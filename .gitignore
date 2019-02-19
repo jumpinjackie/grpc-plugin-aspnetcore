@@ -1,3 +1,7 @@
 .vs
+*.g.cs
+*Grpc.cs
+bin
+obj
 /build
 /thirdparty/vcpkg-export

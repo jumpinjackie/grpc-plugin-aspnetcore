@@ -1,0 +1,2666 @@
+syntax = "proto3";
+option java_package="org.osgeo.mapguide";
+option java_multiple_files = true;
+package OSGeo.MapGuide;
+
+import "google/protobuf/wrappers.proto";
+
+// =================================== MDF Common Contracts ====================================== //
+
+// A name/value pair
+message NameValuePair {
+    // The name
+    string name = 1;
+    // The value
+    string value = 2;
+}
+
+// Describes a bounding box
+message Box2D {
+    // The lower left X coordinate
+    double min_x = 1;
+    // The lower left Y coordinate
+    double min_y = 2;
+    // The upper right Y coordinate
+    double max_x = 3;
+    // The upper right Y coordinate
+    double max_y = 4;
+}
+
+// ===================================== Byte Stream Contacts ==================================== //
+
+// Describes the a byte stream
+message ByteStreamHeader {
+    // A file name for this stream. Optional
+    string file_name = 1;
+    // The mime type for the content in this stream
+    string content_type = 2;
+}
+
+// Describes a chunk of a byte stream. Any operation returning byte streams will return a stream
+// of one or more ByteStreamChunk messages
+message ByteStreamChunk {
+    // A header describing this byte stream. This is present only in the first ByteStreamChunk of the stream
+    ByteStreamHeader header = 1;
+    // An error if one was raised by the service operation. This is present only in the first ByteStreamChunk of the stream
+    Error error = 2;
+    // A slice of the byte stream data. This is present only from the second ByteStreamChunk of the stream onwards
+    bytes data = 3;
+}
+
+// ==================================== Feature Source Contracts ================================= //
+
+// Describes a coordinate system override for a spatial context
+message CoordSysOverride {
+    // The name of the spatial context
+    string name = 1;
+    // The coordinate system to override with
+    string coordinate_system = 2;
+}
+
+// Enum for join types
+enum RelateType {
+    RelateType_LeftOuter = 0;
+    RelateType_RightOuter = 1;
+    RelateType_Inner = 2;
+    RelateType_Association = 3;
+}
+
+// Describes a pair of properties to join on
+message RelateProperty {
+    // Name of property (field) in feature (primary) class
+    string feature_class_property = 1;
+    // Name of property (field) in attribute (secondary) class
+    string attribute_class_property = 2;
+}
+
+// Describes a join to another class
+message AttributeRelate {
+    // Collection of pairs of feature class properties (fields) and attribute class properties (fields) that define a join
+    repeated RelateProperty related_property = 1;
+    // Name of class the feature class is joined to
+    string attribute_class = 2;
+    // Identifies the resource id of the attribute class
+    string resource_id = 3;
+    // Name of the relationship that defines a join
+    string name = 4;
+    // Delimiter symbol to be used by the UI to present an extended attribute
+    string attribute_name_delimiter = 5;
+    // Type of the join
+    RelateType relate_type = 6;
+    // Force 1 : 1 in the case of 1 : many
+    bool force_one_to_one = 7;
+}
+
+// Describes a calculated property
+message CalculatedProperty {
+    // Name of property
+    string name = 1;
+    // Expression for the property
+    string expression = 2;
+}
+
+// Describes an extended feature class
+message FeatureSourceExtension {
+    // Name of the extension
+    string name = 1;
+    // The feature class that is being extended; this is the class whose attributes are used for joining other attribute classes
+    string feature_class = 2;
+    // Zero or more calculated properties from attributes from the same feature class
+    repeated CalculatedProperty calculated_properties = 3;
+    // Zero or more relations to join on
+    repeated AttributeRelate related = 4;
+}
+
+// Describes a connection to a FDO data source
+message FeatureSource {
+    // The name of the FDO provider
+    string provider = 1;
+    // A set of connection parameters
+    repeated NameValuePair parameters = 2;
+    // A set of coordinate system overrides
+    repeated CoordSysOverride supplemental_spatial_context_info = 3;
+    // Configuration information needed for certain providers
+    string configuration_document = 4;
+    // The long transaction to use when connected to the provider
+    string long_transaction = 5;
+    // A set of extensions for the data source information
+    repeated FeatureSourceExtension extensions = 6;
+}
+
+// =================================== Layer Definition Contracts ================================ //
+
+// Encapsulates the definition of a map layer
+message LayerDefinition {
+    string resource_id = 1;
+    double opacity = 2;
+    repeated WatermarkType watermarks = 3;
+    oneof type {
+        VectorLayerDefinition vector = 4;
+        DrawingLayerDefinition drawing = 5;
+        GridLayerDefinition grid = 6;
+    }
+}
+
+// Enumeration describing whether the features are coming from a feature class or named extension
+enum FeatureNameType {
+    FeatureNameType_FeatureClass = 0;
+    FeatureNameType_NamedExtension = 1;
+}
+
+// URL information for features
+message UrlData {
+    // The real address of the URL. This can be a string FDO expression
+    string content = 1;
+    // The description of the URL. This can be a string FDO expression
+    string description = 2;
+    // Specify the the override of URL content for a specific feature which can be a string FDO expression
+    string content_override = 3;
+    // Specify the override of URL description for a specific feature which can be a string FDO expression
+    string description_override = 4;
+}
+
+// The possible interpretations of a z offset value
+enum ElevationType {
+    ElevationType_RelativeToGround = 0;
+    ElevationType_Absolute = 1;
+}
+
+// The measurement units that linear sizes are specified in
+enum LengthUnitType {
+    LengthUnitType_Millimeters = 0;
+    LengthUnitType_Centimeters = 1;
+    LengthUnitType_Meters = 2;
+    LengthUnitType_Kilometers = 3;
+    LengthUnitType_Inches = 4;
+    LengthUnitType_Feet = 5;
+    LengthUnitType_Yards = 6;
+    LengthUnitType_Miles = 7;
+    LengthUnitType_Points = 8;
+}
+
+message ElevationSettings {
+    string z_offset = 1;
+    string z_extrusion = 2;
+    ElevationType z_offset_type = 3;
+    LengthUnitType unit = 4;
+}
+
+// The stylization to be applied to the vector features for a given scale range
+message VectorScaleRange {
+    // The zoomed in part of the scale range.  Defaults to 0 if not specified.  Inclusive
+    double min_scale = 1;
+    // The zoomed out part of the scale range.  Defaults to the application's maximum value if not specified.  Exclusive
+    double max_scale = 2;
+    repeated FeatureTypeStyle feature_styles = 3;
+    // KML elevation settings
+    ElevationSettings elevation_settings = 4;
+}
+
+message FeatureTypeStyle {
+    bool show_in_legend = 1;
+    oneof type {
+        // Area style
+        AreaTypeStyle area_type_style = 2;
+        // Line style
+        LineTypeStyle line_type_style = 3;
+        // Point style
+        PointTypeStyle point_type_style = 4;
+        // Composite style (Advanced Stylization)
+        CompositeTypeStyle composite_type_style = 5;
+    }
+}
+
+// Style specification of a polygon geometry type
+message AreaTypeStyle {
+    // Rules to define a theme
+    repeated AreaRule area_rules = 1;
+}
+
+// Style rule for an area geometry type
+message AreaRule {
+    // The label for the Rule to be displayed in the legend
+    string legend_label = 1;
+    // A filter for the Rule.  This is a boolean FDO expression.  Any features that pass this filter are styled using this rule's stylization
+    string filter = 2;
+    // A label for the Rule
+    TextSymbol label = 3;
+    // The stylization of the polygon geometry
+    AreaSymbolization2D area_symbolization_2d = 4;
+}
+
+message AreaSymbolization2D {
+    // The style of the polygon fill
+    Fill fill = 1;
+    // The style of the polygon edge
+    Stroke stroke = 2;
+}
+
+// The possible background styles of a TextSymbol
+enum BackgroundStyleType {
+    BackgroundStyleType_Transparent = 0;
+    BackgroundStyleType_Opaque = 1;
+    BackgroundStyleType_Ghosted = 2;
+}
+
+enum SizeContext {
+    SizeContext_MappingUnits = 0;
+    SizeContext_DeviceUnits = 1;
+}
+
+// SLD supports square, circle, triangle, star, cross, and X
+enum ShapeType {
+    ShapeType_Square = 0;
+    ShapeType_Circle = 1;
+    ShapeType_Triangle = 2;
+    ShapeType_Star = 3;
+    ShapeType_Cross = 4;
+    ShapeType_X = 5;
+}
+
+// Enumerates the allowed UsageContext values
+enum UsageContextType {
+    UsageContextType_Unspecified = 0;
+    UsageContextType_Point = 1;
+    UsageContextType_Line = 2;
+    UsageContextType_Area = 3;
+}
+
+// Enumerates the allowed GeometryContext values
+enum GeometryContextType {
+    GeometryContextType_Unspecified = 0;
+    GeometryContextType_Point = 1;
+    GeometryContextType_LineString = 2;
+    GeometryContextType_Polygon = 3;
+}
+
+// Encapsulates the stylization of a polygon's fill
+message Fill {
+    string fill_pattern = 1;
+    string foreground_color = 2;
+    // The background color.  Not applicable to solid fills
+    string background_color = 3;
+}
+
+// Style specification of a line geometry type
+message LineTypeStyle {
+    // Rules to define a theme
+    repeated LineRule line_rules = 1;
+}
+
+// Style rule for a line geometry type
+message LineRule {
+    // The label for the Rule to be displayed in the legend
+    string legend_label = 1;
+    // A filter for the Rule.  This is a boolean FDO expression.  Any features that pass this filter are styled using this rule's stylization
+    string filter = 2;
+    // A label for the Rule
+    TextSymbol label = 3;
+    LineSymbolization2D line_symbolization_2d = 4;
+}
+
+// Line symbolization settings
+message LineSymbolization2D {
+    repeated Stroke strokes = 1;
+}
+
+// Encapsulates the stylization of a line
+message Stroke {
+    string line_style = 1;
+    string thickness = 2;
+    string color = 3;
+    // Unit of measurement that the thickness is specified in
+    LengthUnitType unit = 4;
+    // Whether the sizes are with respect to the earth or the user's display device
+    SizeContext size_context = 5;
+}
+
+// Style specification of a point geometry type
+message PointTypeStyle {
+    // Create a text layer
+    bool display_as_text = 1;
+    // Allows labels from any map layer (including the current layer) to obscure features on the current layer
+    bool allow_overpost = 2;
+    // One or more PointRule defining the PointStyle
+    repeated PointRule point_rules = 3;
+}
+
+// Style rule for a point geometry type
+message PointRule {
+    // The label for the Rule to be displayed in the legend
+    string legend_label = 1;
+    // A filter for the Rule.  This is a boolean FDO expression.  Any features that pass this filter are styled using this rule's stylization
+    string filter = 2;
+    // A label for the Rule
+    TextSymbol label = 3;
+    PointSymbolization2D point_symbolization_2d = 4;
+}
+
+// The different types of point geometries
+message PointSymbolization2D {
+    oneof type {
+        MarkSymbol mark = 1;
+        ImageSymbol image = 2;
+        FontSymbol font = 3;
+        W2DSymbol w2d = 4;
+        BlockSymbol block = 5;
+    }
+}
+
+// Defines common properties for all symbols
+message SymbolType {
+    // The units that the sizes are specified in
+    LengthUnitType unit = 1;
+    // Whether the sizes are with respect to the earth or the user's display device
+    SizeContext size_context = 2;
+    // Width of the symbol.  This is a double FDO expression.  Does not apply to font symbols
+    string size_x = 3;
+    // Height of the symbol.  This is a double FDO expression
+    string size_y = 4;
+    // Amount to rotate the symbol in degrees.  This is a double FDO expression.  Does not apply to line labels
+    string rotation = 5;
+    // Hint for the UI only.  When the user enters a constant size for the width or height, the other dimension should be adjusted accordingly.  Does not apply to font symbols or labels
+    bool maintain_aspect = 6;
+    // X offset for the symbol specified in symbol space.  Does not apply to labels
+    string insertion_point_x = 7;
+    // Y offset for the symbol specified in symbol space.  Does not apply to labels
+    string insertion_point_y = 8;
+}
+
+message TextSymbol {
+    // The text of the TextSymbol.  This is a string FDO expression
+    string text = 1;
+    // The font to use
+    string font_name = 2;
+    // The color of the text
+    string foreground_color = 3;
+    // The text background color
+    string background_color = 4;
+    // The background style
+    BackgroundStyleType background_style = 5;
+    // A string FDO expression for the horizontal alignment.  Must evaluate to one of the HorizontalAlignmentType enums.  Only applicable to text styles
+    string horizontal_alignment = 6;
+    // A string FDO expression for the vertical alignment.  Must evaluate to one of the VerticalAlignmentType enums.  Only applicable to text and line styles
+    string vertical_alignment = 7;
+    // Specifies if the label should be in a bold font
+    string bold = 8;
+    // Specifies if the font should be italicized
+    string italic = 9;
+    // Specifies if the text should be underlined.
+    string underlined = 10;
+    // Optional element which specifies that a more advanced labeling algorithm should be used with the AJAX viewer
+    AdvancedPlacement advanced_placement = 11;
+}
+
+// Optional element which specifies that a more advanced labeling algorithm should be used with the AJAX viewer
+message AdvancedPlacement {
+    // The maximum amount any label is allowed to shrink in order to fit into the feature.  For example, 0.8 means that the label can shrink until it is 80% of the original size.  1.0 means that the label cannot shrink.  If not specified, the application should assume 1.0.  If set to 0.0 or less then the advanced placement option is disabled
+    double scale_limit = 1;
+}
+
+// Stylization of a predefined shape (ShapeType)
+message MarkSymbol {
+    ShapeType shape = 1;
+    // No fill is drawn if not specified
+    Fill fill = 2;
+    // No edge is drawn if not specified
+    Stroke edge = 3;
+}
+
+// Symbols that are comprised of a raster
+message ImageSymbol {
+    // Reference to the image
+    ImageRefOrContent image = 1;
+}
+
+message ImageRefOrContent {
+    oneof type {
+        // Reference to the image
+        ResourceDataItemRef image_ref = 1;
+        // BinHex data for image
+        bytes binary = 2;
+    }
+}
+
+// Symbols that are specified by a font and character
+message FontSymbol {
+    // If the font is not installed, the actual font used is application dependent
+    string font_name = 1;
+    string character = 2;
+    bool bold = 3;
+    bool italic = 4;
+    bool underlined = 5;
+    string foreground_color = 6;
+}
+
+// A symbol using a W2D stream
+message W2DSymbol {
+    ResourceDataItemRef w2d_symbol = 1;
+    // If specified all polygon fills in the symbol are drawn in this color
+    string fill_color = 2;
+    // If specified all lines in the symbol are drawn in this color
+    string line_color = 3;
+    // If specified all text in the symbol is drawn in this color
+    string text_color = 4;
+}
+
+// A block symbol
+message BlockSymbol {
+    string drawing_name = 1;
+    string block_name = 2;
+    // Static color
+    string block_color = 3;
+    // Static color
+    string layer_color = 4;
+}
+
+// A style specification consisting of composite rules
+message CompositeTypeStyle {
+    repeated CompositeRule composite_rules = 1;
+}
+
+message CompositeRule {
+    // The label for the Rule to be displayed in the legend
+    string legend_label = 1;
+    // A filter for the Rule.  This is a boolean FDO expression.  Any features that pass this filter are styled using this rule's stylization
+    string filter = 2;
+    CompositeSymbolization composite_symbolization = 3;
+}
+
+// Stylization attributes of a point, line, or area feature
+message CompositeSymbolization {
+    // The symbol instances used for stylization
+    SymbolInstance symbol_instance = 1;
+}
+
+// An instance of a symbol
+message SymbolInstance {
+    oneof type {
+        // A library reference to an existing SymbolDefinition, either simple or compound.
+        string resource_id = 1;
+        // An inlined SimpleSymbolDefinition
+        SimpleSymbolDefinition simple_symbol_definition = 2;
+        // An inlined CompoundSymbolDefinition
+        CompoundSymbolDefinition compound_symbol_definition = 3;
+    }
+    // Specifies all parameter overrides for this symbol instance
+    repeated Override parameter_overrides = 4;
+    // The additional amount to scale the symbol horizontally in symbol space.  Defaults to 1 if not specified
+    string scale_x = 5;
+    // The additional amount to scale the symbol vertically in symbol space.  Defaults to 1 if not specified
+    string scale_y = 6;
+    // Specifies the additional amount to offset the symbol horizontally, in mm in device units, after scaling and rotation have been applied.  Applies only to point symbols.  Defaults to 0 if not specified
+    string insertion_offset_x = 7;
+    // Specifies the additional amount to offset the symbol vertically, in mm in device units, after scaling and rotation have been applied.  Applies only to point symbols.  Defaults to 0 if not specified
+    string insertion_offset_y = 8;
+    // Specifies whether the symbol sizes are with respect to the map or the user's display device.  Defaults to device units
+    SizeContext size_context = 9;
+    // Boolean value which specifies whether the symbol is drawn as part of a final rendering pass (e.g. for labeling).  This must evaluate to True or False (default)
+    string draw_list = 10;
+    // Boolean value which specifies whether to render this symbol only if its graphical extent does not overlap the exclusion region.  If the positioning algorithm generates multiple candidate symbol positions and this setting is True, then only the first non-overlapping candidate is rendered.  This must evaluate to True or False (default).
+    string check_exclusion_region = 11;
+    // Boolean value which specifies whether the graphical extent for this symbol instance is added to the exclusion region (if it is rendered).  Symbols which check the exclusion region will not draw on top of this symbol.  This must evaluate to True or False (default)
+    string add_to_exclusion_region = 12;
+    // Specifies the algorithm used to generate candidate positions for the symbol.  If specified this must evaluate to one of: Default, EightSurrounding, or PathLabels.  Default means generate one position using the feature geometry (used for normal rendering).  EightSurrounding means generate eight candidate labels surrounding the feature geometry (used when labeling point features).  PathLabels means generate periodic labels which follow the feature geometry (used when labeling linestring features)
+    string positioning_algorithm = 13;
+    // The optional rendering pass in which this symbol instance draws.  If specified this must be greater than or equal to zero.  Defaults to 0
+    string rendering_pass = 14;
+    // Specifies which usage in the symbol should be the active one.  Defaults to Unspecified
+    UsageContextType usage_context = 15;
+    // Specifies which geometry type this symbol instance applies to.  Defaults to Unspecified
+    GeometryContextType geometry_context = 16;
+}
+
+// Provides legend labeling information for a theme
+message ThemeLabel {
+    // The legend description for the theme
+    string description = 1;
+    // The default legend format to use for each category in the theme
+    string category_format = 2;
+}
+
+// A parameter override
+message Override {
+    // The name of the symbol definition containing the parameter being overridden
+    string symbol_name = 1;
+    // The identifier of the parameter being overridden
+    string parameter_identifier = 2;
+    // The override value for the parameter
+    string parameter_value = 3;
+    // An optional theme label for this override
+    ThemeLabel theme_label = 4;
+}
+
+// A layer with a vector data source; and stylization specification for the datum's geometry types
+message VectorLayerDefinition {
+    // Either a feature class or named extension
+    string feature_name = 1;
+    FeatureNameType feature_name_type = 2;
+    // A boolean FDO expression that specifies which features to return.  No filter means pass all features through
+    string filter = 3;
+    // Specifies which properties to expose to the user and its corresponding friendly name
+    repeated NameValuePair property_mapping = 4;
+    // Specifies the geometry property that should be used to get the geometries
+    string geometry = 5;
+    // The optional URL information associated with each feature
+    UrlData url_data = 6;
+    // The text to put into the tooltip for displayed features.  This is a string FDO expression
+    string tooltip = 7;
+    // The stylization to be applied to the features for a given scale range
+    repeated VectorScaleRange vector_scale_ranges = 8;
+}
+
+// A layer with a drawing (i.e., DWF) data source
+message DrawingLayerDefinition {
+    string sheet = 1;
+    string layer_filter = 2;
+    double min_scale = 3;
+    double max_scale = 4;
+}
+
+// A layer with a raster or grid data source
+message GridLayerDefinition {
+    string feature_name = 1;
+    // Specifies the raster property that should be used to get the raster data
+    string raster = 2;
+    // A boolean FDO expression that specifies which features to return.  No filter means pass all features through
+    string filter = 3;
+    repeated GridScaleRange grid_scale_ranges = 4;
+}
+
+// Defines how to scale numbers into a color channel
+message ChannelBand {
+    // Name of the band
+    string band = 1;
+    // Default is low value found in band.  Band values less than this are snapped to this number
+    double low_band = 2;
+    // Default is high value found in band.  Band values greater than this are snapped to this number
+    double high_band = 3;
+    // Default is 0.  Range is 0:255. LowBand is mapped to this number.
+    // LowChannel can be greater than HighChannel. Due to protobuf limitations you must ensure
+    // the value you specify lies within the range of 0-255
+    int32 low_channel = 4;
+    // Default is 255.  Range is 0:255. Due to protobuf limitation you must ensure the value
+    // you specify lies within the range of 0-255
+    int32 high_channel = 5;
+}
+
+// Specifies a color using distinct RGB values
+message GridColorBandsType {
+    ChannelBand red_band = 1;
+    ChannelBand green_band = 2;
+    ChannelBand blue_band = 3;
+}
+
+// The color to use for a grid rule
+message GridColorType {
+    oneof type {
+        // Explicit ARGB color
+        string explicit_color = 1;
+        string band = 2;
+        GridColorBandsType bands = 3;
+    }
+}
+
+// Encapsulate a style for a grid source
+message GridColorRule {
+    // The label for the Rule to be displayed in the legend
+    string legend_label = 1;
+    // A filter for the Rule.  This is a boolean FDO expression.  Any features that pass this filter are styled using this rule's stylization
+    string filter = 2;
+    // A label for the Rule.  Does not apply to GridColorRule
+    TextSymbol label = 3;
+    GridColorType color = 4;
+}
+
+// Specifies how to shade given a band and a light source
+message HillShade {
+    // Name of the band used for the computation
+    string band = 1;
+    // Azimuth of the sun in degrees
+    double azimuth = 2;
+    // Altitude of the sun in degrees
+    double altitude = 3;
+    // The scale factor applied to the band prior to computing hillshade.  Defaults to 1 if not specified
+    double scale_factor = 4;
+}
+
+// Specifies how to style each pixel
+message GridColorStyle {
+    HillShade hill_shade = 1;
+    // If a pixel color prior to factoring in HillShade is this value then the pixel is transparent
+    // TOOD: Type in original xsd undocumented. Assuming string
+    string transparency_color = 2;
+    // Default is 0
+    double brightness_factor = 3;
+    // Default is 0
+    double contrast_factor = 4;
+    repeated GridColorRule color_rules = 5;
+}
+
+// Specifies how to calculate pixel elevations
+message GridSurfaceStyle {
+    // Band to use for 3D data
+    string band = 1;
+    // Determines which input value is mapped to zero elevation.  Defaults to 0 if not specified
+    double zero_value = 2;
+    // Determines how to scale the inputs into a consistent elevation.  Defaults to 1 if not specified
+    double scale_factor = 3;
+    // The default color to use if no ColorStyle is defined at a pixel
+    string default_color = 4;
+}
+
+// The stylization for a specified scale range
+message GridScaleRange {
+    // The zoomed in part of the scale range.  Defaults to 0 if not specified.  Inclusive
+    double min_scale = 1;
+    // The zoomed out part of the scale range.  Defaults to the application's maximum value if not specified.  Exclusive
+    double max_scale = 2;
+    // Defines the height field of the grid
+    GridSurfaceStyle surface_style = 3;
+    GridColorStyle color_style = 4;
+    // When the user has zoomed in by this amount, a request for more detailed raster data is made
+    double rebuild_factor = 5;
+}
+
+// ================================== Map Definition Contracts =================================== //
+
+// Defines the collection of layers, groupings of layers
+message MapDefinition {
+    // The name of the Map Definition
+    string name = 1;
+    // The coordinate system as WKT used by the Map Definition
+    string coordinate_system = 2;
+    // A bounding box around the area of the Map Definition
+    Box2D extents = 3;
+    // The background color to be used with the MapDefinition
+    string background_color = 4;
+    // Metadata regarding the Map Definition
+    string metadata = 5;
+    // Zero or more Map Layers that make up the Map Definition. The order of the layers represents the draw order, layers first is the list are drawn over top of layers later in the list
+    repeated MapLayer map_layers = 6;
+    // Zero or more Map Layer Groups that make up the Map Definition
+    repeated MapLayerGroup map_layer_groups = 7;
+    // A reference to the tile set source to use
+    string tileSetSource = 8;
+}
+
+// Describes a map layer, including its group and options about how it should be displayed
+message MapLayer {
+    // The name of the layer
+    string name = 1;
+    // Layer Definition ID
+    string resource_id = 2;
+    // Whether or not the Layer can be selected
+    bool selectable = 3;
+    // Whether or not the Layer should be shown in the legend
+    bool show_in_legend = 4;
+    // Label to be shown for the Layer in the legend
+    string legend_label = 5;
+    // Whether or not the Layer should be expanded in the legend
+    bool expand_in_legend = 6;
+    // Whether this layer's visiblity should be visible or not when it first comes into range
+    bool visible = 7;
+    // Group of which the MapLayer is a member of
+    string group = 8;
+}
+
+// Describes a map layer group
+message MapLayerGroup {
+    // The name of the group
+    string name = 1;
+    // Whether or not the Layer should be shown in the legend
+    bool show_in_legend = 2;
+    // Whether or not the Layer should be expanded in the legend
+    bool expand_in_legend = 3;
+    // Label to be shown for the Layer in the legend
+    string legend_label = 4;
+    // Whether this layer's visiblity should be visible or not when it first comes into range
+    bool visible = 5;
+    // Group of which the MapLayer is a member of
+    string group = 6;
+}
+
+// ================================ Tile Set Definition Contracts ================================ //
+
+// Defines a tile cache
+message TileSetDefinition {
+    // Defines the parameters to access and describe the tile cache
+    TileStoreParameters tile_store_parameters = 1;
+    // A bounding box around the area of the tile cache
+    Box2D extents = 2;
+    // A group of layers that is used to compose a tiled layer
+    BaseMapLayerGroup base_layer_groups = 3;
+}
+
+message TileStoreParameters {
+    // The tile provider
+    string tile_provider = 1;
+    // Collection of name value pairs for connecting to the tile image provider
+    repeated NameValuePair parameters = 2;
+}
+
+message BaseMapLayerGroup {
+    // The name of this group
+    string name = 1;
+    // Whether this group's visiblity should be visible or not when it first comes into range
+    bool visible = 2;
+    // Whether or not the group should be shown in the legend
+    bool show_in_legend = 3;
+    // Whether or not the group should be initially expanded in the legend
+    bool expand_in_legend = 4;
+    // Label to be shown for the group in the legend
+    string legend_label = 5;
+    repeated BaseMapLayer layers = 6;
+}
+
+message BaseMapLayer {
+    // The name of this layer
+    string name = 1;
+    // The layer definition resource id
+    string layer_defintion_id = 2;
+    // Whether or not the Layer can be selected
+    bool selectable = 3;
+    // Whether or not the layer should be shown in the legend
+    bool show_in_legend = 4;
+    // Whether or not the layer should be initially expanded in the legend
+    bool expand_in_legend = 5;
+    // Label to be shown for the layer in the legend
+    string legend_label = 6;
+}
+
+// ================================= Symbol Definition Contracts ================================= //
+
+message SymbolDefinition {
+    oneof type {
+        SimpleSymbolDefinition simple = 1;
+        CompoundSymbolDefinition compound = 2;
+    }
+}
+
+message SimpleSymbolDefinition {
+    // The name of the symbol
+    string name = 1;
+    // An optional description of the symbol
+    string description = 2;
+    // The collection of graphic elements defining this symbol
+    repeated Graphics graphics = 3;
+    // The optional box used to resize and reposition select graphic elements.  The graphical extent of all elements with ResizeControl set to AddToResizeBox will be added to this box, potentially causing it to grow in size.  Any change in size causes all elements with ResizeControl set to AdjustToResizeBox to be proportionally resized and repositioned
+    ResizeBox resize_box = 4;
+    // Specifies how the symbol is used in the context of point features
+    PointUsage point_usage = 5;
+    // Specifies how the symbol is used in the context of linear features
+    LineUsage line_usage = 6;
+    // Specifies how the symbol is used in the context of area features
+    AreaUsage area_usage = 7;
+    // The list of parameters used in this symbol.  If a parameter is not listed here this is considered a bug in the symbol definition
+    repeated SymbolParameter parameters = 8;
+}
+
+// A symbol definition specified using a collection of SimpleSymbolDefinition elements or references
+message CompoundSymbolDefinition {
+    // The name of the symbol
+    string name = 1;
+    // An optional description of the symbol
+    string description = 2;
+    repeated SimpleSymbol simple_symbols = 3;
+}
+
+// A collection of graphic elements
+message Graphics {
+    // Specifies how this graphic element interacts with the resize box.  This must evaluate to one of: ResizeNone (default), AddToResizeBox, or AdjustToResizeBox.  AddToResizeBox means the element's graphical extent is added to the resize box, but the element is not resized or repositioned if the resize box grows.  AdjustToResizeBox means the element is resized and repositioned relative to the resize box, but its extent is not added to the box.  ResizeNone means the element does not interact with the resize box
+    string resize_control = 1;
+    oneof type {
+        Path path = 2;
+        Image image = 3;
+        Text text = 4;
+    }
+}
+
+// A 2D path defining vector geometry to include in the symbol definition
+message Path {
+    // The path geometry.  The format is a sequence of segments, each represented by a letter indicating the segment type followed by one or more parameters.  Uppercase letters denote absolute values and lowercase letters denote relative values.  Segment types can be one of "M" (moveto), "L" (lineto), "H" (horizontal lineto), "V" (vertical lineto), "A" (arcto), or "Z" (close segment)
+    string geometry = 1;
+    // The amount to scale the path geometry in the horizontal direction. This is only applied to the Geometry element. Defaults to 1 if not specified
+    string scale_x = 2;
+    // The amount to scale the path geometry in the vertical direction. This is only applied to the Geometry element. Defaults to 1 if not specified
+    string scale_y = 3;
+    // The ARGB color used to fill the path.  If this element is missing or empty then no fill is applied to the path
+    string fill_color = 4;
+    // The ARGB color used to draw the path outline.  If this element is missing or empty then no path outline is drawn
+    string line_color = 5;
+    // The weight to use when drawing the path outline, in mm.  If specified this must be greater than or equal to zero.  Defaults to 0
+    string line_weight = 6;
+    // Boolean value which specifies whether the line weight scales with the symbol.  This behavior is independent of the symbol's size context.  This must evaluate to True (default) or False
+    string line_weight_scalable = 7;
+    // The cap type to use at the ends of each segment in the path outline.  This must evaluate to one of: None, Round (default), Triangle, or Square
+    string line_cap = 8;
+    // The join type to use at each vertex in the path outline.  This must evaluate to one of: None, Bevel, Round (default), or Miter
+    string line_join = 9;
+    // The limit to use when drawing miter joins.  A miter join is trimmed if the ratio of the miter length to line weight is greater than the miter limit.  If specified this must be greater than zero.  Defaults to 5
+    string line_miter_limit = 10;
+}
+
+message Image {
+    oneof type {
+        // An embedded PNG image stored using base64 binary
+        bytes content = 1;
+        // A library reference to a PNG image
+        ResourceDataItemRef reference = 2;
+    }
+    // The width of the image, in mm.  This must be greater than zero
+    string size_x = 3;
+    // The height of the image, in mm.  This must be greater than zero
+    string size_y = 4;
+    // Boolean value which specifies whether the image sizes scale with the symbol.  This behavior is independent of the symbol's size context.  This must evaluate to True (default) or False
+    string size_scalable = 5;
+    // The angle of the image in symbol space, in degrees.  Defaults to 0
+    string angle = 6;
+    // The x-coordinate of the image center in symbol space, in mm.  Defaults to 0
+    string position_x = 7;
+    // The y-coordinate of the image center in symbol space, in mm.  Defaults to 0
+    string posiiton_y = 8;
+}
+
+// A text string to include in the symbol definition
+message Text {
+    // The string content for the text
+    string content = 1;
+    // The name of the font to use for the text
+    string font_name = 2;
+    // Specifies if the text should be drawn using a bold font.  This must evaluate to True or False (default)
+    string bold = 3;
+    // Specifies if the text should be drawn using an italic font.  This must evaluate to True or False (default)
+    string italic = 4;
+    // Specifies if the text should be underlined.  This must evaluate to True or False (default)
+    string underlined = 5;
+    // Specifies if the text should be overlined.  This must evaluate to True or False (default)
+    string overlined = 6;
+    // A numeric value between -85.0 and 85.0 representing the angle in degrees forward (for positive) or backwards (for negative) that the text should be obliqued (a la shear or skew transform).  Defaults to 0
+    string oblique_angle = 7;
+    // A numeric value between 0.75 and 10.0, representing the text "tracking" factor to apply to inter-character spacing, effectively a multiplier of each character's advance width.  Values less than 1.0 condense the text, spacing individual characters closer together than normally dictated by the font, whereas values greater than 1.0 expand the text, spacing characters farther apart.  The outline of individual characters is not altered by this element, only the spacing between them and adjacent characters.  Defaults to 1
+    string track_spacing = 8;
+    // The height of the text, in mm.  If specified this must be greater than zero.  Defaults to 4
+    string height = 9;
+    // Boolean value which specifies whether the font height scales with the symbol.  This behavior is independent of the symbol's size context.  This must evaluate to True (default) or False
+    string height_scalable = 10;
+    // The angle of the text in symbol space, in degrees.  Defaults to 0
+    string angle = 11;
+    // The x-coordinate of the text in symbol space, in mm.  Horizontal alignment of the text box is relative to this coordinate.  Defaults to 0
+    string position_x = 12;
+    // The y-coordinate of the text in symbol space, in mm.  Vertical alignment of the text box is relative to this coordinate.  Defaults to 0
+    string position_y = 13;
+    // The horizontal alignment of the text box relative to its position.  This must evaluate to one of: Left, Center (default), or Right
+    string horizontal_alignment = 14;
+    // The vertical alignment of the text box relative to its position.  This must evaluate to one of: Bottom, Baseline, Halfline (default), Capline, or Top
+    string vertical_alignment = 15;
+    // The horizontal justification of individual lines of text in a multi-line text string.  This must evaluate to one of: Left, Center, Right, Justified, or FromAlignment (default)
+    string justification = 16;
+    // The spacing between individual lines of text in a multi-line text string, as a multiple of the font height.  If specified this must be greater than zero.  Defaults to 1.05
+    string line_spacing = 17;
+    // The ARGB color used to draw the text.  Defaults to black (ff000000)
+    string text_color = 18;
+    // The ARGB color used to draw the ghosted text.  If this element is missing or empty then no ghosting is drawn
+    string ghost_color = 19;
+    // If specified, defines the kind of frame drawn around the text
+    TextFrame frame = 20;
+    // The markup format of the string content.  Defaults to 'Plain'
+    string markup = 21;
+}
+
+// Defines a frame used with text elements
+message TextFrame {
+    // The ARGB color used to draw the text frame border.  If this element is missing or empty then no frame border is drawn
+    string line_color = 1;
+    // The ARGB color used to fill the text frame.  If this element is missing or empty then no fill is drawn
+    string fill_color = 2;
+    // The additional horizontal offset of the frame relative to the text box, in mm.  Defaults to 0
+    string offset_x = 3;
+    // The additional vertical offset of the frame relative to the text box, in mm.  Defaults to 0
+    string offset_y = 4;
+}
+
+// Defines a library resource data item reference
+message ResourceDataItemRef {
+    // The reference to the resource
+    string resource_id = 1;
+    // If ResourceId specifies a library, this identifies the name of a library item
+    string library_item_name = 2;
+}
+
+// Defines a resize box used with SimpleSymbolDefinitions
+message ResizeBox {
+    // The initial width of the resize box, in mm.  This must be greater than or equal to zero
+    string size_x = 1;
+    // The initial height of the resize box, in mm.  This must be greater than or equal to zero
+    string size_y = 2;
+    // The initial x-coordinate of the resize box center, in mm
+    string position_x = 3;
+    // The initial y-coordinate of the resize box center, in mm
+    string position_y = 4;
+    // Specifies how the resize box grows in size.  This must evaluate to one of: GrowInX, GrowInY, GrowInXY, or GrowInXYMaintainAspect (default)
+    string grow_control = 5;
+}
+
+// Specifies how a symbol is used in the context of point features
+message PointUsage {
+    // Specifies how the symbol angle is defined.  This must evaluate to one of: FromAngle (default) or FromGeometry
+    string angle_control = 1;
+    // Specifies the symbol angle, in degrees.  If AngleControl evaluates to FromAngle then this specifies the absolute angle of the symbol.  If AngleControl evaluates to FromGeometry then this specifies the symbol angle relative to the geometry.  Defaults to 0
+    string angle = 2;
+    // Specifies the horizontal offset to apply to the symbol origin, in mm.  This offset is applied before the symbol is scaled and rotated.  Defaults to 0
+    string origin_offset_x = 3;
+    // Specifies the vertical offset to apply to the symbol origin, in mm.  This offset is applied before the symbol is scaled and rotated.  Defaults to 0
+    string origin_offset_y = 4;
+}
+
+// Specifies how a symbol is used in the context of linear features
+message LineUsage {
+    // Specifies how the symbol angle is defined.  This must evaluate to one of: FromAngle (default) or FromGeometry
+    string angle_control = 1;
+    // Specifies whether the distribution parameters are interpreted as absolute values (in mm) or parametric values.  This must evaluate to one of: Absolute (default) or Parametric
+    string units_control = 2;
+    // Specifies the symbol behavior at vertices.  This must evaluate to one of: OverlapNone, OverlapDirect, or OverlapWrap (default)
+    string vertex_control = 3;
+    // Specifies the angle of each repeating symbol, in degrees.  If AngleControl evaluates to FromAngle then this specifies the absolute angle of the symbol.  If AngleControl evaluates to FromGeometry then this specifies the symbol angle relative to the geometry.  Defaults to 0
+    string angle = 4;
+    // Specifies where the symbol distribution begins, relative to the start of the feature.  If specified this must be greater than or equal to zero
+    string start_offset = 5;
+    // Specifies where the symbol distribution ends, relative to the end of the feature.  If specified this must be greater than or equal to zero
+    string end_offset = 6;
+    // Specifies the separation between repeating symbols.  Defaults to 0
+    string repeat = 7;
+    // Specifies the limiting angle, in degrees, by a which the feature geometry can change before some of the VertexControl options take effect.  If specified this must be greater than or equal to zero.  Defaults to 0
+    string vertex_angle_limit = 8;
+    // Specifies the wrapping behavior at vertices for all graphic elements.  Only applies if VertexControl evaluates to OverlapWrap.  This must evaluate to one of: None, Bevel, Round (default), or Miter
+    string vertex_join = 9;
+    // The limit to use when drawing miter vertex joins.  A miter vertex join is trimmed if the ratio of the miter length to symbol height is greater than the miter limit.  If specified this must be greater than zero.  Defaults to 5
+    string vertex_miter_limit = 10;
+    // Specifies the default path attributes to use when drawing the symbol.  These apply to any centerline that gets drawn where the symbol can't draw, and to path elements that don't specify attributes.  The geometry contained in this path is ignored and should be empty
+    string default_path = 11;
+}
+
+// Specifies how a symbol is used in the context of area features
+message AreaUsage {
+    // Specifies how the symbol angle is defined.  This must evaluate to one of: FromAngle (default) or FromGeometry
+    string angle_control = 1;
+    // Specifies how the symbol grid origin is defined.  This must evaluate to one of: Global (default), Local, or Centroid
+    string origin_control = 2;
+    // Specifies the clipping behavior of the symbol at polygon boundaries.  This must evaluate to one of: Clip (default), Inside, or Overlap
+    string clipping_control = 3;
+    // Specifies the angle of each repeating symbol, in degrees.  If AngleControl evaluates to FromAngle then this specifies the absolute angle of the symbol.  If AngleControl evaluates to FromGeometry then this specifies the symbol angle relative to the geometry.  Defaults to 0
+    string angle = 4;
+    // The x-coordinate of the symbol grid origin, in mm.  Only applies if OriginControl evaluates to Global or Local.  Defaults to 0
+    string origin_x = 5;
+    // The y-coordinate of the symbol grid origin, in mm.  Only applies if OriginControl evaluates to Global or Local.  Defaults to 0
+    string origin_y = 6;
+    // The horizontal separation between symbols, in mm.  Defaults to 0
+    string repeat_x = 7;
+    // The vertical separation between symbo9ls, in mm.  Defaults to 0
+    string repeat_y = 8;
+    // The width, in mm, of the buffer zone relative to the polygon boundary in which the symbol is rendered.  Defaults to 0.
+    string buffer_width = 9;
+}
+
+// The metadata for a symbol parameter
+message SymbolParameter {
+    // The parameter identifier as used in the symbol
+    string identifier = 1;
+    // The default value of the parameter if no override is defined in the symbol instance.  This can be an expression
+    string default_value = 2;
+    // An optional short description of the parameter.  This can be used, for example, to ask the user to specify a parameter value
+    string display_name = 3;
+    // An optional long description of the parameter.  This might include a description of useful values for this parameter
+    string description = 4;
+    // An optional explicit declaration of data type or data usage context.  This is a hint used by the UI when assigning a value to this parameter.  Defaults to String
+    SymbolParameterDataType data_type = 5;
+}
+
+// Defines a reference to a SimpleSymbolDefinition, either inlined or a library reference
+message SimpleSymbol {
+    oneof type {
+        // An inlined SimpleSymbolDefinition
+        SimpleSymbolDefinition simple_symbol_definition = 1;
+        // A library reference to an existing SimpleSymbolDefinition
+        string resource_id = 2;
+    }
+    // The optional rendering pass in which this symbol definition draws.  If specified this must be greater than or equal to zero.  Defaults to 0
+    string rendering_pass = 3;
+}
+
+// Enumerates the allowed GrowControl values
+enum GrowControl {
+    GrowControl_GrowInX = 0;
+    GrowControl_GrowInY = 1;
+    GrowControl_GrowInXY = 2;
+    GrowControl_GrowInXYMaintainAspect = 3;
+}
+
+// Enumerates the allowed AngleControl values
+enum AngleControl {
+    AngleControl_FromAngle = 0;
+    AngleControl_FromGeometry = 1;
+}
+
+// Enumerates the allowed UnitsControl values
+enum UnitsControl {
+    UnitsControl_Absolute = 0;
+    UnitsControl_Parametric = 1;
+}
+
+// Enumerates the allowed VertexControl values
+enum VertexControl {
+    VertexControl_OverlapNone = 0;
+    VertexControl_OverlapDirect = 1;
+    VertexControl_OverlapWrap = 2;
+}
+
+enum VertexJoin {
+    VertexJoin_None = 0;
+    VertexJoin_Bevel = 1;
+    VertexJoin_Round = 2;
+    VertexJoin_Miter = 3;
+}
+
+enum OriginControl {
+    OriginContext_Global = 0;
+    OriginContext_Local = 1;
+    OriginContext_Centroid = 2;
+}
+
+enum ClippingControl {
+    ClippingControl_Clip = 0;
+    ClippingControl_Inside = 1;
+    ClippingControl_Overlap = 2;
+}
+
+enum ResizeControl {
+    ResizeControl_ResizeNone = 0;
+    ResizeControl_AddToResizeBox = 1;
+    ResizeControl_AdjustToResizeBox = 2;
+}
+
+enum LineCap {
+    LineCap_None = 0;
+    LineCap_Round = 1;
+    LineCap_Triangle = 2;
+    LineCap_Square = 3;
+}
+
+enum LineJoin {
+    LineJoin_None = 0;
+    LineJoin_Bevel = 1;
+    LineJoin_Round = 2;
+    LineJoin_Miter = 3;
+}
+
+enum HorizontalAlignment {
+    HorizontalAlignment_Left = 0;
+    HorizontalAlignment_Center = 1;
+    HorizontalAlignment_Right = 2;
+}
+
+enum VerticalAlignment {
+    VerticalAlignment_Bottom = 0;
+    VerticalAlignment_Baseline = 1;
+    VerticalAlignment_Halfline = 2;
+    VerticalAlignment_Capline = 3;
+    VerticalAlignment_Top = 4;
+}
+
+enum Justification {
+    Justification_Left = 0;
+    Justification_Center = 1;
+    Justification_Right = 2;
+    Justification_Justified = 3;
+    Justification_FromAlignment = 4;
+}
+
+enum SymbolParameterDataType {
+    SymbolParameterDataType_String = 0;
+    SymbolParameterDataType_Boolean = 1;
+    SymbolParameterDataType_Integer = 2;
+    SymbolParameterDataType_Real = 3;
+    SymbolParameterDataType_Color = 4;
+    SymbolParameterDataType_Angle = 5;
+    SymbolParameterDataType_FillColor = 6;
+    SymbolParameterDataType_LineColor = 7;
+    SymbolParameterDataType_LineWeight = 8;
+    SymbolParameterDataType_Content = 9;
+    SymbolParameterDataType_Markup = 10;
+    SymbolParameterDataType_FontName = 11;
+    SymbolParameterDataType_Bold = 12;
+    SymbolParameterDataType_Italic = 13;
+    SymbolParameterDataType_Underlined = 14;
+    SymbolParameterDataType_Overlined = 15;
+    SymbolParameterDataType_ObliqueAngle = 16;
+    SymbolParameterDataType_TrackSpacing = 17;
+    SymbolParameterDataType_FontHeight = 18;
+    SymbolParameterDataType_HorizontalAlignment = 19;
+    SymbolParameterDataType_VerticalAlignment = 20;
+    SymbolParameterDataType_Justification = 21;
+    SymbolParameterDataType_LineSpacing = 22;
+    SymbolParameterDataType_TextColor = 23;
+    SymbolParameterDataType_GhostColor = 24;
+    SymbolParameterDataType_FrameLineColor = 25;
+    SymbolParameterDataType_FrameFillColor = 26;
+    SymbolParameterDataType_StartOffset = 27;
+    SymbolParameterDataType_EndOffset = 28;
+    SymbolParameterDataType_RepeatX = 29;
+    SymbolParameterDataType_RepeatY = 30;
+}
+
+// =================================== Watermark Definition Contracts ============================ //
+
+// The specification of a watermark
+message WatermarkDefinition {
+    oneof content {
+        SimpleSymbolDefinition simple_symbol_definition = 1;
+        CompoundSymbolDefinition compound_symbol_definition = 2;
+    }
+    WatermarkAppearanceType appearance = 3;
+    oneof position {
+        XYPositionType xy_position = 4;
+        TilePositionType tile_position = 5;
+    }
+}
+
+// Specifies the context in which the watermark is displayed
+enum UsageType {
+    // Watermark is displayed in WMS
+    UsageType_WMS = 0;
+    // Watermark is displayed in AJAX or Fusion viewers
+    UsageType_Viewer = 1;
+    // Watermark is displayed in all contexts
+    UsageType_All = 2;
+}
+
+// Enumerates the allowed length units for a watermark position
+enum UnitType {
+    UnitType_Inches = 0;
+    UnitType_Centimeters = 1;
+    UnitType_Millimeters = 2;
+    UnitType_Pixels = 3;
+    UnitType_Points = 4;
+}
+
+// Enumerates the allowed horizontal alignment values for a watermark position
+enum HorizontalAlignmentType {
+    HorizontalAlignmentType_Left = 0;
+    HorizontalAlignmentType_Center = 1;
+    HorizontalAlignmentType_Right = 2;
+}
+
+// Enumerates the allowed vertical alignments for a watermark position
+enum VerticalAlignmentType {
+    VerticalAlignmentType_Top = 0;
+    VerticalAlignmentType_Center = 1;
+    VerticalAlignmentType_Bottom = 2;
+}
+
+// Defines the horizontal position of a watermark
+message HorizontalPositionType {
+    // The horizontal offset for the position
+    double offset = 1;
+    // The unit for the offset
+    UnitType unit = 2;
+    // The horizontal alignment for the position
+    HorizontalAlignmentType alignment = 3;
+}
+
+// Defines the vertical position of a watermark
+message VerticalPositionType {
+    // The vertical offset for the position
+    double offset = 1;
+    // The unit for the offset
+    UnitType unit = 2;
+    // The vertical alignment for the positio
+    VerticalAlignmentType alignment = 3;
+}
+
+// Positions a watermark at a single X/Y location
+message XYPositionType {
+    // The position along the X-axis
+    HorizontalPositionType x_position = 1;
+    // The position along the Y-axis
+    VerticalPositionType y_position = 2;
+}
+
+// Positions a watermark according to a regular grid
+message TilePositionType {
+    // The width of each tile in the grid
+    double tile_width = 1;
+    // The height of each tile in the grid
+    double tile_height = 2;
+    // The horizontal position of the watermark within a tile
+    HorizontalPositionType horizontal_position = 3;
+    // The vertical position of the watermark within a tile
+    VerticalPositionType vertical_position = 4;
+}
+
+message WatermarkAppearanceType {
+    double transparency = 1;
+    double rotation = 2;
+}
+
+message WatermarkType {
+    string name = 1;
+    string resource_id = 2;
+    UsageType usage = 3;
+    WatermarkAppearanceType apperance_override = 4;
+    oneof position_override {
+        XYPositionType xy_position = 5;
+        TilePositionType tile_position = 6;
+    }
+}
+
+// =================================== Begin Common Contracts ==================================== //
+
+// Describes a basic service operation response
+message BasicResponse {
+    //An error if one was raised by the service operation
+    Error error = 1;
+}
+
+// Defines the repository type
+enum RepositoryType {
+    RepositoryType_Library = 0;
+}
+
+// Defines a type of resource
+enum ResourceType {
+    ResourceType_FeatureSource = 0;
+    ResourceType_LayerDefinition = 1;
+    ResourceType_MapDefinition = 2;
+    ResourceType_SymbolDefinition = 3;
+    ResourceType_WatermarkDefinition = 4;
+    ResourceType_TileSetDefinition = 5;
+    ResourceType_Folder = 6;
+}
+
+// Describes a means of accessing a given resource
+message ResourceIdentifier {
+    // The name
+    string name = 1;
+    // The path
+    string path = 2;
+    // The name of the repository
+    string repository_name = 3;
+    // The repository type
+    RepositoryType repository_type = 4;
+    // The resource type
+    ResourceType resource_type = 5;
+}
+
+// Describes an error returned by a service operation
+message Error {
+    // The name of the error
+    string name = 1;
+    // The error message
+    string message = 2;
+    // The stack trace of the service operation implementation that threw the error
+    repeated string stack = 3;
+}
+
+// Describes a collection of strings
+message StringCollection {
+    // The list of string items
+    repeated string items = 1;
+}
+
+// ================================= Begin Geometry Contracts ==================================== //
+
+message Point {
+    double x = 1;
+    double y = 2;
+    google.protobuf.DoubleValue z = 3;
+    google.protobuf.DoubleValue m = 4;
+}
+
+message LineString {
+    repeated Point points = 1;
+}
+
+message Ring {
+    repeated Point points = 1;
+}
+
+message Polygon {
+    Ring outer_ring = 1;
+    repeated Ring interior_rings = 2;
+}
+
+message MultiPoint {
+    repeated Point points = 1;
+}
+
+message MultiLineString {
+    repeated LineString line_strings = 1;
+}
+
+message MultiPolygon {
+    repeated Polygon polygons = 1;
+}
+
+message GeometryCollection {
+    repeated Geometry geometries = 1;
+}
+
+message Geometry {
+    oneof geometry_type {
+        Point point = 1;
+        LineString line_string = 2;
+        Polygon polygon = 3;
+        MultiPoint multi_point = 4;
+        MultiLineString multi_line_string = 5;
+        MultiPolygon multi_polygon = 6;
+        GeometryCollection geometry_collection = 7;
+    }
+}
+
+// =================================== Begin FDO Contracts ======================================= //
+
+// Describes a FDO data property
+message DataPropertyDescriptor {
+    // The name of the property
+    string name = 1;
+    // The FDO data type
+    LogicalPropertyType property_type = 2;
+}
+
+// Describes a data record header
+message DataRecordHeader {
+    // The collection of data property descriptors
+    repeated DataPropertyDescriptor properties = 1;
+}
+
+// A data record from a SQL or Aggregate feature query
+message DataRecord { //TODO: Maybe this should be a oneof
+    //An error if one was raised by the service operation. This only exists in the first data record
+    Error error = 1;
+    //A data record header describing the structure of the data record. This only exists on the first data record
+    DataRecordHeader header = 2;
+    //The property values of the data record. This exists on the records beyond the first
+    repeated PropertyValue values = 3;
+}
+
+// A feature record from a feature query
+message FeatureRecord { //TODO: Maybe this should be a oneof
+    //An error if one was raised by the service operation. This only exists in the first data record
+    Error error = 1;
+    //A class definition describing the structure of the feature. This only exists on the first feature record
+    ClassDefinition header = 2;
+    //The property values of the feature record. This exists on the records beyond the first
+    repeated PropertyValue values = 3;
+}
+
+// Describes a FDO feature schema
+message FeatureSchema {
+    // The name of the schema
+    string name = 1;
+    // The schema description
+    google.protobuf.StringValue description = 2;
+    // The collection of classes
+    repeated ClassDefinition classes = 3;
+    // Indicates if this item is marked for deletion. Only used when applying this schema. Ignored otherwise
+    bool marked_for_delete = 4;
+}
+
+// Describes a FDO class definition
+message ClassDefinition {
+    // The name of the class
+    string name = 1;
+    // The class description
+    google.protobuf.StringValue description = 2;
+    // The name of the default designated geometry property
+    google.protobuf.StringValue geometry_property_name = 3;
+    // The collection of properties
+    repeated PropertyDefinition properties = 4;
+    // The collection of identity property names. The corresponding properties must exist in the property collection
+    repeated string identity_property_names = 5;
+    // Indicates if this item is marked for deletion. Only used when applying this schema. Ignored otherwise
+    bool marked_for_delete = 6;
+}
+
+// Describes a FDO property definition
+message PropertyDefinition {
+    // The name of the property
+    string name = 1;
+    // The description of the property
+    google.protobuf.StringValue description = 2;
+    // Indicates if this item is marked for deletion. Only used when applying this schema. Ignored otherwise
+    bool marked_for_delete = 3;
+    oneof property_type {
+        DataPropertyDefinition data = 4;
+        GeometricPropertyDefinition geom = 5;
+        RasterPropertyDefinition raster = 6;
+    }
+}
+
+// Describes a FDO data type
+enum DataPropertyType {
+    // Binary Large Object
+    DataPropertyType_Blob = 0;
+    // Boolean
+    DataPropertyType_Boolean = 1;
+    // Byte. NOTE: Due to protobuf limitation, we use int32 to store such values.
+    // To prevent overflow, you must ensure that you must not store values beyond
+    // the allowed limits of a byte. When reading, you can assume the value lies
+    // within the allowed limits of a byte.
+    DataPropertyType_Byte = 2;
+    // Character Large Object
+    DataPropertyType_Clob = 3;
+    // DateTime
+    DataPropertyType_DateTime = 4;
+    // Decimal
+    DataPropertyType_Decimal = 5;
+    // Double
+    DataPropertyType_Double = 6;
+    // Int16. NOTE: Due to protobuf limitation, we use int32 to store such values.
+    // To prevent overflow, you must ensure that you must not store values beyond
+    // the allowed limits of an int16 (aka. short). When reading, you can assume the value lies
+    // within the allowed limits of an int16.
+    DataPropertyType_Int16 = 7;
+    // Int32
+    DataPropertyType_Int32 = 8;
+    // Int64
+    DataPropertyType_Int64 = 9;
+    // Single
+    DataPropertyType_Single = 10;
+    // String
+    DataPropertyType_String = 11;
+}
+
+enum LogicalPropertyType {
+    // Data - Binary Large Object
+    LogicalPropertyType_Data_Blob = 0;
+    // Data - Boolean
+    LogicalPropertyType_Data_Boolean = 1;
+    // Data - Byte. NOTE: Due to protobuf limitation, we use int32 to store such values.
+    // To prevent overflow, you must ensure that you must not store values beyond
+    // the allowed limits of a byte. When reading, you can assume the value lies
+    // within the allowed limits of a byte.
+    LogicalPropertyType_Data_Byte = 2;
+    // Data - Character Large Object
+    LogicalPropertyType_Data_Clob = 3;
+    // Data - DateTime
+    LogicalPropertyType_Data_DateTime = 4;
+    // Data - Decimal
+    LogicalPropertyType_Data_Decimal = 5;
+    // Data - Double
+    LogicalPropertyType_Data_Double = 6;
+    // Data - Int16. NOTE: Due to protobuf limitation, we use int32 to store such values.
+    // To prevent overflow, you must ensure that you must not store values beyond
+    // the allowed limits of an int16 (aka. short). When reading, you can assume the value lies
+    // within the allowed limits of an int16.
+    LogicalPropertyType_Data_Int16 = 7;
+    // Data - Int32
+    LogicalPropertyType_Data_Int32 = 8;
+    // Data - Int64
+    LogicalPropertyType_Data_Int64 = 9;
+    // Data - Single
+    LogicalPropertyType_Data_Single = 10;
+    // Data - String
+    LogicalPropertyType_Data_String = 11;
+    // Geometric
+    LogicalPropertyType_Geometric = 12;
+    // Raster
+    LogicalPropertyType_Raster = 13;
+}
+
+// Describes a FDO raster property definition
+message RasterPropertyDefinition {
+    // Indicates if this property is read only
+    bool is_read_only = 3;
+    // Indicates if this property is nullable
+    bool is_nullable = 4;
+    // The name of the associated spatial context
+    string spatial_context = 5;
+    // The X image size
+    int32 image_x_size = 6;
+    // The Y image size
+    int32 image_y_size = 7;
+}
+
+// Describes a FDO data property definition
+message DataPropertyDefinition {
+    // The FDO data type of this property
+    DataPropertyType data_type = 3;
+    // Indicates if this property is read only
+    bool is_read_only = 4;
+    // Indicates if this property is nullable
+    bool is_nullable = 5;
+    // Indicates if this property is auto-generated
+    bool is_auto_generated = 6;
+    // The maximum length of this property. Only applicable if the data type is string
+    google.protobuf.Int32Value string_length = 7;
+    // The decimal precision of this property. Only applicable if the data type is decimal
+    google.protobuf.Int32Value decimal_precision = 8;
+    // The decimal scale of this property. Only applicable if the data type is decimal
+    google.protobuf.Int32Value decimal_scale = 9;
+    // The default value of this property. Only applicable if the data type is string
+    google.protobuf.StringValue default_value = 10;
+}
+
+enum GeometryType {
+    GeometryType_Unknown = 0;
+    GeometryType_Points = 1;
+    GeometryType_Curves = 2;
+    GeometryType_Surfaces = 4;
+    //All basic geometry types. Hack flag to workaround protobuf limitation where this enum with bitmask
+    //values cannot be logically OR-ed together
+    GeometryType_AllFlat = 7;
+    GeometryType_Solids = 8;
+    GeometryType_All = 15;
+}
+
+enum SpecificGeometryType {
+    SpecificGeometryType_None = 0;
+    SpecificGeometryType_Point = 1;
+    SpecificGeometryType_LineString = 2;
+    SpecificGeometryType_Polygon = 3;
+    SpecificGeometryType_MultiPoint = 4;
+    SpecificGeometryType_MultiLineString = 5;
+    SpecificGeometryType_MultiPolygon = 6;
+    SpecificGeometryType_MultiGeometry = 7;
+    SpecificGeometryType_CurveString = 10;
+    SpecificGeometryType_CurvePolygon = 11;
+    SpecificGeometryType_MultiCurveString = 12;
+    SpecificGeometryType_MultiCurvePolygon = 13;
+}
+
+// Describes a FDO geometric property definition
+message GeometricPropertyDefinition {
+    // The name of the associated spatial context
+    string spatial_context = 3;
+    // The basic geometry type of this property
+    GeometryType geometry_type = 4;
+    // The specific geometry type of this property
+    repeated SpecificGeometryType specific_geometry_type = 5;
+    // Indicates if this property is read only
+    bool is_read_only = 6;
+    // Indicates if this property has elevation
+    bool has_elevation = 7;
+}
+
+/*
+// Describes a reference to an open transaction
+message TransactionRef {
+    // The transaction id
+    string id = 1;
+}
+*/
+
+// Describes a parameter
+message QueryParameter {
+    // The name of the parameter value
+    string name = 1;
+    BasicPropertyValue value = 2;
+}
+
+// Describes a colletion of parameters
+message QueryParameterCollection {
+    // The collection of parameters
+    repeated QueryParameter values = 1;
+}
+
+// Describes the capabilities of a FDO provider
+message ProviderCapabilities {
+    ProviderName provider = 1;
+    ProviderConnectionCapabilities connection = 2;
+    ProviderSchemaCapabilities schema = 3;
+    ProviderCommandCapabilities command = 4;
+    ProviderFilterCapabilities filter = 5;
+    ProviderExpressionCapabilities expression = 6;
+    ProviderRasterCapabilities raster = 7;
+    ProviderTopologyCapabilities topology = 8;
+    ProviderGeometryCapabilities geometry = 9;
+}
+
+// The provider name
+message ProviderName {
+    string name = 1;
+}
+
+enum ProviderThreadCapability {
+    ProviderThreadCapability_SingleThreaded = 0;
+    ProviderThreadCapability_PerConnectionThreaded = 1;
+    ProviderThreadCapability_PerCommandThreaded = 2;
+    ProviderThreadCapability_MultiThreaded = 3;
+}
+
+message ProviderConnectionCapabilities {
+    ProviderThreadCapability thread_capability = 1;
+    repeated SpatialContextExtentType spatial_context_extent_types = 2;
+    bool supports_locking = 3;
+    bool supports_timeout = 4;
+    bool supports_transactions = 5;
+    bool supports_sql = 6;
+    bool supports_configuration = 7;
+}
+
+enum ClassType {
+    ClassType_Class = 0;
+    ClassType_FeatureClass = 1;
+}
+
+enum ProviderCommandType {
+    ProviderCommandType_Select = 0;
+    ProviderCommandType_Insert = 1;
+    ProviderCommandType_Delete = 2;
+    ProviderCommandType_Update = 3;
+    ProviderCommandType_DescribeSchema = 4;
+    ProviderCommandType_DescribeSchemaMapping = 5;
+    ProviderCommandType_ApplySchema = 6;
+    ProviderCommandType_DestroySchema = 7;
+    ProviderCommandType_ActivateSpatialContext = 8;
+    ProviderCommandType_CreateSpatialContext = 9;
+    ProviderCommandType_DestroySpatialContext = 10;
+    ProviderCommandType_GetSpatialContexts = 11;
+    ProviderCommandType_CreateMeasureUnit = 12;
+    ProviderCommandType_DestroyMeasureUnit = 13;
+    ProviderCommandType_GetMeasureUnits = 14;
+    ProviderCommandType_SQLCommand = 15;
+    ProviderCommandType_AcquireLock = 16;
+    ProviderCommandType_GetLockInfo = 17;
+    ProviderCommandType_GetLockedObjects = 18;
+    ProviderCommandType_GetLockOwners = 19;
+    ProviderCommandType_ReleaseLock = 20;
+    ProviderCommandType_ActivateLongTransaction = 21;
+    ProviderCommandType_DeactivateLongTransaction = 22;
+    ProviderCommandType_CommitLongTransaction = 23;
+    ProviderCommandType_CreateLongTransaction = 24;
+    ProviderCommandType_GetLongTransactions = 25;
+    ProviderCommandType_FreezeLongTransaction = 26;
+    ProviderCommandType_RollbackLongTransaction = 27;
+    ProviderCommandType_ActivateLongTransactionCheckpoint = 28;
+    ProviderCommandType_CreateLongTransactionCheckpoint = 29;
+    ProviderCommandType_GetLongTransactionCheckpoints = 30;
+    ProviderCommandType_RollbackLongTransactionCheckpoint = 31;
+    ProviderCommandType_ChangeLongTransactionPrivileges = 32;
+    ProviderCommandType_GetLongTransactionPrivileges = 33;
+    ProviderCommandType_ChangeLongTransactionSet = 34;
+    ProviderCommandType_GetLongTransactionsInSet = 35;
+    ProviderCommandType_NetworkShortestPath = 36;
+    ProviderCommandType_NetworkAllPaths = 37;
+    ProviderCommandType_NetworkReachableNodes = 38;
+    ProviderCommandType_NetworkReachingNodes = 39;
+    ProviderCommandType_NetworkNearestNeighbors = 40;
+    ProviderCommandType_NetworkWithinCost = 41;
+    ProviderCommandType_NetworkTSP = 42;
+    ProviderCommandType_ActivateTopologyArea = 43;
+    ProviderCommandType_DeactivateTopologyArea = 44;
+    ProviderCommandType_ActivateTopologyInCommandResult = 45;
+    ProviderCommandType_DeactivateTopologyInCommandResults = 46;
+    ProviderCommandType_SelectAggregates = 47;
+    ProviderCommandType_CreateDataStore = 48;
+    ProviderCommandType_DestroyDataStore = 49;
+    ProviderCommandType_ListDataStores = 50;
+    ProviderCommandType_FirstProviderCommand = 51;
+}
+
+message ProviderCommandCapabilities {
+    repeated ProviderCommandType supported_commands = 1;
+    bool supports_parameters = 2;
+    bool supports_timeout = 3;
+    bool supports_select_expressions = 4;
+    bool supports_select_functions = 5;
+    bool supports_select_distinct = 6;
+    bool supports_select_ordering = 7;
+    bool supports_select_grouping = 8;
+}
+
+message ProviderSchemaCapabilities {
+    repeated ClassType class_types = 1;
+    repeated DataPropertyType data_types = 2;
+    bool supports_inheritance = 3;
+    bool supports_multiple_schemas = 4;
+    bool supports_association_properties = 5;
+    bool supports_schema_overrides = 6;
+    bool supports_network_model = 7;
+    bool supports_auto_id_generation = 8;
+    bool supports_data_store_scope_unique_id_generation = 9;
+    repeated DataPropertyType supported_auto_generated_types = 10;
+    bool supports_schema_modification = 11;
+}
+
+enum ProviderFilterConditionType {
+    ProviderFilterConditionType_Comparison = 0;
+    ProviderFilterConditionType_Like = 1;
+    ProviderFilterConditionType_In = 2;
+    ProviderFilterConditionType_Null = 3;
+    ProviderFilterConditionType_Spatial = 4;
+    ProviderFilterConditionType_Distance = 5;
+}
+
+enum DistanceOperation {
+    DistanceOperation_Beyond = 0;
+    DistanceOperation_Within = 1;
+}
+
+message ProviderFilterCapabilities {
+    repeated ProviderFilterConditionType conditions = 1;
+    repeated SpatialOperation spatial_operations = 2;
+    repeated DistanceOperation distance_operations = 3;
+    bool supports_geodesic_distance = 4;
+    bool supports_non_literal_geometric_operations = 5;
+}
+
+enum ExpressionType {
+    ExpressionType_Basic = 0;
+    ExpressionType_Function = 1;
+    ExpressionType_Parameter = 2;
+}
+
+enum FunctionCategory {
+    FunctionCategory_Aggregate = 0;
+    FunctionCategory_Conversion = 1;
+    FunctionCategory_Custom = 2;
+    FunctionCategory_Date = 3;
+    FunctionCategory_Geometry = 4;
+    FunctionCategory_Math = 5;
+    FunctionCategory_Numeric = 6;
+    FunctionCategory_String = 7;
+    FunctionCategory_Unspecified = 8;
+}
+
+enum PropertyDefinitionType {
+    PropertyDefinitionType_Data = 0;
+    PropertyDefinitionType_Object = 1;
+    PropertyDefinitionType_Geometry = 2;
+    PropertyDefinitionType_Association = 3;
+    PropertyDefinitionType_Raster = 4;
+}
+
+message ArgumentDefinition {
+    string name = 1;
+    string description = 2;
+    PropertyDefinitionType property_type = 3;
+    DataPropertyType data_type = 4;
+    repeated string property_value_constraints = 5;
+}
+
+message SignatureDefinition {
+    PropertyDefinitionType property_type = 1;
+    DataPropertyType data_type = 2;
+    repeated ArgumentDefinition arguments = 3;
+}
+
+message FunctionDefinition {
+    string name = 1;
+    string description = 2;
+    FunctionCategory category = 3;
+    bool is_aggregate = 4;
+    bool supports_variable_argument_list = 5;
+    repeated SignatureDefinition signatures = 6;
+}
+
+message ProviderExpressionCapabilities {
+    repeated ExpressionType expression_types = 1;
+    repeated FunctionDefinition functions = 2;
+}
+
+message ProviderRasterCapabilities {
+    bool supports_raster = 1;
+    bool supports_stitching = 2;
+    bool supports_subsampling = 3;
+}
+
+message ProviderTopologyCapabilities {
+    bool supports_topology = 1;
+    bool supports_topological_hierarchy = 2;
+    bool breaks_curve_crossings_automatically = 3;
+    bool activates_topology_by_area = 4;
+    bool constrains_feature_movements = 5;
+}
+
+enum GeometryComponentType {
+    GeometryComponentType_LinearRing = 0;
+    GeometryComponentType_CircularArcSegment = 1;
+    GeometryComponentType_LineStringSegment = 2;
+    GeometryComponentType_Ring = 4;
+}
+
+message ProviderGeometryCapabilities {
+    repeated SpecificGeometryType geometry_types = 1;
+    repeated GeometryComponentType geometry_components = 2;
+    int32 dimensionality = 3;
+}
+
+message ConnectionProperty {
+    string name = 1;
+    string localized_name = 2;
+    string default_value = 3;
+    repeated string values = 4;
+    bool required = 5;
+    bool protected = 6;
+    bool enumerable = 7;
+}
+
+// Describes information about a FDO provider
+message ProviderInfo {
+    string name = 1;
+    string description = 2;
+    string display_name = 3;
+    string version = 4;
+    repeated ConnectionProperty connection_properties = 5;
+}
+
+// Describes a configuration document for a FDO provider
+message DataStoreConfiguration {
+
+}
+
+// Describes a feature query property
+message QueryProperty {
+    oneof type {
+        QueryPropertyIdentifier identifier = 1;
+        QueryPropertyComputed computed = 2;
+    }
+}
+
+// Describes a feature property reference by identifier
+message QueryPropertyIdentifier {
+    // The name of the property
+    string name = 1;
+}
+
+// Describes a feature property reference by a computed FDO expression
+message QueryPropertyComputed {
+    // The name of the alias
+    string alias = 1;
+    // The FDO expression
+    string expression = 2;
+}
+
+// Describes a grouping filter for an aggregate query
+message GroupingFilter {
+    // The collection of property names to group by
+    repeated string group_by = 1;
+    // The FDO grouping filter
+    // NOTE: This is not an actual SQL WHERE clause. This string will be parsed into an FDO filter expression
+    // tree before query proecssing.
+    string having_filter = 2;
+}
+
+// Describes the ordering direction for an aggregate or feature query
+enum OrderingDirection {
+    // Order ascending
+    Ascending = 0;
+    // Order descending
+    Descending = 1;
+}
+
+// A reference to a geometry that can be in the form of either the raw geometry model or its Well-Known Text (WKT)
+// representation
+message GeometryRef {
+    oneof kind {
+        // The raw geometry model
+        Geometry geometry = 1;
+        // The geometry WKT text
+        string geometry_wkt = 2;
+    }
+}
+
+// Describes an ordering option for an aggregate or feature query
+message OrderingOption {
+    // The collection of property names to order by
+    repeated string order_by = 1;
+    // The direction to order query results
+    OrderingDirection direction = 2;
+}
+
+enum SpatialOperation {
+    SpatialOperation_Contains = 0;
+    SpatialOperation_Crosses = 1;
+    SpatialOperation_Disjoint = 2;
+    SpatialOperation_Equals = 3;
+    SpatialOperation_Intersects = 4;
+    SpatialOperation_Overlaps = 5;
+    SpatialOperation_Touches = 6;
+    SpatialOperation_Within = 7;
+    SpatialOperation_CoveredBy = 8;
+    SpatialOperation_Inside = 9;
+    SpatialOperation_EnvelopeIntersects = 10;
+}
+
+// Describes a spatial filter to apply for a feature query
+message SpatialFilter {
+    // The geometry property
+    string geometry_property = 1;
+    // The geometry object set in relation to the geometry property
+    GeometryRef geometry = 2;
+    // The spatial operation to perform between the geometry property and the geometry object
+    SpatialOperation operation = 3;
+}
+
+// Describes query options for an aggregate query
+message AggregateQueryOptions {
+    // A collection of properties to include
+    repeated QueryProperty properties = 1;
+    // Indicates whether to join a regular filter with a spatial filter
+    bool binaryOp = 2;
+    // For queries that return a large number of objects some feature sources support
+    // improving performance by setting fetch size in order to reduce the number of database server
+    // round trips required to satisfy the selection criteria. Providers that do not use a fetch size
+    // will ignore the fetch size parameter. This does not affect the actual results of queries as it
+    // is a performance tuning parameter
+    google.protobuf.Int32Value fetch_size = 3;
+    // The filter for this select operation. The filter acts like the where clause in an SQL Select
+    // statement. Not calling this method causes all instances of the feature class to be selected.
+    // NOTE: This is not an actual SQL WHERE clause. This string will be parsed into an FDO filter expression
+    // tree before query proecssing.
+    google.protobuf.StringValue filter = 4;
+    // The order (ascending or descending) in which the selected features are returned
+    OrderingOption ordering = 5;
+    // The spatial filter to apply
+    SpatialFilter spatial_filter = 6;
+    // Indicates whether to restrict the values returned by a select operation to be unique
+    bool distinct = 7;
+    // The grouping filter so that the results are grouped
+    GroupingFilter group_filter = 8;
+}
+
+// Describes query options for a standard feature query
+message FeatureQueryOptions {
+    // A collection of properties to include
+    repeated QueryProperty properties = 1;
+    // Indicates whether to join a regular filter with a spatial filter
+    bool binaryOp = 2;
+    // For queries that return a large number of objects some feature sources support
+    // improving performance by setting fetch size in order to reduce the number of database server
+    // round trips required to satisfy the selection criteria. Providers that do not use a fetch size
+    // will ignore the fetch size parameter. This does not affect the actual results of queries as it
+    // is a performance tuning parameter
+    google.protobuf.Int32Value fetch_size = 3;
+    // The filter for this select operation. The filter acts like the where clause in an SQL Select
+    // statement. Not calling this method causes all instances of the feature class to be selected.
+    // NOTE: This is not an actual SQL WHERE clause. This string will be parsed into an FDO filter expression
+    // tree before query proecssing.
+    google.protobuf.StringValue filter = 4;
+    // The order (ascending or descending) in which the selected features are returned
+    OrderingOption ordering = 5;
+    // The spatial filter to apply
+    SpatialFilter spatial_filter = 6;
+}
+
+// Describes a feature manipulation command
+message FeatureCommand {
+    // The FDO class name this command applies to
+    string class_name = 1;
+    oneof type {
+        InsertFeaturesCommand insert = 2;
+        UpdateFeaturesCommand update = 3;
+        DeleteFeaturesCommand delete = 4;
+    }
+}
+
+// Describes a command to insert a feature
+message InsertFeaturesCommand {
+    // The collection of property values to insert
+    repeated PropertyValue values = 1;
+}
+
+// Describes a command to update features
+message UpdateFeaturesCommand {
+    // The collection of property values to update with
+    repeated PropertyValue values = 1;
+    // The FDO filter to update features
+    // NOTE: This is not an actual SQL WHERE clause. This string will be parsed into an FDO filter expression
+    // tree before query proecssing.
+    google.protobuf.StringValue filter = 2;
+}
+
+// Describes a command to delete features
+message DeleteFeaturesCommand {
+    // The FDO filter to delete features
+    // NOTE: This is not an actual SQL WHERE clause. This string will be parsed into an FDO filter expression
+    // tree before query proecssing.
+    google.protobuf.StringValue filter = 1;
+}
+
+// Describes a date/time value
+message DateTimeValue {
+    int32 year = 1;
+    int32 month = 2;
+    int32 day = 3;
+    int32 hour = 4;
+    int32 minute = 5;
+    float second = 6;
+    int32 time_zone = 7;
+}
+
+message BasicPropertyValue {
+    oneof type {
+        bool bool_value = 2;
+        int32 byte_value = 3;
+        DateTimeValue date_time_value = 4;
+        float single_value = 5;
+        double double_value = 6;
+        int32 int16_value = 7;
+        int32 int32_value = 8;
+        int64 int64_value = 9;
+        string string_value = 10;
+        bytes blob_value = 11;
+        bytes clob_value = 12;
+        double decimal_value = 16;
+    }
+}
+
+message FeaturePropertyValue {
+    oneof type {
+        bool bool_value = 2;
+        int32 byte_value = 3;
+        DateTimeValue date_time_value = 4;
+        float single_value = 5;
+        double double_value = 6;
+        int32 int16_value = 7;
+        int32 int32_value = 8;
+        int64 int64_value = 9;
+        string string_value = 10;
+        bytes blob_value = 11;
+        bytes clob_value = 12;
+        FeatureRecord feature_value = 13;
+        Geometry geometry_value = 14;
+        bytes raster_value = 15;
+        double decimal_value = 16;
+    }
+}
+
+// Describes a property value
+message PropertyValue {
+    // The name of the property value
+    string name = 1;
+    FeaturePropertyValue value = 2;
+}
+
+// Describes the type of extent for spatial contexts
+enum SpatialContextExtentType {
+    // The extent is static
+    SpatialContextExtentType_Static = 0;
+    // The extent is dynamic
+    SpatialContextExtentType_Dynamic = 1;
+}
+
+// Describes a spatial context
+message SpatialContext {
+    // The name of the spatial context
+    string name = 1;
+    // The coordinate system name of the spatial context
+    string coordinate_system = 2;
+    // The coordinate system WKT of the spatial context
+    string coordinate_system_wkt = 3;
+    // The description of the spatial context
+    string description = 4;
+    // The bounding box of the spatial context
+    Box2D extent = 5;
+    // The bounding box extent type
+    SpatialContextExtentType extent_type = 6;
+    // The X/Y coordinate tolerance
+    double xy_tolerance = 7;
+    // The Z coordinate tolerance
+    double z_tolerance = 8;
+}
+
+// =========================== Begin Feature Service Contracts =========================== //
+
+// An operation request to create a Feature Source
+message CreateFeatureSourceRequest {
+    // The feature source id
+    ResourceIdentifier feature_source = 1;
+    // The FDO provider
+    string provider = 2;
+    // The file name
+    string file_name = 3;
+    // The FDO Feature Schema to apply
+    FeatureSchema schema = 4;
+    // The spatial context to apply
+    SpatialContext spatial_context = 5;
+}
+
+// An operation request to apply a FDO Feature Schema to a given Feature Source
+message ApplySchemaRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+    // The FDO Feature Schema to apply
+    FeatureSchema schema = 2;
+}
+
+/*
+// An operation request to begin a transaction on a Feature Source
+message BeginTransactionRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+}
+
+// An operation response for a BeginTransaction operation
+message BeginTransactionResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    TransactionRef result = 2;
+}
+
+// An operation request to delete features from a Feature Source
+message DeleteFeaturesRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+    // The FDO class name
+    string class_name = 2;
+    // The FDO filter to delete features
+    // NOTE: This is not an actual SQL WHERE clause. This string will be parsed into an FDO filter expression
+    // tree before query proecssing.
+    string filter = 3;
+    // An optional transaction reference
+    TransactionRef transaction = 4;
+}
+
+// An operation response for a DeleteFeatures operation
+message DeleteFeaturesResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    int32 result = 2;
+}
+*/
+
+// An operation request to describe the structure of a Feature Source
+message DescribeSchemaRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+    // The name of the FDO schema
+    string schema_name = 2;
+    // An optional collection of class names to filter down
+    repeated string class_names = 3;
+}
+
+// An operation response for a DescribeSchema operation
+message DescribeSchemaResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated FeatureSchema result = 2;
+}
+
+// An operation request to enumerate the data stores for a FDO provider
+message EnumerateDataStoresRequest {
+    // The FDO provider
+    string provider = 1;
+    // The FDO connection string
+    string connection_string = 2;
+}
+
+// An operation response for a EnumerateDataStores operation
+message EnumerateDataStoresResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated string result = 2;
+}
+
+// An operation request to execute non-query SQL for a SQL-supporting FDO provider
+message ExecuteSqlNonQueryRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+    // The SQL command
+    string sql = 2;
+    // A collection of SQL parameter
+    QueryParameterCollection parameters = 3;
+    // An optional transaction reference
+    //TransactionRef transaction = 4;
+}
+
+// An operation response for a ExecuteSqlNonQuery operation
+message ExecuteSqlNonQueryResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    int32 result = 2;
+}
+
+// An operation request to execute query SQL for a SQL-supporting FDO provider
+message ExecuteSqlQueryRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+    // The SQL command
+    string sql = 2;
+    // A collection of SQL parameter
+    QueryParameterCollection parameters = 3;
+    // An optional transaction reference
+    //TransactionRef transaction = 4;
+}
+
+// An operation request to get the capabilities of a FDO provider
+message GetCapabilitiesRequest {
+    // The FDO provider
+    string provider = 1;
+    // An optional FDO connection string
+    string connection_string = 2;
+}
+
+// An operation response for a GetCapabilities operation
+message GetCapabilitiesResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    ProviderCapabilities result = 2;
+}
+
+// An operation request to get a class definition from a Feature Source
+message GetClassDefinitionRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+    // The FDO schema name
+    string schema_name = 2;
+    // The FDO class name
+    string class_name = 3;
+}
+
+// An operation response from a GetClassDefinition request
+message GetClassDefinitionResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    ClassDefinition result = 2;
+}
+
+// An operation request to list the class names for a FDO schema in a Feature Source
+message GetClassesRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+    // The FDO schema name
+    string schema_name = 2;
+}
+
+// An operation response from a GetClasses request
+message GetClassesResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated string result = 2;
+}
+
+// An operation request to list the available values for a FDO connection property
+message GetConnectionPropertyValuesRequest {
+    // The FDO provider
+    string provider = 1;
+    // The connection property name
+    string property_name = 2;
+    // The connection string
+    string connection_string = 3;
+}
+
+// An operation response for a GetConnectionPropertyValues request
+message GetConnectionPropertyValuesResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated string result = 2;
+}
+
+// An operation request to get the installed FDO providers
+message GetFeatureProvidersRequest {
+
+}
+
+// An operation response for a GetFeatureProviders request
+message GetFeatureProvidersResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated ProviderInfo result = 2;
+}
+
+/*
+// An operation request to get query locked features from a Feature Source
+message GetLockedFeaturesRequest {
+    // The feature source ID
+    ResourceIdentifier feature_source = 1;
+    // The FDO class name
+    string class_name = 2;
+    // The query options
+    FeatureQueryOptions options = 3;
+}
+
+// An operation request to get long transactions from a Feature Source
+message GetLongTransactionsRequest {
+
+}
+
+// An operation response for a GetLongTransactions request
+message GetLongTransactionsResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated string result = 2;
+}
+*/
+
+// An operation request all of the logical to physical schema mappings for the
+// specified provider and partial connection string
+message GetSchemaMappingRequest {
+    // The FDO provider
+    string provider = 1;
+    // The partial or full connection string
+    string connection_string = 2;
+}
+
+// An operation response for a GetSchemaMapping request
+message GetSchemaMappingResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    DataStoreConfiguration result = 2;
+}
+
+// An operation request to list the names of all schemas for Feature Source
+message GetSchemasRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+}
+
+// An operation response for a GetSchemas request
+message GetSchemasResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated string result = 2;
+}
+
+// An operation request to list all spatial contexts for a Feature Source
+message GetSpatialContextsRequest {
+    // The Feature Source ID
+    ResourceIdentifier feature_source = 1;
+}
+
+// An operation response for a GetSpatialContext request
+message GetSpatialContextsResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated SpatialContext result = 2;
+}
+
+/*
+// An operation to insert features into a Feature Source
+message InsertFeaturesRequest {
+    // The feature source ID
+    ResourceIdentifier feature_source = 1;
+}
+
+// An operation result for a InsertFeatures request
+message InsertFeaturesResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated FeatureRecord result = 2;
+}
+*/
+
+// An operation request to query features in an aggregated manner from a Feature Source
+message SelectAggregateRequest {
+    // The feature source ID
+    ResourceIdentifier feature_source = 1;
+    // The FDO class name
+    string class_name = 2;
+    // The query options
+    AggregateQueryOptions options = 3;
+}
+
+// An operation request to query features from a Feature Source
+message SelectFeaturesRequest {
+    // The feature source ID
+    ResourceIdentifier feature_source = 1;
+    // The FDO class name
+    string class_name = 2;
+    // The query options
+    FeatureQueryOptions options = 3;
+}
+
+/*
+// An operation request to set the active long transaction of a Feature Source that supports long transactions
+message SetLongTransactionRequest {
+    // The feature source ID
+    ResourceIdentifier feature_source = 1;
+    // The long transaction name
+    string name = 2;
+}
+*/
+// An operation request to test whether a given Feature Source can be connected to
+message TestConnectionRequest {
+    // The feature source ID
+    ResourceIdentifier feature_source = 1;
+}
+
+// An operation response for a TestConnection operation
+message TestConnectionResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    bool result = 2;
+}
+
+// An operation request to run a series of feature manipulation commands on a Feature Source
+message UpdateFeaturesRequest {
+    // The feature source ID
+    ResourceIdentifier feature_source = 1;
+    // The collection of commands to execute
+    repeated FeatureCommand commands = 2;
+    // Use a transaction if available
+    bool use_transaction = 3;
+}
+
+// An operation response for an UpdateFeatures request
+message UpdateFeaturesResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    repeated PropertyValue result = 2;
+}
+
+/*
+// An operation request to update features in a Feature Source
+message UpdateMatchingFeaturesRequest {
+    // The feature source ID
+    ResourceIdentifier feature_source = 1;
+    // The FDO class name
+    string class_name = 2;
+    // The collection of properties to update with
+    repeated PropertyValue properties = 3;
+    // The FDO filter
+    string filter = 4;
+}
+
+// An operation response for a UpdateMatchingFeatures request
+message UpdateMatchingFeaturesResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    int32 result = 2;
+}
+*/
+// =========================== Begin Resource Service Contracts =========================== //
+
+// Describes resource content
+message Resource {
+    oneof type {
+        FeatureSource feature_source = 1;
+        LayerDefinition layer_definition = 2;
+        MapDefinition map_definition = 3;
+        SymbolDefinition symbol_definition = 4;
+        WatermarkDefinition watermark_definition = 5;
+        TileSetDefinition tile_set_definition = 6;
+    }
+}
+
+// An operation request to enumerate resources
+message EnumerateResourcesRequest {
+    // The resource ID
+    ResourceIdentifier resource = 1;
+}
+
+// An operation response for a EnumerateResources request
+message EnumerateResourcesResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    bytes result = 2;
+}
+
+// An operation request to get the content for a given resource
+message GetResourceContentRequest {
+    // The resource ID
+    ResourceIdentifier resource = 1;
+}
+
+// An operation response for a GetResourceContent request
+message GetResourceContentResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    Resource result = 2;
+}
+
+// An operation request to test whether the specified resource exists
+message ResourceExistsRequest {
+    // The resource ID
+    ResourceIdentifier resource = 1;
+}
+
+// An operation response for a ResourceExists request
+message ResourceExistsResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    bool result = 2;
+}
+
+// A service operation to set or update the content for a particular resource
+message SetResourceRequest {
+    // The resource ID
+    ResourceIdentifier resource = 1;
+    // The resource content
+    Resource content = 2;
+    // The resource header
+    bytes header = 3;
+}
+
+// An operation request to delete the resource indicated by the specified resource id
+message DeleteResourceRequest {
+    // The resource ID
+    ResourceIdentifier resource = 1;
+}
+
+// =========================== Begin Rendering Service Contracts =========================== //
+
+// An operation request to identifies those features that meet the specified spatial selection criteria
+message QueryMapFeaturesRequest {
+
+}
+
+// An operation response for a QueryMapFeatures request
+message QueryMapFeaturesResponse {
+
+}
+
+// An operation request to render an image for a given map
+message RenderMapRequest {
+
+}
+
+// An operation response for a RenderMap request
+message RenderMapResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    bytes image = 2;
+}
+
+// An operation request to render a tile for a given map
+message RenderTileRequest {
+
+}
+
+// An operation response for a RenderTile request
+message RenderTileResponse {
+    // An error if one was raised by the service operation
+    Error error = 1;
+    // The result of the operation
+    bytes tile = 2;
+}
+
+// ================================= Begin Service Definitions ====================================== //
+
+
+// Provides an abstraction layer for the storage and retrieval of feature data in a technology-independent way.
+// The API lets you determine what storage technologies are available and what capabilities they have. Access
+// to the storage technology is modeled as a connection. For example, you can connect to a file and do simple
+// insertions or connect to a relational database and do transaction-based operations.
+service FeatureService {
+    // Creates or updates a feature schema within the specified feature source.
+    // For this method to actually delete any schema elements, the matching elements
+    // in the input schema must be marked for deletion
+    rpc ApplySchema (ApplySchemaRequest) returns (BasicResponse);
+    // Creates a feature source in the repository identified by the specified resource
+    // identifier, using the given feature source parameters.
+    rpc CreateFeatureSource (CreateFeatureSourceRequest) returns (BasicResponse);
+    // Gets the definitions of one or more schemas contained in the feature source for particular classes.
+    // If the specified schema name or a class name does not exist, this method will throw an exception.
+    rpc DescribeSchema (DescribeSchemaRequest) returns (DescribeSchemaResponse);
+    // This method enumerates all the providers and if they are FDO enabled for the specified provider and partial connection string.
+    rpc EnumerateDataStores (EnumerateDataStoresRequest) returns (EnumerateDataStoresResponse);
+    // Executes SQL statements NOT including SELECT statements.
+    rpc ExecuteSqlNonQuery (ExecuteSqlNonQueryRequest) returns (ExecuteSqlNonQueryResponse);
+    // Executes the SQL SELECT statement on the specified feature source.
+    rpc ExecuteSqlQuery (ExecuteSqlQueryRequest) returns (stream DataRecord);
+    // Gets the capabilities of an FDO Provider
+    rpc GetCapabilities (GetCapabilitiesRequest) returns (GetCapabilitiesResponse);
+    // Gets the class definition for the specified class
+    rpc GetClassDefinition (GetClassDefinitionRequest) returns (GetClassDefinitionResponse);
+    // Gets a list of the names of all classes available within a specified schema
+    rpc GetClasses (GetClassesRequest) returns (GetClassesResponse);
+    // Gets a set of connection values that are used to make connections to an FDO provider that permits multiple connections.
+    rpc GetConnectionPropertyValues (GetConnectionPropertyValuesRequest) returns (GetConnectionPropertyValuesResponse);
+    // Gets a list of the available FDO providers together with other information such as the names of the connection properties for each provider
+    rpc GetFeatureProviders (GetFeatureProvidersRequest) returns (GetFeatureProvidersResponse);
+    // This method returns all of the logical to physical schema mappings for the specified provider and partial connection string
+    rpc GetSchemaMapping (GetSchemaMappingRequest) returns (GetSchemaMappingResponse);
+    // Gets a list of the names of all of the schemas available in the feature source
+    rpc GetSchemas (GetSchemasRequest) returns (GetSchemasResponse);
+    // Gets all of the spatial contexts available in the feature source
+    rpc GetSpatialContexts (GetSpatialContextsRequest) returns (GetSpatialContextsResponse);
+    // Selects groups of features from a feature source and applies filters to each of the groups according to the criteria set in the aggregate query option supplied
+    rpc SelectAggregate (SelectAggregateRequest) returns (stream DataRecord);
+    // Selects features from a feature source according to the criteria set in the query options provided
+    rpc SelectFeatures (SelectFeaturesRequest) returns (stream FeatureRecord);
+    // Connects to the Feature Provider specified in the connection string
+    rpc TestConnection (TestConnectionRequest) returns (TestConnectionResponse);
+    // Executes commands contained in the given command set
+    rpc UpdateFeatures (UpdateFeaturesRequest) returns (UpdateFeaturesResponse);
+}
+
+// Enables you to manipulate repositories and resources
+service ResourceService {
+    // Gets the content of the specified resource
+    rpc GetResourceContent (GetResourceContentRequest) returns (GetResourceContentResponse);
+    // Enumerates the resources in the specified repository
+    rpc EnumerateResources (EnumerateResourcesRequest) returns (EnumerateResourcesResponse);
+    // Checks to see if the specified resource exists
+    rpc ResourceExists (ResourceExistsRequest) returns (ResourceExistsResponse);
+    // Adds a new resource to a resource repository, or updates an existing resource
+    rpc SetResource (SetResourceRequest) returns (BasicResponse);
+    // Deletes the specified resource
+    rpc DeleteResource (DeleteResourceRequest) returns (BasicResponse);
+}
+
+// This class provides services to render a map into an image and other various representations
+service RenderingService {
+    // Identifies those features that meet the specified spatial selection criteria. This operation
+    // is used to implement server-side selection. In addition to a selection set, this operation may
+    // optionally returns attribute information and other related information
+    rpc QueryMapFeatures (QueryMapFeaturesRequest) returns (QueryMapFeaturesResponse);
+    // Renders the specified map to the requested format
+    rpc RenderMap (RenderMapRequest) returns (RenderMapResponse);
+    // Renders the specified base map tile for the given map.
+    rpc RenderTile (RenderTileRequest) returns (RenderTileRequest);
+}

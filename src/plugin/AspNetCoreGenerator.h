@@ -17,11 +17,6 @@ public:
                           const string & parameter,
                           GeneratorContext * generator_context,
                           string * error) const;
-
-private:
-    void PrintService(Printer& printer, const ServiceDescriptor* msg) const;
-    void PrintServiceMethod(Printer& printer, const MethodDescriptor* msg) const;
-    void PrintMessage(Printer& printer, const Descriptor* msg) const;
 };
 
 #endif
