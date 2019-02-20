@@ -5,3 +5,4 @@ bin
 obj
 /build
 /thirdparty/vcpkg-export
+/src/gateway/gateway.xml

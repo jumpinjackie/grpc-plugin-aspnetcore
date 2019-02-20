@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
+
+#pragma warning disable 1591
 
 namespace gateway
 {
@@ -34,6 +30,12 @@ namespace gateway
                     Title = "My GRPC Gateway",
                     Version = "v1"
                 });
+
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "gateway.xml");
+                c.IncludeXmlComments(filePath);
+
+                c.DescribeAllEnumsAsStrings();
+                c.DescribeStringEnumsInCamelCase();
             });
         }
 
@@ -56,6 +58,8 @@ namespace gateway
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.DisplayRequestDuration();
+                c.ShowExtensions();
             });
         }
     }

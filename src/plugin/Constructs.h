@@ -43,7 +43,7 @@ public:
         m_printer->Print("using System;\n");
         m_printer->Print("using System.Collections.Generic;\n");
         m_printer->Print("using System.Threading.Tasks;\n\n");
-
+        m_printer->Print("#pragma warning disable 1591\n\n");
         m_printer->Print("namespace $ns$\n", "ns", file->package());
         m_printer->Print("{\n");
         PRINTER_INDENT(m_printer); //Begin namespace
