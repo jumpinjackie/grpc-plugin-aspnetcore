@@ -1,0 +1,39 @@
+//
+// mvc.proto
+//
+// Special annotations for ASP.net core mvc <-> integration
+
+syntax = "proto3";
+
+package aspnet.core;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/descriptor.proto";
+
+enum HttpMethod {
+    HttpMethod_Get = 0;
+    HttpMethod_Post = 1;
+    HttpMethod_Put = 2;
+    HttpMethod_Delete = 3;
+}
+
+enum HttpInputSource {
+    HttpInputSource_Unspecified = 0;
+    HttpInputSource_Body = 1;
+    HttpInputSource_Form = 2;
+    HttpInputSource_Query = 3;
+    HttpInputSource_Header = 4;
+}
+
+message MvcRoute {
+    // The HTTP method
+    HttpMethod method = 1;
+    // Where the input argument should be read from
+    HttpInputSource source = 2;
+    // The route pattern for this service operation
+    google.protobuf.StringValue route_pattern = 3;
+}
+
+extend google.protobuf.MethodOptions {
+    MvcRoute api = 25898343;
+}

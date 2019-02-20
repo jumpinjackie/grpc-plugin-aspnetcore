@@ -3,6 +3,7 @@ option java_package="org.osgeo.mapguide";
 option java_multiple_files = true;
 package OSGeo.MapGuide;
 
+import "aspnetcore.proto";
 import "google/protobuf/wrappers.proto";
 
 // =================================== MDF Common Contracts ====================================== //
@@ -2600,57 +2601,162 @@ service FeatureService {
     // Creates or updates a feature schema within the specified feature source.
     // For this method to actually delete any schema elements, the matching elements
     // in the input schema must be marked for deletion
-    rpc ApplySchema (ApplySchemaRequest) returns (BasicResponse);
+    rpc ApplySchema (ApplySchemaRequest) returns (BasicResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Post,
+            source: HttpInputSource_Body
+        };
+    }
     // Creates a feature source in the repository identified by the specified resource
     // identifier, using the given feature source parameters.
-    rpc CreateFeatureSource (CreateFeatureSourceRequest) returns (BasicResponse);
+    rpc CreateFeatureSource (CreateFeatureSourceRequest) returns (BasicResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Post,
+            source: HttpInputSource_Body
+        };
+    }
     // Gets the definitions of one or more schemas contained in the feature source for particular classes.
     // If the specified schema name or a class name does not exist, this method will throw an exception.
-    rpc DescribeSchema (DescribeSchemaRequest) returns (DescribeSchemaResponse);
+    rpc DescribeSchema (DescribeSchemaRequest) returns (DescribeSchemaResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // This method enumerates all the providers and if they are FDO enabled for the specified provider and partial connection string.
-    rpc EnumerateDataStores (EnumerateDataStoresRequest) returns (EnumerateDataStoresResponse);
+    rpc EnumerateDataStores (EnumerateDataStoresRequest) returns (EnumerateDataStoresResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Executes SQL statements NOT including SELECT statements.
     rpc ExecuteSqlNonQuery (ExecuteSqlNonQueryRequest) returns (ExecuteSqlNonQueryResponse);
     // Executes the SQL SELECT statement on the specified feature source.
     rpc ExecuteSqlQuery (ExecuteSqlQueryRequest) returns (stream DataRecord);
     // Gets the capabilities of an FDO Provider
-    rpc GetCapabilities (GetCapabilitiesRequest) returns (GetCapabilitiesResponse);
+    rpc GetCapabilities (GetCapabilitiesRequest) returns (GetCapabilitiesResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Gets the class definition for the specified class
-    rpc GetClassDefinition (GetClassDefinitionRequest) returns (GetClassDefinitionResponse);
+    rpc GetClassDefinition (GetClassDefinitionRequest) returns (GetClassDefinitionResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Gets a list of the names of all classes available within a specified schema
-    rpc GetClasses (GetClassesRequest) returns (GetClassesResponse);
+    rpc GetClasses (GetClassesRequest) returns (GetClassesResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Gets a set of connection values that are used to make connections to an FDO provider that permits multiple connections.
-    rpc GetConnectionPropertyValues (GetConnectionPropertyValuesRequest) returns (GetConnectionPropertyValuesResponse);
+    rpc GetConnectionPropertyValues (GetConnectionPropertyValuesRequest) returns (GetConnectionPropertyValuesResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Gets a list of the available FDO providers together with other information such as the names of the connection properties for each provider
-    rpc GetFeatureProviders (GetFeatureProvidersRequest) returns (GetFeatureProvidersResponse);
+    rpc GetFeatureProviders (GetFeatureProvidersRequest) returns (GetFeatureProvidersResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // This method returns all of the logical to physical schema mappings for the specified provider and partial connection string
-    rpc GetSchemaMapping (GetSchemaMappingRequest) returns (GetSchemaMappingResponse);
+    rpc GetSchemaMapping (GetSchemaMappingRequest) returns (GetSchemaMappingResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Gets a list of the names of all of the schemas available in the feature source
-    rpc GetSchemas (GetSchemasRequest) returns (GetSchemasResponse);
+    rpc GetSchemas (GetSchemasRequest) returns (GetSchemasResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Gets all of the spatial contexts available in the feature source
-    rpc GetSpatialContexts (GetSpatialContextsRequest) returns (GetSpatialContextsResponse);
+    rpc GetSpatialContexts (GetSpatialContextsRequest) returns (GetSpatialContextsResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Selects groups of features from a feature source and applies filters to each of the groups according to the criteria set in the aggregate query option supplied
-    rpc SelectAggregate (SelectAggregateRequest) returns (stream DataRecord);
+    rpc SelectAggregate (SelectAggregateRequest) returns (stream DataRecord) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Selects features from a feature source according to the criteria set in the query options provided
-    rpc SelectFeatures (SelectFeaturesRequest) returns (stream FeatureRecord);
+    rpc SelectFeatures (SelectFeaturesRequest) returns (stream FeatureRecord) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Connects to the Feature Provider specified in the connection string
-    rpc TestConnection (TestConnectionRequest) returns (TestConnectionResponse);
+    rpc TestConnection (TestConnectionRequest) returns (TestConnectionResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Post,
+            source: HttpInputSource_Body
+        };
+    }
     // Executes commands contained in the given command set
-    rpc UpdateFeatures (UpdateFeaturesRequest) returns (UpdateFeaturesResponse);
+    rpc UpdateFeatures (UpdateFeaturesRequest) returns (UpdateFeaturesResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Post,
+            source: HttpInputSource_Body
+        };
+    }
 }
 
 // Enables you to manipulate repositories and resources
 service ResourceService {
     // Gets the content of the specified resource
-    rpc GetResourceContent (GetResourceContentRequest) returns (GetResourceContentResponse);
+    rpc GetResourceContent (GetResourceContentRequest) returns (GetResourceContentResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Enumerates the resources in the specified repository
-    rpc EnumerateResources (EnumerateResourcesRequest) returns (EnumerateResourcesResponse);
+    rpc EnumerateResources (EnumerateResourcesRequest) returns (EnumerateResourcesResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Checks to see if the specified resource exists
-    rpc ResourceExists (ResourceExistsRequest) returns (ResourceExistsResponse);
+    rpc ResourceExists (ResourceExistsRequest) returns (ResourceExistsResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Adds a new resource to a resource repository, or updates an existing resource
-    rpc SetResource (SetResourceRequest) returns (BasicResponse);
+    rpc SetResource (SetResourceRequest) returns (BasicResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Deletes the specified resource
-    rpc DeleteResource (DeleteResourceRequest) returns (BasicResponse);
+    rpc DeleteResource (DeleteResourceRequest) returns (BasicResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Post,
+            source: HttpInputSource_Body
+        };
+    }
 }
 
 // This class provides services to render a map into an image and other various representations
@@ -2658,9 +2764,24 @@ service RenderingService {
     // Identifies those features that meet the specified spatial selection criteria. This operation
     // is used to implement server-side selection. In addition to a selection set, this operation may
     // optionally returns attribute information and other related information
-    rpc QueryMapFeatures (QueryMapFeaturesRequest) returns (QueryMapFeaturesResponse);
+    rpc QueryMapFeatures (QueryMapFeaturesRequest) returns (QueryMapFeaturesResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Post,
+            source: HttpInputSource_Body
+        };
+    }
     // Renders the specified map to the requested format
-    rpc RenderMap (RenderMapRequest) returns (RenderMapResponse);
+    rpc RenderMap (RenderMapRequest) returns (RenderMapResponse) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
     // Renders the specified base map tile for the given map.
-    rpc RenderTile (RenderTileRequest) returns (RenderTileRequest);
+    rpc RenderTile (RenderTileRequest) returns (RenderTileRequest) {
+        option (aspnet.core.api) = {
+            method: HttpMethod_Get,
+            source: HttpInputSource_Query
+        };
+    }
 }

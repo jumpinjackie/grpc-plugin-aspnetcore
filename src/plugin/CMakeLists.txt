@@ -2,6 +2,7 @@ project(protoc_plugin_aspnetcore CXX)
 
 set(protoc_plugin_aspnetcore_SOURCES 
     main.cpp
+    aspnetcore.pb.cc
     AspNetCoreGenerator.cpp
 )
 

@@ -3,11 +3,21 @@
 
 #include <google/protobuf/compiler/code_generator.h>
 #include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
 #include <google/protobuf/compiler/plugin.h>
 #include <google/protobuf/io/printer.h>
+#include "aspnetcore.pb.h"
 #include <string>
 #include <sstream>
 #include <vector>
+
+// Can't change indentation size. Ugh!
+
+#define PRINTER_INDENT(p) \
+    p->Indent(); p->Indent()
+
+#define PRINTER_OUTDENT(p) \
+    p->Outdent(); p->Outdent()
 
 using namespace google::protobuf;
 using namespace google::protobuf::compiler;
@@ -36,12 +46,12 @@ public:
 
         m_printer->Print("namespace $ns$\n", "ns", file->package());
         m_printer->Print("{\n");
-        m_printer->Indent();
+        PRINTER_INDENT(m_printer); //Begin namespace
     }
     ~CSharpNamespace()
     {
-        m_printer->Outdent();
-        m_printer->Print("}\n");
+        PRINTER_OUTDENT(m_printer);
+        m_printer->Print("}\n"); //End namespace
     }
 
 private:
@@ -83,22 +93,21 @@ public:
         m_printer->Print("[ApiController]\n");
         m_printer->Print("public partial class $name$Controller : ControllerBase\n", "name", msg->name());
         m_printer->Print("{\n");
-        m_printer->Indent();
-
+        PRINTER_INDENT(m_printer); //Begin Controller
 
         m_printer->Print("readonly $name$.$name$Client _client;\n\n", "name", msg->name());
 
         m_printer->Print("public $name$Controller($name$.$name$Client client)\n", "name", msg->name());
-        m_printer->Print("{\n");
-        m_printer->Indent();
+        m_printer->Print("{\n"); //Begin controller
+        PRINTER_INDENT(m_printer);
         m_printer->Print("_client = client;\n");
-        m_printer->Outdent();
-        m_printer->Print("}\n");
+        PRINTER_OUTDENT(m_printer);
+        m_printer->Print("}\n"); //End controller
     }
     ~MvcController()
     {
-        m_printer->Outdent();
-        m_printer->Print("}\n");
+        PRINTER_OUTDENT(m_printer);
+        m_printer->Print("}\n"); //End Controller
     }
 
 private:
@@ -117,11 +126,15 @@ public:
         auto isInputTypeStreamed = msg->client_streaming();
         auto isOutputTypeStreamed = msg->server_streaming();
 
-        m_writeMethod = !isInputTypeStreamed && !isOutputTypeStreamed;
+        auto options = msg->options();
+        m_writeMethod = !isInputTypeStreamed && !isOutputTypeStreamed && options.HasExtension(aspnet::core::api);
 
         //Dunno how to map streamed input/output yet
         if (m_writeMethod)
-        {
+        {   
+            //m_printer->Print("/*\n");
+            //m_printer->Print(options.DebugString().c_str());
+            //m_printer->Print("*/\n");
             SourceLocation srcLoc;
             if (msg->GetSourceLocation(&srcLoc))
             {
@@ -172,17 +185,78 @@ public:
                 inputTypeName = inputType->name();
             }
 
-            m_printer->Print("public async Task<ActionResult<$output_type$>> $name$($input_type$ input)\n",
+            auto routeOption = options.GetExtension(aspnet::core::api);
+            auto method = routeOption.method();
+            switch (method)
+            {
+            case aspnet::core::HttpMethod::HttpMethod_Get:
+                {
+                    if (routeOption.has_route_pattern())
+                        m_printer->Print("[HttpGet(\"$route_pattern$\")]\n", "route_pattern", routeOption.route_pattern().value());
+                    else
+                        m_printer->Print("[HttpGet(nameof($route_pattern$))]\n", "route_pattern", msg->name());
+                }
+                break;
+            case aspnet::core::HttpMethod::HttpMethod_Post:
+                {
+                    if (routeOption.has_route_pattern())
+                        m_printer->Print("[HttpPost(\"$route_pattern$\")]\n", "route_pattern", routeOption.route_pattern().value());
+                    else
+                        m_printer->Print("[HttpPost(nameof($route_pattern$))]\n", "route_pattern", msg->name());
+                }
+                break;
+            case aspnet::core::HttpMethod::HttpMethod_Put:
+                {
+                    if (routeOption.has_route_pattern())
+                        m_printer->Print("[HttpPut(\"$route_pattern$\")]\n", "route_pattern", routeOption.route_pattern().value());
+                    else
+                        m_printer->Print("[HttpPut(nameof($route_pattern$))]\n", "route_pattern", msg->name());
+                }
+                break;
+            case aspnet::core::HttpMethod::HttpMethod_Delete:
+                {
+                    if (routeOption.has_route_pattern())
+                        m_printer->Print("[HttpDelete(\"$route_pattern$\")]\n", "route_pattern", routeOption.route_pattern().value());
+                    else
+                        m_printer->Print("[HttpDelete(nameof($route_pattern$))]\n", "route_pattern", msg->name());
+                }
+                break;
+            default:
+                {
+                    m_printer->Print("#warning Encountered unsupprted method option annotation: $method$\n", "method", aspnet::core::HttpMethod_Name(method));
+                }
+                break;
+            }
+
+            std::string inputAttr;
+            switch (routeOption.source())
+            {
+            case aspnet::core::HttpInputSource::HttpInputSource_Body:
+                inputAttr = "[FromBody]";
+                break;
+            case aspnet::core::HttpInputSource::HttpInputSource_Form:
+                inputAttr = "[FromForm]";
+                break;
+            case aspnet::core::HttpInputSource::HttpInputSource_Header:
+                inputAttr = "[FromHeader]";
+                break;
+            case aspnet::core::HttpInputSource::HttpInputSource_Query:
+                inputAttr = "[FromQuery]";
+                break;
+            }
+
+            m_printer->Print("public async Task<ActionResult<$output_type$>> $name$($input_attr$$input_type$ input)\n",
                 "name", msg->name(),
+                "input_attr", inputAttr,
                 "input_type", inputTypeName,
                 "output_type", outputTypeName);
             m_printer->Print("{\n");
-            m_printer->Indent();
+            PRINTER_INDENT(m_printer); //Begin method
 
             m_printer->Print("$output_type$ result = null;\n", "output_type", outputType->name());
             m_printer->Print("try\n");
             m_printer->Print("{\n");
-            m_printer->Indent();
+            PRINTER_INDENT(m_printer); //Begin try
 
             if (isOutputTypeStreamed)
             {
@@ -193,14 +267,14 @@ public:
                 m_printer->Print("result = await _client.$name$Async(input);\n", "name", msg->name());
             }
 
-            m_printer->Outdent();
-            m_printer->Print("}\n");
+            PRINTER_OUTDENT(m_printer);
+            m_printer->Print("}\n"); //End try
             m_printer->Print("catch (Exception ex)\n");
-            m_printer->Print("{\n");
-            m_printer->Indent();
+            m_printer->Print("{\n"); //Begin catch
+            PRINTER_INDENT(m_printer);
             m_printer->Print("Response.StatusCode = 500;\n");
-            m_printer->Outdent();
-            m_printer->Print("}\n");
+            PRINTER_OUTDENT(m_printer);
+            m_printer->Print("}\n"); //End catch
             m_printer->Print("return result;\n");
         }
     }
@@ -208,7 +282,7 @@ public:
     {
         if (m_writeMethod)
         {
-            m_printer->Outdent();
+            PRINTER_OUTDENT(m_printer); //End method
             m_printer->Print("}\n");
         }
     }
