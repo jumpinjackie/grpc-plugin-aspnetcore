@@ -32,6 +32,17 @@ message MvcRoute {
     HttpInputSource source = 2;
     // The route pattern for this service operation
     google.protobuf.StringValue route_pattern = 3;
+    // Specifies any additional attributes to include on the generated MVC action method
+    // The values specified here are appended raw without any formatting, so remember to include
+    // the surrounding [] tokens and any newlines
+    repeated string custom_method_attributes = 4;
+    // The custom .net return type to use. If you specify this, it is presumed you will be providing
+    // your own custom_method_body that will know how to convert the underlying GRPC call result to 
+    // your return type
+    google.protobuf.StringValue custom_return_type = 5;
+    // If specified, the body of the MVC action method is replaced with the contents
+    // within
+    repeated string custom_method_body = 6;
 }
 
 extend google.protobuf.MethodOptions {

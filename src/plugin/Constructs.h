@@ -228,6 +228,14 @@ public:
                 break;
             }
 
+            if (routeOption.custom_method_attributes_size() > 0)
+            {
+                for (auto const& line : routeOption.custom_method_attributes())
+                {
+                    m_printer->Print(line.c_str());
+                }
+            }
+
             std::string inputAttr;
             switch (routeOption.source())
             {
@@ -245,37 +253,78 @@ public:
                 break;
             }
 
-            m_printer->Print("public async Task<ActionResult<$output_type$>> $name$($input_attr$$input_type$ input)\n",
-                "name", msg->name(),
-                "input_attr", inputAttr,
-                "input_type", inputTypeName,
-                "output_type", outputTypeName);
+            if (routeOption.has_custom_return_type())
+            {
+                m_printer->Print("public async Task<$output_type$> $name$($input_attr$$input_type$ input)\n",
+                    "name", msg->name(),
+                    "input_attr", inputAttr,
+                    "input_type", inputTypeName,
+                    "output_type", routeOption.custom_return_type().value());
+            }
+            else 
+            {
+                m_printer->Print("public async Task<ActionResult<$output_type$>> $name$($input_attr$$input_type$ input)\n",
+                    "name", msg->name(),
+                    "input_attr", inputAttr,
+                    "input_type", inputTypeName,
+                    "output_type", outputTypeName);
+            }
             m_printer->Print("{\n");
             PRINTER_INDENT(m_printer); //Begin method
 
-            m_printer->Print("$output_type$ result = null;\n", "output_type", outputType->name());
-            m_printer->Print("try\n");
-            m_printer->Print("{\n");
-            PRINTER_INDENT(m_printer); //Begin try
-
-            if (isOutputTypeStreamed)
+            if (routeOption.custom_method_body_size() > 0)
             {
-                m_printer->Print("result = await _client.$name$(input);\n", "name", msg->name());
+                for (auto const& line : routeOption.custom_method_body())
+                {
+                    std::map<std::string, std::string> vars;
+                    if (line.find("$method_call$") != std::string::npos)
+                    {
+                        std::string methodCall = "await _client.";
+                        methodCall += msg->name();
+                        if (!isOutputTypeStreamed)
+                        {
+                            methodCall += "Async";
+                        }
+                        methodCall += "(input)";
+                        vars["method_call"] = methodCall;
+                    }
+                    if (line.find("$output_var$") != std::string::npos)
+                    {
+                        vars["output_var"] = "result";
+                    }
+                    if (line.find("$output_type$") != std::string::npos)
+                    {
+                        vars["output_type"] = outputType->name();
+                    }
+                    m_printer->Print(vars, line.c_str());
+                }
             }
             else
             {
-                m_printer->Print("result = await _client.$name$Async(input);\n", "name", msg->name());
-            }
+                m_printer->Print("$output_type$ result = null;\n", "output_type", outputType->name());
+                m_printer->Print("try\n");
+                m_printer->Print("{\n");
+                PRINTER_INDENT(m_printer); //Begin try
 
-            PRINTER_OUTDENT(m_printer);
-            m_printer->Print("}\n"); //End try
-            m_printer->Print("catch (Exception ex)\n");
-            m_printer->Print("{\n"); //Begin catch
-            PRINTER_INDENT(m_printer);
-            m_printer->Print("Response.StatusCode = 500;\n");
-            PRINTER_OUTDENT(m_printer);
-            m_printer->Print("}\n"); //End catch
-            m_printer->Print("return result;\n");
+                if (isOutputTypeStreamed)
+                {
+                    m_printer->Print("result = await _client.$name$(input);\n", "name", msg->name());
+                }
+                else
+                {
+                    m_printer->Print("result = await _client.$name$Async(input);\n", "name", msg->name());
+                }
+
+                PRINTER_OUTDENT(m_printer);
+                m_printer->Print("}\n"); //End try
+                m_printer->Print("catch (Exception ex)\n");
+                m_printer->Print("{\n"); //Begin catch
+                PRINTER_INDENT(m_printer);
+                m_printer->Print("Response.StatusCode = 500;\n");
+                PRINTER_OUTDENT(m_printer);
+                m_printer->Print("}\n"); //End catch
+                m_printer->Print("return result;\n");
+            }
         }
     }
     ~MvcControllerActionMethod()

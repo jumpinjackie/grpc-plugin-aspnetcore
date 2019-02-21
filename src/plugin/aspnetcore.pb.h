@@ -199,6 +199,50 @@ class MvcRoute : public ::google::protobuf::Message /* @@protoc_insertion_point(
 
   // accessors -------------------------------------------------------
 
+  // repeated string custom_method_attributes = 4;
+  int custom_method_attributes_size() const;
+  void clear_custom_method_attributes();
+  static const int kCustomMethodAttributesFieldNumber = 4;
+  const ::std::string& custom_method_attributes(int index) const;
+  ::std::string* mutable_custom_method_attributes(int index);
+  void set_custom_method_attributes(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_custom_method_attributes(int index, ::std::string&& value);
+  #endif
+  void set_custom_method_attributes(int index, const char* value);
+  void set_custom_method_attributes(int index, const char* value, size_t size);
+  ::std::string* add_custom_method_attributes();
+  void add_custom_method_attributes(const ::std::string& value);
+  #if LANG_CXX11
+  void add_custom_method_attributes(::std::string&& value);
+  #endif
+  void add_custom_method_attributes(const char* value);
+  void add_custom_method_attributes(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField< ::std::string>& custom_method_attributes() const;
+  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_custom_method_attributes();
+
+  // repeated string custom_method_body = 6;
+  int custom_method_body_size() const;
+  void clear_custom_method_body();
+  static const int kCustomMethodBodyFieldNumber = 6;
+  const ::std::string& custom_method_body(int index) const;
+  ::std::string* mutable_custom_method_body(int index);
+  void set_custom_method_body(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_custom_method_body(int index, ::std::string&& value);
+  #endif
+  void set_custom_method_body(int index, const char* value);
+  void set_custom_method_body(int index, const char* value, size_t size);
+  ::std::string* add_custom_method_body();
+  void add_custom_method_body(const ::std::string& value);
+  #if LANG_CXX11
+  void add_custom_method_body(::std::string&& value);
+  #endif
+  void add_custom_method_body(const char* value);
+  void add_custom_method_body(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField< ::std::string>& custom_method_body() const;
+  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_custom_method_body();
+
   // .google.protobuf.StringValue route_pattern = 3;
   bool has_route_pattern() const;
   void clear_route_pattern();
@@ -210,6 +254,18 @@ class MvcRoute : public ::google::protobuf::Message /* @@protoc_insertion_point(
   ::google::protobuf::StringValue* release_route_pattern();
   ::google::protobuf::StringValue* mutable_route_pattern();
   void set_allocated_route_pattern(::google::protobuf::StringValue* route_pattern);
+
+  // .google.protobuf.StringValue custom_return_type = 5;
+  bool has_custom_return_type() const;
+  void clear_custom_return_type();
+  static const int kCustomReturnTypeFieldNumber = 5;
+  private:
+  const ::google::protobuf::StringValue& _internal_custom_return_type() const;
+  public:
+  const ::google::protobuf::StringValue& custom_return_type() const;
+  ::google::protobuf::StringValue* release_custom_return_type();
+  ::google::protobuf::StringValue* mutable_custom_return_type();
+  void set_allocated_custom_return_type(::google::protobuf::StringValue* custom_return_type);
 
   // .aspnet.core.HttpMethod method = 1;
   void clear_method();
@@ -227,7 +283,10 @@ class MvcRoute : public ::google::protobuf::Message /* @@protoc_insertion_point(
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> custom_method_attributes_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> custom_method_body_;
   ::google::protobuf::StringValue* route_pattern_;
+  ::google::protobuf::StringValue* custom_return_type_;
   int method_;
   int source_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
@@ -323,6 +382,193 @@ inline void MvcRoute::set_allocated_route_pattern(::google::protobuf::StringValu
   }
   route_pattern_ = route_pattern;
   // @@protoc_insertion_point(field_set_allocated:aspnet.core.MvcRoute.route_pattern)
+}
+
+// repeated string custom_method_attributes = 4;
+inline int MvcRoute::custom_method_attributes_size() const {
+  return custom_method_attributes_.size();
+}
+inline void MvcRoute::clear_custom_method_attributes() {
+  custom_method_attributes_.Clear();
+}
+inline const ::std::string& MvcRoute::custom_method_attributes(int index) const {
+  // @@protoc_insertion_point(field_get:aspnet.core.MvcRoute.custom_method_attributes)
+  return custom_method_attributes_.Get(index);
+}
+inline ::std::string* MvcRoute::mutable_custom_method_attributes(int index) {
+  // @@protoc_insertion_point(field_mutable:aspnet.core.MvcRoute.custom_method_attributes)
+  return custom_method_attributes_.Mutable(index);
+}
+inline void MvcRoute::set_custom_method_attributes(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_attributes)
+  custom_method_attributes_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void MvcRoute::set_custom_method_attributes(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_attributes)
+  custom_method_attributes_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void MvcRoute::set_custom_method_attributes(int index, const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  custom_method_attributes_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:aspnet.core.MvcRoute.custom_method_attributes)
+}
+inline void MvcRoute::set_custom_method_attributes(int index, const char* value, size_t size) {
+  custom_method_attributes_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:aspnet.core.MvcRoute.custom_method_attributes)
+}
+inline ::std::string* MvcRoute::add_custom_method_attributes() {
+  // @@protoc_insertion_point(field_add_mutable:aspnet.core.MvcRoute.custom_method_attributes)
+  return custom_method_attributes_.Add();
+}
+inline void MvcRoute::add_custom_method_attributes(const ::std::string& value) {
+  custom_method_attributes_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_method_attributes)
+}
+#if LANG_CXX11
+inline void MvcRoute::add_custom_method_attributes(::std::string&& value) {
+  custom_method_attributes_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_method_attributes)
+}
+#endif
+inline void MvcRoute::add_custom_method_attributes(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  custom_method_attributes_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:aspnet.core.MvcRoute.custom_method_attributes)
+}
+inline void MvcRoute::add_custom_method_attributes(const char* value, size_t size) {
+  custom_method_attributes_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:aspnet.core.MvcRoute.custom_method_attributes)
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+MvcRoute::custom_method_attributes() const {
+  // @@protoc_insertion_point(field_list:aspnet.core.MvcRoute.custom_method_attributes)
+  return custom_method_attributes_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+MvcRoute::mutable_custom_method_attributes() {
+  // @@protoc_insertion_point(field_mutable_list:aspnet.core.MvcRoute.custom_method_attributes)
+  return &custom_method_attributes_;
+}
+
+// .google.protobuf.StringValue custom_return_type = 5;
+inline bool MvcRoute::has_custom_return_type() const {
+  return this != internal_default_instance() && custom_return_type_ != NULL;
+}
+inline const ::google::protobuf::StringValue& MvcRoute::_internal_custom_return_type() const {
+  return *custom_return_type_;
+}
+inline const ::google::protobuf::StringValue& MvcRoute::custom_return_type() const {
+  const ::google::protobuf::StringValue* p = custom_return_type_;
+  // @@protoc_insertion_point(field_get:aspnet.core.MvcRoute.custom_return_type)
+  return p != NULL ? *p : *reinterpret_cast<const ::google::protobuf::StringValue*>(
+      &::google::protobuf::_StringValue_default_instance_);
+}
+inline ::google::protobuf::StringValue* MvcRoute::release_custom_return_type() {
+  // @@protoc_insertion_point(field_release:aspnet.core.MvcRoute.custom_return_type)
+  
+  ::google::protobuf::StringValue* temp = custom_return_type_;
+  custom_return_type_ = NULL;
+  return temp;
+}
+inline ::google::protobuf::StringValue* MvcRoute::mutable_custom_return_type() {
+  
+  if (custom_return_type_ == NULL) {
+    auto* p = CreateMaybeMessage<::google::protobuf::StringValue>(GetArenaNoVirtual());
+    custom_return_type_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:aspnet.core.MvcRoute.custom_return_type)
+  return custom_return_type_;
+}
+inline void MvcRoute::set_allocated_custom_return_type(::google::protobuf::StringValue* custom_return_type) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(custom_return_type_);
+  }
+  if (custom_return_type) {
+    ::google::protobuf::Arena* submessage_arena =
+      reinterpret_cast<::google::protobuf::MessageLite*>(custom_return_type)->GetArena();
+    if (message_arena != submessage_arena) {
+      custom_return_type = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, custom_return_type, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  custom_return_type_ = custom_return_type;
+  // @@protoc_insertion_point(field_set_allocated:aspnet.core.MvcRoute.custom_return_type)
+}
+
+// repeated string custom_method_body = 6;
+inline int MvcRoute::custom_method_body_size() const {
+  return custom_method_body_.size();
+}
+inline void MvcRoute::clear_custom_method_body() {
+  custom_method_body_.Clear();
+}
+inline const ::std::string& MvcRoute::custom_method_body(int index) const {
+  // @@protoc_insertion_point(field_get:aspnet.core.MvcRoute.custom_method_body)
+  return custom_method_body_.Get(index);
+}
+inline ::std::string* MvcRoute::mutable_custom_method_body(int index) {
+  // @@protoc_insertion_point(field_mutable:aspnet.core.MvcRoute.custom_method_body)
+  return custom_method_body_.Mutable(index);
+}
+inline void MvcRoute::set_custom_method_body(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_body)
+  custom_method_body_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void MvcRoute::set_custom_method_body(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_body)
+  custom_method_body_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void MvcRoute::set_custom_method_body(int index, const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  custom_method_body_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:aspnet.core.MvcRoute.custom_method_body)
+}
+inline void MvcRoute::set_custom_method_body(int index, const char* value, size_t size) {
+  custom_method_body_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:aspnet.core.MvcRoute.custom_method_body)
+}
+inline ::std::string* MvcRoute::add_custom_method_body() {
+  // @@protoc_insertion_point(field_add_mutable:aspnet.core.MvcRoute.custom_method_body)
+  return custom_method_body_.Add();
+}
+inline void MvcRoute::add_custom_method_body(const ::std::string& value) {
+  custom_method_body_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_method_body)
+}
+#if LANG_CXX11
+inline void MvcRoute::add_custom_method_body(::std::string&& value) {
+  custom_method_body_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_method_body)
+}
+#endif
+inline void MvcRoute::add_custom_method_body(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  custom_method_body_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:aspnet.core.MvcRoute.custom_method_body)
+}
+inline void MvcRoute::add_custom_method_body(const char* value, size_t size) {
+  custom_method_body_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:aspnet.core.MvcRoute.custom_method_body)
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+MvcRoute::custom_method_body() const {
+  // @@protoc_insertion_point(field_list:aspnet.core.MvcRoute.custom_method_body)
+  return custom_method_body_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+MvcRoute::mutable_custom_method_body() {
+  // @@protoc_insertion_point(field_mutable_list:aspnet.core.MvcRoute.custom_method_body)
+  return &custom_method_body_;
 }
 
 #ifdef __GNUC__
