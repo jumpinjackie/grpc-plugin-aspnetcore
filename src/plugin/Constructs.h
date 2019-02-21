@@ -14,9 +14,15 @@
 // Can't change indentation size. Ugh!
 
 #define PRINTER_INDENT(p) \
-    p->Indent(); p->Indent()
+    p.Indent(); p.Indent()
 
 #define PRINTER_OUTDENT(p) \
+    p.Outdent(); p.Outdent()
+
+#define PRINTER_PTR_INDENT(p) \
+    p->Indent(); p->Indent()
+
+#define PRINTER_PTR_OUTDENT(p) \
     p->Outdent(); p->Outdent()
 
 using namespace google::protobuf;
@@ -33,11 +39,39 @@ void SplitStrings(const std::string& str, const char delimiter, std::vector<std:
     }
 }
 
+class CodeBlock
+{
+public:
+    CodeBlock(Printer* printer, char* insertAfterEndingBrace = nullptr) 
+        : m_printer(printer), m_insertAfterEndingBrace(insertAfterEndingBrace)
+    {
+        m_printer->Print("{\n");
+        PRINTER_PTR_INDENT(m_printer);
+    }
+    ~CodeBlock()
+    {
+        PRINTER_PTR_OUTDENT(m_printer);
+        if (m_insertAfterEndingBrace != nullptr)
+        {
+            m_printer->Print("}");
+            m_printer->Print(m_insertAfterEndingBrace);
+            m_printer->Print("\n");
+        }
+        else
+        {
+            m_printer->Print("}\n");
+        }
+    }
+private:
+    Printer* m_printer;
+    char* m_insertAfterEndingBrace;
+};
+
 class CSharpNamespace
 {
 public:
     CSharpNamespace(const FileDescriptor * file, Printer* printer)
-        : m_printer(printer)
+        : m_printer(printer), m_namespace(nullptr)
     {
         m_printer->Print("using Microsoft.AspNetCore.Mvc;\n");
         m_printer->Print("using System;\n");
@@ -45,15 +79,50 @@ public:
         m_printer->Print("using System.Threading.Tasks;\n\n");
         m_printer->Print("#pragma warning disable 1591\n\n");
         m_printer->Print("namespace $ns$\n", "ns", file->package());
-        m_printer->Print("{\n");
-        PRINTER_INDENT(m_printer); //Begin namespace
+        m_namespace = new CodeBlock(m_printer);
     }
     ~CSharpNamespace()
     {
-        PRINTER_OUTDENT(m_printer);
-        m_printer->Print("}\n"); //End namespace
+        delete m_namespace;
     }
 
+private:
+    Printer* m_printer;
+    CodeBlock* m_namespace;
+};
+
+class DocCommentBlock
+{
+public:
+    DocCommentBlock(const SourceLocation& srcLoc, Printer* printer)
+        : m_printer(printer)
+    {
+        m_printer->Print("/// <summary>\n");
+
+        std::vector<std::string> comments;
+        SplitStrings(srcLoc.leading_comments, '\n', comments);
+        for (auto const& cmnt : comments)
+        {
+            m_printer->Print("/// ");
+            m_printer->Print(cmnt.c_str());
+            m_printer->Print("\n");
+        }
+
+        comments.clear();
+        SplitStrings(srcLoc.trailing_comments, '\n', comments);
+        for (auto const& cmnt : comments)
+        {
+            m_printer->Print("/// ");
+            m_printer->Print(cmnt.c_str());
+            m_printer->Print("\n");
+        }
+
+        m_printer->Print("/// </summary>\n");
+    }
+    ~DocCommentBlock()
+    {
+
+    }
 private:
     Printer* m_printer;
 };
@@ -62,56 +131,35 @@ class MvcController
 {
 public:
     MvcController(const ServiceDescriptor* msg, Printer* printer)
-        : m_printer(printer)
+        : m_printer(printer), m_controller(nullptr)
     {
         SourceLocation srcLoc;
         if (msg->GetSourceLocation(&srcLoc))
         {
-            m_printer->Print("/// <summary>\n");
-
-            std::vector<std::string> comments;
-            SplitStrings(srcLoc.leading_comments, '\n', comments);
-            for (auto const& cmnt : comments)
-            {
-                m_printer->Print("/// ");
-                m_printer->Print(cmnt.c_str());
-                m_printer->Print("\n");
-            }
-
-            comments.clear();
-            SplitStrings(srcLoc.trailing_comments, '\n', comments);
-            for (auto const& cmnt : comments)
-            {
-                m_printer->Print("/// ");
-                m_printer->Print(cmnt.c_str());
-                m_printer->Print("\n");
-            }
-
-            m_printer->Print("/// </summary>\n");
+            DocCommentBlock comment(srcLoc, m_printer);
         }
         m_printer->Print("[Route(\"api/[controller]\")]\n");
         m_printer->Print("[ApiController]\n");
         m_printer->Print("public partial class $name$Controller : ControllerBase\n", "name", msg->name());
-        m_printer->Print("{\n");
-        PRINTER_INDENT(m_printer); //Begin Controller
 
+        m_controller = new CodeBlock(m_printer);
+
+        m_printer->Print("// The GRPC service client\n");
         m_printer->Print("readonly $name$.$name$Client _client;\n\n", "name", msg->name());
-
         m_printer->Print("public $name$Controller($name$.$name$Client client)\n", "name", msg->name());
-        m_printer->Print("{\n"); //Begin controller
-        PRINTER_INDENT(m_printer);
-        m_printer->Print("_client = client;\n");
-        PRINTER_OUTDENT(m_printer);
-        m_printer->Print("}\n"); //End controller
+        {
+            CodeBlock ctor(m_printer);
+            m_printer->Print("_client = client;\n");
+        }
     }
     ~MvcController()
     {
-        PRINTER_OUTDENT(m_printer);
-        m_printer->Print("}\n"); //End Controller
+        delete m_controller;
     }
 
 private:
     Printer* m_printer;
+    CodeBlock* m_controller;
 };
 
 class MvcControllerActionMethod
@@ -138,27 +186,7 @@ public:
             SourceLocation srcLoc;
             if (msg->GetSourceLocation(&srcLoc))
             {
-                m_printer->Print("/// <summary>\n");
-
-                std::vector<std::string> comments;
-                SplitStrings(srcLoc.leading_comments, '\n', comments);
-                for (auto const& cmnt : comments)
-                {
-                    m_printer->Print("/// ");
-                    m_printer->Print(cmnt.c_str());
-                    m_printer->Print("\n");
-                }
-
-                comments.clear();
-                SplitStrings(srcLoc.trailing_comments, '\n', comments);
-                for (auto const& cmnt : comments)
-                {
-                    m_printer->Print("/// ");
-                    m_printer->Print(cmnt.c_str());
-                    m_printer->Print("\n");
-                }
-
-                m_printer->Print("/// </summary>\n");
+                DocCommentBlock comment(srcLoc, m_printer);
             }
 
             std::string inputTypeName;
@@ -270,7 +298,7 @@ public:
                     "output_type", outputTypeName);
             }
             m_printer->Print("{\n");
-            PRINTER_INDENT(m_printer); //Begin method
+            PRINTER_PTR_INDENT(m_printer); //Begin method
 
             if (routeOption.custom_method_body_size() > 0)
             {
@@ -303,26 +331,22 @@ public:
             {
                 m_printer->Print("$output_type$ result = null;\n", "output_type", outputType->name());
                 m_printer->Print("try\n");
-                m_printer->Print("{\n");
-                PRINTER_INDENT(m_printer); //Begin try
-
-                if (isOutputTypeStreamed)
                 {
-                    m_printer->Print("result = await _client.$name$(input);\n", "name", msg->name());
+                    CodeBlock tryStart(m_printer);
+                    if (isOutputTypeStreamed)
+                    {
+                        m_printer->Print("result = await _client.$name$(input);\n", "name", msg->name());
+                    }
+                    else
+                    {
+                        m_printer->Print("result = await _client.$name$Async(input);\n", "name", msg->name());
+                    }
                 }
-                else
-                {
-                    m_printer->Print("result = await _client.$name$Async(input);\n", "name", msg->name());
-                }
-
-                PRINTER_OUTDENT(m_printer);
-                m_printer->Print("}\n"); //End try
                 m_printer->Print("catch (Exception ex)\n");
-                m_printer->Print("{\n"); //Begin catch
-                PRINTER_INDENT(m_printer);
-                m_printer->Print("Response.StatusCode = 500;\n");
-                PRINTER_OUTDENT(m_printer);
-                m_printer->Print("}\n"); //End catch
+                {
+                    CodeBlock catchStart(m_printer);
+                    m_printer->Print("Response.StatusCode = 500;\n");
+                }
                 m_printer->Print("return result;\n");
             }
         }
@@ -331,7 +355,7 @@ public:
     {
         if (m_writeMethod)
         {
-            PRINTER_OUTDENT(m_printer); //End method
+            PRINTER_PTR_OUTDENT(m_printer); //End method
             m_printer->Print("}\n");
         }
     }
