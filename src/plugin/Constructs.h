@@ -39,18 +39,34 @@ void SplitStrings(const std::string& str, const char delimiter, std::vector<std:
     }
 }
 
+class Indent
+{
+public:
+    Indent(Printer* printer)
+        : m_printer(printer)
+    {
+        PRINTER_PTR_INDENT(m_printer);
+    }
+    ~Indent()
+    {
+        PRINTER_PTR_OUTDENT(m_printer);
+    }
+private:
+    Printer* m_printer;
+};
+
 class CodeBlock
 {
 public:
     CodeBlock(Printer* printer, char* insertAfterEndingBrace = nullptr) 
-        : m_printer(printer), m_insertAfterEndingBrace(insertAfterEndingBrace)
+        : m_printer(printer), m_indent(nullptr), m_insertAfterEndingBrace(insertAfterEndingBrace)
     {
         m_printer->Print("{\n");
-        PRINTER_PTR_INDENT(m_printer);
+        m_indent = new Indent(printer);
     }
     ~CodeBlock()
     {
-        PRINTER_PTR_OUTDENT(m_printer);
+        delete m_indent;
         if (m_insertAfterEndingBrace != nullptr)
         {
             m_printer->Print("}");
@@ -64,6 +80,7 @@ public:
     }
 private:
     Printer* m_printer;
+    Indent* m_indent;
     char* m_insertAfterEndingBrace;
 };
 
@@ -166,7 +183,7 @@ class MvcControllerActionMethod
 {
 public:
     MvcControllerActionMethod(const MethodDescriptor* msg, Printer* printer)
-        : m_printer(printer), m_writeMethod(true)
+        : m_printer(printer), m_methodBlock(nullptr)
     {
         auto inputType = msg->input_type();
         auto outputType = msg->output_type();
@@ -175,10 +192,10 @@ public:
         auto isOutputTypeStreamed = msg->server_streaming();
 
         auto options = msg->options();
-        m_writeMethod = !isInputTypeStreamed && !isOutputTypeStreamed && options.HasExtension(aspnet::core::api);
+        auto writeMethod = !isInputTypeStreamed && !isOutputTypeStreamed && options.HasExtension(aspnet::core::api);
 
         //Dunno how to map streamed input/output yet
-        if (m_writeMethod)
+        if (writeMethod)
         {   
             //m_printer->Print("/*\n");
             //m_printer->Print(options.DebugString().c_str());
@@ -297,8 +314,8 @@ public:
                     "input_type", inputTypeName,
                     "output_type", outputTypeName);
             }
-            m_printer->Print("{\n");
-            PRINTER_PTR_INDENT(m_printer); //Begin method
+
+            m_methodBlock = new CodeBlock(m_printer); //Begin method
 
             if (routeOption.custom_method_body_size() > 0)
             {
@@ -353,16 +370,15 @@ public:
     }
     ~MvcControllerActionMethod()
     {
-        if (m_writeMethod)
+        if (m_methodBlock)
         {
-            PRINTER_PTR_OUTDENT(m_printer); //End method
-            m_printer->Print("}\n");
+            delete m_methodBlock; //End method
         }
     }
 
 private:
     Printer* m_printer;
-    bool m_writeMethod;
+    CodeBlock* m_methodBlock;
 };
 
 #endif

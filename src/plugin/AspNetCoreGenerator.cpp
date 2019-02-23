@@ -6,7 +6,18 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                                    GeneratorContext * generator_context,
                                    string * error) const
 {
+    std::vector<std::pair<string, string>> params;
+    ParseGeneratorParameter(parameter, &params);
     bool generateProject = false;
+
+    for (auto const& p : params)
+    {
+        if (p.first == "generate_project" && (p.second == "true" || p.second == "1"))
+        {
+            generateProject = true;
+        }
+    }
+
     if (generateProject)
     {
         std::string projectName = file->package() + ".GrpcGateway.csproj";
@@ -15,24 +26,28 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
         auto *projOutStream = generator_context->Open(projectName);
         Printer projPrinter(projOutStream, '$');
         projPrinter.Print("<Project Sdk=\"Microsoft.NET.Sdk.Web\">\n");
-        PRINTER_INDENT(projPrinter);
-        projPrinter.Print("<PropertyGroup>\n");
-        PRINTER_INDENT(projPrinter);
-        projPrinter.Print("<TargetFramework>netcoreapp2.2</TargetFramework>\n");
-        projPrinter.Print("<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>\n");
-        projPrinter.Print("<LangVersion>latest</LangVersion>\n");
-        PRINTER_OUTDENT(projPrinter);
-        projPrinter.Print("</PropertyGroup>\n");
-        projPrinter.Print("<ItemGroup>\n");
-        PRINTER_INDENT(projPrinter);
-        projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.App\" />\n");
-        projPrinter.Print("<PackageReference Include=\"Google.Protobuf\" Version=\"3.6.1\" />\n");
-        projPrinter.Print("<PackageReference Include=\"Grpc.Core\" Version=\"1.18.0\" />\n");
-        projPrinter.Print("<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"4.0.1\" />\n");
-        PRINTER_OUTDENT(projPrinter);
-        projPrinter.Print("</ItemGroup>\n");
-        PRINTER_OUTDENT(projPrinter);
+        {
+            Indent i1(&projPrinter);
+            projPrinter.Print("<PropertyGroup>\n");
+            {
+                Indent i2(&projPrinter);
+                projPrinter.Print("<TargetFramework>netcoreapp2.2</TargetFramework>\n");
+                projPrinter.Print("<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>\n");
+                projPrinter.Print("<LangVersion>latest</LangVersion>\n");
+            }
+            projPrinter.Print("</PropertyGroup>\n");
+            projPrinter.Print("<ItemGroup>\n");
+            {
+                Indent i2(&projPrinter);
+                projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.App\" />\n");
+                projPrinter.Print("<PackageReference Include=\"Google.Protobuf\" Version=\"3.6.1\" />\n");
+                projPrinter.Print("<PackageReference Include=\"Grpc.Core\" Version=\"1.18.0\" />\n");
+                projPrinter.Print("<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"4.0.1\" />\n");
+            }
+            projPrinter.Print("</ItemGroup>\n");
+        }
         projPrinter.Print("</Project>");
+        
 
         std::cerr << "Wrote: " << projectName << std::endl;
 
