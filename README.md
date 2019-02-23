@@ -35,7 +35,15 @@ You may prefix the `--aspnetcore_out` option with extra options like so:
 The following options are supported:
 
  * `generate_project`: Set to `1` or `true` to tell the generator to also generate a skeleton aspnetcore project. Otherwise, only the webapi controllers are generated.
- * Invocation: `--aspnetcore_out:generate_project=1:<output path>`
+    * Invocation: `--aspnetcore_out:generate_project=1:<output path>`
+ * `port`: Only has effect if `generate_project` is set to `1` or `true`. The default port to use when writing GRPC channel setup code in `Startup.cs`.
+    * Invocation: `--aspnetcore_out:generate_project=1,port=1234:<output path>`
+ * `host`: Only has effect if `generate_project` is set to `1` or `true`. The default host to use when writing GRPC channel setup code in `Startup.cs`.
+    * Invocation: `--aspnetcore_out:generate_project=1,host=127.0.0.1:<output path>`
+ * `name`: Only has effect if `generate_project` is set to `1` or `true`. The default service display name to use for Swagger metadata generation.
+    * Invocation: `--aspnetcore_out:generate_project=1,name="My GRPC Gateway":<output path>`
+ * `project_ref`: Only has effect if `generate_project` is set to `1` or `true`. Add additional project references to the generated project. Paths specified must be relative to the output path specified.
+    * Invocation: `--aspnetcore_out:generate_project=1,project_ref=..\MyProject.csproj:<output path>`
 
 ## Known Issues
 

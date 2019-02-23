@@ -43,6 +43,11 @@ message MvcRoute {
     // If specified, the body of the MVC action method is replaced with the contents
     // within
     repeated string custom_method_body = 6;
+    // Set to true, to signifiy the given request type is "empty" in that it has no properties
+    bool is_empty_request = 7;
+    // If specified, the exception handling block of a generated MVC action method is replaced
+    // with what you specify here. Has no effect if you specify your own custom method body
+    repeated string custom_exception_handling = 8;
 }
 
 extend google.protobuf.MethodOptions {

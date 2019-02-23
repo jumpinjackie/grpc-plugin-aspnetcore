@@ -2666,7 +2666,15 @@ service FeatureService {
     rpc GetFeatureProviders (GetFeatureProvidersRequest) returns (GetFeatureProvidersResponse) {
         option (aspnet.core.api) = {
             method: HttpMethod_Get,
-            source: HttpInputSource_Query
+            source: HttpInputSource_Query,
+            is_empty_request: true,
+            custom_exception_handling: [
+                "Response.StatusCode = 500;",
+                "result.Error = new Error",
+                "{",
+                "    Message = ex.Message",
+                "};"
+            ]
         };
     }
     // This method returns all of the logical to physical schema mappings for the specified provider and partial connection string

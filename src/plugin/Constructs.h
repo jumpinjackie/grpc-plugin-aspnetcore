@@ -298,23 +298,40 @@ public:
                 break;
             }
 
-            if (routeOption.has_custom_return_type())
+            if (routeOption.is_empty_request())
             {
-                m_printer->Print("public async Task<$output_type$> $name$($input_attr$$input_type$ input)\n",
-                    "name", msg->name(),
-                    "input_attr", inputAttr,
-                    "input_type", inputTypeName,
-                    "output_type", routeOption.custom_return_type().value());
+                if (routeOption.has_custom_return_type())
+                {
+                    m_printer->Print("public async Task<$output_type$> $name$()\n",
+                        "name", msg->name(),
+                        "output_type", routeOption.custom_return_type().value());
+                }
+                else
+                {
+                    m_printer->Print("public async Task<ActionResult<$output_type$>> $name$()\n",
+                        "name", msg->name(),
+                        "output_type", outputTypeName);
+                }
             }
             else 
             {
-                m_printer->Print("public async Task<ActionResult<$output_type$>> $name$($input_attr$$input_type$ input)\n",
-                    "name", msg->name(),
-                    "input_attr", inputAttr,
-                    "input_type", inputTypeName,
-                    "output_type", outputTypeName);
+                if (routeOption.has_custom_return_type())
+                {
+                    m_printer->Print("public async Task<$output_type$> $name$($input_attr$$input_type$ input)\n",
+                        "name", msg->name(),
+                        "input_attr", inputAttr,
+                        "input_type", inputTypeName,
+                        "output_type", routeOption.custom_return_type().value());
+                }
+                else
+                {
+                    m_printer->Print("public async Task<ActionResult<$output_type$>> $name$($input_attr$$input_type$ input)\n",
+                        "name", msg->name(),
+                        "input_attr", inputAttr,
+                        "input_type", inputTypeName,
+                        "output_type", outputTypeName);
+                }
             }
-
             m_methodBlock = new CodeBlock(m_printer); //Begin method
 
             if (routeOption.custom_method_body_size() > 0)
@@ -346,10 +363,18 @@ public:
             }
             else
             {
-                m_printer->Print("$output_type$ result = null;\n", "output_type", outputType->name());
-                m_printer->Print("try\n");
+                m_printer->Print("var result = default($output_type$);\n", "output_type", outputType->name());
                 {
-                    CodeBlock tryStart(m_printer);
+                    std::unique_ptr<CodeBlock> tryStart;
+                    if (routeOption.custom_exception_handling_size() > 0)
+                    {
+                        m_printer->Print("try\n");
+                        tryStart.reset(new CodeBlock(m_printer));
+                    }
+                    if (routeOption.is_empty_request())
+                    {
+                        m_printer->Print("var input = new $input_type$();\n", "input_type", inputTypeName);
+                    }
                     if (isOutputTypeStreamed)
                     {
                         m_printer->Print("result = await _client.$name$(input);\n", "name", msg->name());
@@ -359,10 +384,16 @@ public:
                         m_printer->Print("result = await _client.$name$Async(input);\n", "name", msg->name());
                     }
                 }
-                m_printer->Print("catch (Exception ex)\n");
+                if (routeOption.custom_exception_handling_size() > 0)
                 {
-                    CodeBlock catchStart(m_printer);
-                    m_printer->Print("Response.StatusCode = 500;\n");
+                    m_printer->Print("catch (Exception ex)\n");
+                    {
+                        CodeBlock catchStart(m_printer);
+                        for (auto const& line : routeOption.custom_exception_handling())
+                        {
+                            m_printer->Print("$line$\n", "line", line);
+                        }
+                    }
                 }
                 m_printer->Print("return result;\n");
             }

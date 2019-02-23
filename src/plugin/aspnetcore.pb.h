@@ -243,6 +243,28 @@ class MvcRoute : public ::google::protobuf::Message /* @@protoc_insertion_point(
   const ::google::protobuf::RepeatedPtrField< ::std::string>& custom_method_body() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_custom_method_body();
 
+  // repeated string custom_exception_handling = 8;
+  int custom_exception_handling_size() const;
+  void clear_custom_exception_handling();
+  static const int kCustomExceptionHandlingFieldNumber = 8;
+  const ::std::string& custom_exception_handling(int index) const;
+  ::std::string* mutable_custom_exception_handling(int index);
+  void set_custom_exception_handling(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_custom_exception_handling(int index, ::std::string&& value);
+  #endif
+  void set_custom_exception_handling(int index, const char* value);
+  void set_custom_exception_handling(int index, const char* value, size_t size);
+  ::std::string* add_custom_exception_handling();
+  void add_custom_exception_handling(const ::std::string& value);
+  #if LANG_CXX11
+  void add_custom_exception_handling(::std::string&& value);
+  #endif
+  void add_custom_exception_handling(const char* value);
+  void add_custom_exception_handling(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField< ::std::string>& custom_exception_handling() const;
+  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_custom_exception_handling();
+
   // .google.protobuf.StringValue route_pattern = 3;
   bool has_route_pattern() const;
   void clear_route_pattern();
@@ -279,16 +301,24 @@ class MvcRoute : public ::google::protobuf::Message /* @@protoc_insertion_point(
   ::aspnet::core::HttpInputSource source() const;
   void set_source(::aspnet::core::HttpInputSource value);
 
+  // bool is_empty_request = 7;
+  void clear_is_empty_request();
+  static const int kIsEmptyRequestFieldNumber = 7;
+  bool is_empty_request() const;
+  void set_is_empty_request(bool value);
+
   // @@protoc_insertion_point(class_scope:aspnet.core.MvcRoute)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::std::string> custom_method_attributes_;
   ::google::protobuf::RepeatedPtrField< ::std::string> custom_method_body_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> custom_exception_handling_;
   ::google::protobuf::StringValue* route_pattern_;
   ::google::protobuf::StringValue* custom_return_type_;
   int method_;
   int source_;
+  bool is_empty_request_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_aspnetcore_2eproto::TableStruct;
 };
@@ -569,6 +599,89 @@ inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 MvcRoute::mutable_custom_method_body() {
   // @@protoc_insertion_point(field_mutable_list:aspnet.core.MvcRoute.custom_method_body)
   return &custom_method_body_;
+}
+
+// bool is_empty_request = 7;
+inline void MvcRoute::clear_is_empty_request() {
+  is_empty_request_ = false;
+}
+inline bool MvcRoute::is_empty_request() const {
+  // @@protoc_insertion_point(field_get:aspnet.core.MvcRoute.is_empty_request)
+  return is_empty_request_;
+}
+inline void MvcRoute::set_is_empty_request(bool value) {
+  
+  is_empty_request_ = value;
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.is_empty_request)
+}
+
+// repeated string custom_exception_handling = 8;
+inline int MvcRoute::custom_exception_handling_size() const {
+  return custom_exception_handling_.size();
+}
+inline void MvcRoute::clear_custom_exception_handling() {
+  custom_exception_handling_.Clear();
+}
+inline const ::std::string& MvcRoute::custom_exception_handling(int index) const {
+  // @@protoc_insertion_point(field_get:aspnet.core.MvcRoute.custom_exception_handling)
+  return custom_exception_handling_.Get(index);
+}
+inline ::std::string* MvcRoute::mutable_custom_exception_handling(int index) {
+  // @@protoc_insertion_point(field_mutable:aspnet.core.MvcRoute.custom_exception_handling)
+  return custom_exception_handling_.Mutable(index);
+}
+inline void MvcRoute::set_custom_exception_handling(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_exception_handling)
+  custom_exception_handling_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void MvcRoute::set_custom_exception_handling(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_exception_handling)
+  custom_exception_handling_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void MvcRoute::set_custom_exception_handling(int index, const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  custom_exception_handling_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:aspnet.core.MvcRoute.custom_exception_handling)
+}
+inline void MvcRoute::set_custom_exception_handling(int index, const char* value, size_t size) {
+  custom_exception_handling_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:aspnet.core.MvcRoute.custom_exception_handling)
+}
+inline ::std::string* MvcRoute::add_custom_exception_handling() {
+  // @@protoc_insertion_point(field_add_mutable:aspnet.core.MvcRoute.custom_exception_handling)
+  return custom_exception_handling_.Add();
+}
+inline void MvcRoute::add_custom_exception_handling(const ::std::string& value) {
+  custom_exception_handling_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_exception_handling)
+}
+#if LANG_CXX11
+inline void MvcRoute::add_custom_exception_handling(::std::string&& value) {
+  custom_exception_handling_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_exception_handling)
+}
+#endif
+inline void MvcRoute::add_custom_exception_handling(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  custom_exception_handling_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:aspnet.core.MvcRoute.custom_exception_handling)
+}
+inline void MvcRoute::add_custom_exception_handling(const char* value, size_t size) {
+  custom_exception_handling_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:aspnet.core.MvcRoute.custom_exception_handling)
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+MvcRoute::custom_exception_handling() const {
+  // @@protoc_insertion_point(field_list:aspnet.core.MvcRoute.custom_exception_handling)
+  return custom_exception_handling_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+MvcRoute::mutable_custom_exception_handling() {
+  // @@protoc_insertion_point(field_mutable_list:aspnet.core.MvcRoute.custom_exception_handling)
+  return &custom_exception_handling_;
 }
 
 #ifdef __GNUC__

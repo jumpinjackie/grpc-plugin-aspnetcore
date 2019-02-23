@@ -69,6 +69,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::aspnet::core::MvcRoute, custom_method_attributes_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::aspnet::core::MvcRoute, custom_return_type_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::aspnet::core::MvcRoute, custom_method_body_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::aspnet::core::MvcRoute, is_empty_request_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::aspnet::core::MvcRoute, custom_exception_handling_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::aspnet::core::MvcRoute)},
@@ -101,25 +103,27 @@ void AddDescriptorsImpl() {
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\020aspnetcore.proto\022\013aspnet.core\032\036google/"
       "protobuf/wrappers.proto\032 google/protobuf"
-      "/descriptor.proto\"\216\002\n\010MvcRoute\022\'\n\006method"
+      "/descriptor.proto\"\313\002\n\010MvcRoute\022\'\n\006method"
       "\030\001 \001(\0162\027.aspnet.core.HttpMethod\022,\n\006sourc"
       "e\030\002 \001(\0162\034.aspnet.core.HttpInputSource\0223\n"
       "\rroute_pattern\030\003 \001(\0132\034.google.protobuf.S"
       "tringValue\022 \n\030custom_method_attributes\030\004"
       " \003(\t\0228\n\022custom_return_type\030\005 \001(\0132\034.googl"
       "e.protobuf.StringValue\022\032\n\022custom_method_"
-      "body\030\006 \003(\t*`\n\nHttpMethod\022\022\n\016HttpMethod_G"
-      "et\020\000\022\023\n\017HttpMethod_Post\020\001\022\022\n\016HttpMethod_"
-      "Put\020\002\022\025\n\021HttpMethod_Delete\020\003*\235\001\n\017HttpInp"
-      "utSource\022\037\n\033HttpInputSource_Unspecified\020"
-      "\000\022\030\n\024HttpInputSource_Body\020\001\022\030\n\024HttpInput"
-      "Source_Form\020\002\022\031\n\025HttpInputSource_Query\020\003"
-      "\022\032\n\026HttpInputSource_Header\020\004:E\n\003api\022\036.go"
-      "ogle.protobuf.MethodOptions\030\347\332\254\014 \001(\0132\025.a"
-      "spnet.core.MvcRouteb\006proto3"
+      "body\030\006 \003(\t\022\030\n\020is_empty_request\030\007 \001(\010\022!\n\031"
+      "custom_exception_handling\030\010 \003(\t*`\n\nHttpM"
+      "ethod\022\022\n\016HttpMethod_Get\020\000\022\023\n\017HttpMethod_"
+      "Post\020\001\022\022\n\016HttpMethod_Put\020\002\022\025\n\021HttpMethod"
+      "_Delete\020\003*\235\001\n\017HttpInputSource\022\037\n\033HttpInp"
+      "utSource_Unspecified\020\000\022\030\n\024HttpInputSourc"
+      "e_Body\020\001\022\030\n\024HttpInputSource_Form\020\002\022\031\n\025Ht"
+      "tpInputSource_Query\020\003\022\032\n\026HttpInputSource"
+      "_Header\020\004:E\n\003api\022\036.google.protobuf.Metho"
+      "dOptions\030\347\332\254\014 \001(\0132\025.aspnet.core.MvcRoute"
+      "b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 707);
+      descriptor, 768);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "aspnetcore.proto", &protobuf_RegisterTypes);
   ::protobuf_google_2fprotobuf_2fwrappers_2eproto::AddDescriptors();
@@ -200,6 +204,8 @@ const int MvcRoute::kRoutePatternFieldNumber;
 const int MvcRoute::kCustomMethodAttributesFieldNumber;
 const int MvcRoute::kCustomReturnTypeFieldNumber;
 const int MvcRoute::kCustomMethodBodyFieldNumber;
+const int MvcRoute::kIsEmptyRequestFieldNumber;
+const int MvcRoute::kCustomExceptionHandlingFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 MvcRoute::MvcRoute()
@@ -213,7 +219,8 @@ MvcRoute::MvcRoute(const MvcRoute& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
       custom_method_attributes_(from.custom_method_attributes_),
-      custom_method_body_(from.custom_method_body_) {
+      custom_method_body_(from.custom_method_body_),
+      custom_exception_handling_(from.custom_exception_handling_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_route_pattern()) {
     route_pattern_ = new ::google::protobuf::StringValue(*from.route_pattern_);
@@ -226,15 +233,15 @@ MvcRoute::MvcRoute(const MvcRoute& from)
     custom_return_type_ = NULL;
   }
   ::memcpy(&method_, &from.method_,
-    static_cast<size_t>(reinterpret_cast<char*>(&source_) -
-    reinterpret_cast<char*>(&method_)) + sizeof(source_));
+    static_cast<size_t>(reinterpret_cast<char*>(&is_empty_request_) -
+    reinterpret_cast<char*>(&method_)) + sizeof(is_empty_request_));
   // @@protoc_insertion_point(copy_constructor:aspnet.core.MvcRoute)
 }
 
 void MvcRoute::SharedCtor() {
   ::memset(&route_pattern_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&source_) -
-      reinterpret_cast<char*>(&route_pattern_)) + sizeof(source_));
+      reinterpret_cast<char*>(&is_empty_request_) -
+      reinterpret_cast<char*>(&route_pattern_)) + sizeof(is_empty_request_));
 }
 
 MvcRoute::~MvcRoute() {
@@ -269,6 +276,7 @@ void MvcRoute::Clear() {
 
   custom_method_attributes_.Clear();
   custom_method_body_.Clear();
+  custom_exception_handling_.Clear();
   if (GetArenaNoVirtual() == NULL && route_pattern_ != NULL) {
     delete route_pattern_;
   }
@@ -278,8 +286,8 @@ void MvcRoute::Clear() {
   }
   custom_return_type_ = NULL;
   ::memset(&method_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&source_) -
-      reinterpret_cast<char*>(&method_)) + sizeof(source_));
+      reinterpret_cast<char*>(&is_empty_request_) -
+      reinterpret_cast<char*>(&method_)) + sizeof(is_empty_request_));
   _internal_metadata_.Clear();
 }
 
@@ -381,6 +389,37 @@ bool MvcRoute::MergePartialFromCodedStream(
         break;
       }
 
+      // bool is_empty_request = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &is_empty_request_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated string custom_exception_handling = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_custom_exception_handling()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->custom_exception_handling(this->custom_exception_handling_size() - 1).data(),
+            static_cast<int>(this->custom_exception_handling(this->custom_exception_handling_size() - 1).length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspnet.core.MvcRoute.custom_exception_handling"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -451,6 +490,21 @@ void MvcRoute::SerializeWithCachedSizes(
       6, this->custom_method_body(i), output);
   }
 
+  // bool is_empty_request = 7;
+  if (this->is_empty_request() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->is_empty_request(), output);
+  }
+
+  // repeated string custom_exception_handling = 8;
+  for (int i = 0, n = this->custom_exception_handling_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->custom_exception_handling(i).data(), static_cast<int>(this->custom_exception_handling(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspnet.core.MvcRoute.custom_exception_handling");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      8, this->custom_exception_handling(i), output);
+  }
+
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
@@ -511,6 +565,21 @@ void MvcRoute::SerializeWithCachedSizes(
       WriteStringToArray(6, this->custom_method_body(i), target);
   }
 
+  // bool is_empty_request = 7;
+  if (this->is_empty_request() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(7, this->is_empty_request(), target);
+  }
+
+  // repeated string custom_exception_handling = 8;
+  for (int i = 0, n = this->custom_exception_handling_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->custom_exception_handling(i).data(), static_cast<int>(this->custom_exception_handling(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspnet.core.MvcRoute.custom_exception_handling");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(8, this->custom_exception_handling(i), target);
+  }
+
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
@@ -544,6 +613,14 @@ size_t MvcRoute::ByteSizeLong() const {
       this->custom_method_body(i));
   }
 
+  // repeated string custom_exception_handling = 8;
+  total_size += 1 *
+      ::google::protobuf::internal::FromIntSize(this->custom_exception_handling_size());
+  for (int i = 0, n = this->custom_exception_handling_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->custom_exception_handling(i));
+  }
+
   // .google.protobuf.StringValue route_pattern = 3;
   if (this->has_route_pattern()) {
     total_size += 1 +
@@ -568,6 +645,11 @@ size_t MvcRoute::ByteSizeLong() const {
   if (this->source() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->source());
+  }
+
+  // bool is_empty_request = 7;
+  if (this->is_empty_request() != 0) {
+    total_size += 1 + 1;
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -599,6 +681,7 @@ void MvcRoute::MergeFrom(const MvcRoute& from) {
 
   custom_method_attributes_.MergeFrom(from.custom_method_attributes_);
   custom_method_body_.MergeFrom(from.custom_method_body_);
+  custom_exception_handling_.MergeFrom(from.custom_exception_handling_);
   if (from.has_route_pattern()) {
     mutable_route_pattern()->::google::protobuf::StringValue::MergeFrom(from.route_pattern());
   }
@@ -610,6 +693,9 @@ void MvcRoute::MergeFrom(const MvcRoute& from) {
   }
   if (from.source() != 0) {
     set_source(from.source());
+  }
+  if (from.is_empty_request() != 0) {
+    set_is_empty_request(from.is_empty_request());
   }
 }
 
@@ -639,10 +725,12 @@ void MvcRoute::InternalSwap(MvcRoute* other) {
   using std::swap;
   custom_method_attributes_.InternalSwap(CastToBase(&other->custom_method_attributes_));
   custom_method_body_.InternalSwap(CastToBase(&other->custom_method_body_));
+  custom_exception_handling_.InternalSwap(CastToBase(&other->custom_exception_handling_));
   swap(route_pattern_, other->route_pattern_);
   swap(custom_return_type_, other->custom_return_type_);
   swap(method_, other->method_);
   swap(source_, other->source_);
+  swap(is_empty_request_, other->is_empty_request_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 

@@ -9,12 +9,32 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
     std::vector<std::pair<string, string>> params;
     ParseGeneratorParameter(parameter, &params);
     bool generateProject = false;
+    std::string name = "My GRPC Gateway";
+    std::string defaultHost = "localhost";
+    std::string defaultPort = "7000";
+    std::vector<std::string> projectRefs;
 
     for (auto const& p : params)
     {
         if (p.first == "generate_project" && (p.second == "true" || p.second == "1"))
         {
             generateProject = true;
+        }
+        else if (p.first == "port")
+        {
+            defaultPort = p.second;
+        }
+        else if (p.first == "name")
+        {
+            name = p.second;
+        }
+        else if (p.first == "host")
+        {
+            defaultHost = p.second;
+        }
+        else if (p.first == "project_ref")
+        {
+            projectRefs.push_back(p.second);
         }
     }
 
@@ -45,6 +65,22 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                 projPrinter.Print("<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"4.0.1\" />\n");
             }
             projPrinter.Print("</ItemGroup>\n");
+
+            if (projectRefs.size() > 0)
+            {
+                projPrinter.Print("<ItemGroup>\n");
+                {
+                    Indent iRefs(&projPrinter);
+                    for (auto const& ref : projectRefs)
+                    {
+                        std::string refEl = "<ProjectReference Include=\"";
+                        refEl += ref;
+                        refEl += "\" />\n";
+                        projPrinter.Print(refEl.c_str());
+                    }
+                }
+                projPrinter.Print("</ItemGroup>\n");
+            }
         }
         projPrinter.Print("</Project>");
         
@@ -83,6 +119,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
         auto *startupCsOutput = generator_context->Open("Startup.cs");
         Printer startupCsPrinter(startupCsOutput, '$');
 
+        startupCsPrinter.Print("using Grpc.Core;\n");
         startupCsPrinter.Print("using Microsoft.AspNetCore.Builder;\n");
         startupCsPrinter.Print("using Microsoft.AspNetCore.Hosting;\n");
         startupCsPrinter.Print("using Microsoft.AspNetCore.Mvc;\n");
@@ -106,6 +143,27 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                 startupCsPrinter.Print("public void ConfigureServices(IServiceCollection services)\n");
                 {
                     CodeBlock configureSvcStart(&startupCsPrinter);
+
+                    startupCsPrinter.Print("var grpcConf = Configuration.GetSection(\"grpc\");\n");
+                    startupCsPrinter.Print("var host = grpcConf[\"host\"] ?? \"$host$\";\n", "host", defaultHost);
+                    startupCsPrinter.Print("var port = $port$;\n", "port", defaultPort);
+                    startupCsPrinter.Print("if (int.TryParse(grpcConf[\"port\"], out var p))\n");
+                    {
+                        CodeBlock ifBlock(&startupCsPrinter);
+                        startupCsPrinter.Print("port = p;\n");
+                    }
+
+                    startupCsPrinter.Print("var ch = new Channel(host, port, ChannelCredentials.Insecure);\n");
+                    startupCsPrinter.Print("services.AddSingleton(ch);\n");
+
+                    for (int i = 0; i < file->service_count(); i++)
+                    {
+                        auto svc = file->service(i);
+                        startupCsPrinter.Print("services.AddTransient(sp => new $service$.$service$Client(sp.GetRequiredService<Channel>()));\n",
+                            "service",
+                            svc->name());
+                    }
+                    
                     startupCsPrinter.Print("services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);\n");
                     startupCsPrinter.Print("services.AddSwaggerGen(c =>\n");
                     {
@@ -113,7 +171,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                         startupCsPrinter.Print("c.SwaggerDoc(\"v1\", new Info\n");
                         {
                             CodeBlock infoSet(&startupCsPrinter, ");");
-                            startupCsPrinter.Print("Title = \"My GRPC Gateway\",\n");
+                            startupCsPrinter.Print("Title = \"$name$\",\n", "name", name);
                             startupCsPrinter.Print("Version = \"v1\"\n");
                         }
                         startupCsPrinter.Print("\n//To support API description from comments, enable XML documentation support\n");
@@ -147,7 +205,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                     startupCsPrinter.Print("app.UseSwaggerUI(c =>\n");
                     {
                         CodeBlock useSwagger(&startupCsPrinter, ");");
-                        startupCsPrinter.Print("c.SwaggerEndpoint(\"/swagger/v1/swagger.json\", \"My GRPC Gateway V1\");\n");
+                        startupCsPrinter.Print("c.SwaggerEndpoint(\"/swagger/v1/swagger.json\", \"$name$\");\n", "name", name);
                         startupCsPrinter.Print("c.DisplayRequestDuration();\n");
                         startupCsPrinter.Print("c.ShowExtensions();\n");
                     }
