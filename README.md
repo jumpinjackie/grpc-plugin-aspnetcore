@@ -49,3 +49,7 @@ The following options are supported:
 
 If you include `aspnetcore.proto` to annotate your service methods, you will have to include `aspnetcore.proto` when 
 generating gRPC clients for languages other than .net
+
+As protobuf does not support pre-processing (eg. `#ifdef` certain sections of the file based on language target), a workaround you can use is to put your
+gRPC service definitions behind text templates where `aspnetcore.proto` and your service method annotations can be selectively applied and run your template
+with the desired switches to generate the required `.proto` file with or without the aspnetcore annotations.
