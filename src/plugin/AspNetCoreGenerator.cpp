@@ -102,8 +102,9 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                 CodeBlock classStart(&progCsPrinter);
                 progCsPrinter.Print("public static void Main(string[] args)\n");
                 {
-                    CodeBlock mainStart(&progCsPrinter);
-                    progCsPrinter.Print("CreateWebHostBuilder(args).Build().Run();\n");
+                    CodeBlock mainStart(&progCsPrinter, "\n");
+                    progCsPrinter.Print("var host = CreateWebHostBuilder(args).Build();\n");
+                    progCsPrinter.Print("host.Run();\n");
                 }
                 progCsPrinter.Print("public static IWebHostBuilder CreateWebHostBuilder(string[] args)\n");
                 {
