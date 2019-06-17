@@ -61,7 +61,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                 Indent i2(&projPrinter);
                 projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.App\" />\n");
                 projPrinter.Print("<PackageReference Include=\"Google.Protobuf\" Version=\"3.7.0\" />\n");
-                projPrinter.Print("<PackageReference Include=\"Grpc.Core\" Version=\"1.19.0\" />\n");
+                projPrinter.Print("<PackageReference Include=\"Grpc.Core\" Version=\"1.21.0\" />\n");
                 projPrinter.Print("<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"4.0.1\" />\n");
             }
             projPrinter.Print("</ItemGroup>\n");
