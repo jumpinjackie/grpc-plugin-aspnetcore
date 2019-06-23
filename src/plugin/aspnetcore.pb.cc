@@ -8,48 +8,43 @@
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/extension_set.h>
-#include <google/protobuf/wire_format_lite_inl.h>
+#include <google/protobuf/wire_format_lite.h>
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-
-extern PROTOBUF_INTERNAL_EXPORT_aspnetcore_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_MvcRoute_aspnetcore_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_google_2fprotobuf_2fwrappers_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_StringValue_google_2fprotobuf_2fwrappers_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_aspnetcore_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_MvcRoute_aspnetcore_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_google_2fprotobuf_2fwrappers_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StringValue_google_2fprotobuf_2fwrappers_2eproto;
 namespace aspnet {
 namespace core {
 class MvcRouteDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<MvcRoute> _instance;
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<MvcRoute> _instance;
 } _MvcRoute_default_instance_;
 }  // namespace core
 }  // namespace aspnet
-static void InitDefaultsMvcRoute_aspnetcore_2eproto() {
+static void InitDefaultsscc_info_MvcRoute_aspnetcore_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
     void* ptr = &::aspnet::core::_MvcRoute_default_instance_;
     new (ptr) ::aspnet::core::MvcRoute();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
   ::aspnet::core::MvcRoute::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<1> scc_info_MvcRoute_aspnetcore_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsMvcRoute_aspnetcore_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_MvcRoute_aspnetcore_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsscc_info_MvcRoute_aspnetcore_2eproto}, {
       &scc_info_StringValue_google_2fprotobuf_2fwrappers_2eproto.base,}};
 
-void InitDefaults_aspnetcore_2eproto() {
-  ::google::protobuf::internal::InitSCC(&scc_info_MvcRoute_aspnetcore_2eproto.base);
-}
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_aspnetcore_2eproto[1];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_aspnetcore_2eproto[2];
+static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_aspnetcore_2eproto = nullptr;
 
-::google::protobuf::Metadata file_level_metadata_aspnetcore_2eproto[1];
-const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_aspnetcore_2eproto[2];
-constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_aspnetcore_2eproto = nullptr;
-
-const ::google::protobuf::uint32 TableStruct_aspnetcore_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_aspnetcore_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::aspnet::core::MvcRoute, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -64,18 +59,12 @@ const ::google::protobuf::uint32 TableStruct_aspnetcore_2eproto::offsets[] PROTO
   PROTOBUF_FIELD_OFFSET(::aspnet::core::MvcRoute, is_empty_request_),
   PROTOBUF_FIELD_OFFSET(::aspnet::core::MvcRoute, custom_exception_handling_),
 };
-static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::aspnet::core::MvcRoute)},
 };
 
-static ::google::protobuf::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::google::protobuf::Message*>(&::aspnet::core::_MvcRoute_default_instance_),
-};
-
-::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_aspnetcore_2eproto = {
-  {}, AddDescriptors_aspnetcore_2eproto, "aspnetcore.proto", schemas,
-  file_default_instances, TableStruct_aspnetcore_2eproto::offsets,
-  file_level_metadata_aspnetcore_2eproto, 1, file_level_enum_descriptors_aspnetcore_2eproto, file_level_service_descriptors_aspnetcore_2eproto,
+static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::aspnet::core::_MvcRoute_default_instance_),
 };
 
 const char descriptor_table_protodef_aspnetcore_2eproto[] =
@@ -100,27 +89,28 @@ const char descriptor_table_protodef_aspnetcore_2eproto[] =
   "dOptions\030\347\332\254\014 \001(\0132\025.aspnet.core.MvcRoute"
   "b\006proto3"
   ;
-::google::protobuf::internal::DescriptorTable descriptor_table_aspnetcore_2eproto = {
-  false, InitDefaults_aspnetcore_2eproto, 
-  descriptor_table_protodef_aspnetcore_2eproto,
-  "aspnetcore.proto", &assign_descriptors_table_aspnetcore_2eproto, 768,
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_aspnetcore_2eproto_deps[2] = {
+  &::descriptor_table_google_2fprotobuf_2fdescriptor_2eproto,
+  &::descriptor_table_google_2fprotobuf_2fwrappers_2eproto,
+};
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_aspnetcore_2eproto_sccs[1] = {
+  &scc_info_MvcRoute_aspnetcore_2eproto.base,
+};
+static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_aspnetcore_2eproto_once;
+static bool descriptor_table_aspnetcore_2eproto_initialized = false;
+const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_aspnetcore_2eproto = {
+  &descriptor_table_aspnetcore_2eproto_initialized, descriptor_table_protodef_aspnetcore_2eproto, "aspnetcore.proto", 768,
+  &descriptor_table_aspnetcore_2eproto_once, descriptor_table_aspnetcore_2eproto_sccs, descriptor_table_aspnetcore_2eproto_deps, 1, 2,
+  schemas, file_default_instances, TableStruct_aspnetcore_2eproto::offsets,
+  file_level_metadata_aspnetcore_2eproto, 1, file_level_enum_descriptors_aspnetcore_2eproto, file_level_service_descriptors_aspnetcore_2eproto,
 };
 
-void AddDescriptors_aspnetcore_2eproto() {
-  static constexpr ::google::protobuf::internal::InitFunc deps[2] =
-  {
-    ::AddDescriptors_google_2fprotobuf_2fwrappers_2eproto,
-    ::AddDescriptors_google_2fprotobuf_2fdescriptor_2eproto,
-  };
- ::google::protobuf::internal::AddDescriptors(&descriptor_table_aspnetcore_2eproto, deps, 2);
-}
-
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_aspnetcore_2eproto = []() { AddDescriptors_aspnetcore_2eproto(); return true; }();
+static bool dynamic_init_dummy_aspnetcore_2eproto = (  ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_aspnetcore_2eproto), true);
 namespace aspnet {
 namespace core {
-const ::google::protobuf::EnumDescriptor* HttpMethod_descriptor() {
-  ::google::protobuf::internal::AssignDescriptors(&assign_descriptors_table_aspnetcore_2eproto);
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* HttpMethod_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_aspnetcore_2eproto);
   return file_level_enum_descriptors_aspnetcore_2eproto[0];
 }
 bool HttpMethod_IsValid(int value) {
@@ -135,8 +125,8 @@ bool HttpMethod_IsValid(int value) {
   }
 }
 
-const ::google::protobuf::EnumDescriptor* HttpInputSource_descriptor() {
-  ::google::protobuf::internal::AssignDescriptors(&assign_descriptors_table_aspnetcore_2eproto);
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* HttpInputSource_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_aspnetcore_2eproto);
   return file_level_enum_descriptors_aspnetcore_2eproto[1];
 }
 bool HttpInputSource_IsValid(int value) {
@@ -156,22 +146,22 @@ bool HttpInputSource_IsValid(int value) {
 // ===================================================================
 
 void MvcRoute::InitAsDefaultInstance() {
-  ::aspnet::core::_MvcRoute_default_instance_._instance.get_mutable()->route_pattern_ = const_cast< ::google::protobuf::StringValue*>(
-      ::google::protobuf::StringValue::internal_default_instance());
-  ::aspnet::core::_MvcRoute_default_instance_._instance.get_mutable()->custom_return_type_ = const_cast< ::google::protobuf::StringValue*>(
-      ::google::protobuf::StringValue::internal_default_instance());
+  ::aspnet::core::_MvcRoute_default_instance_._instance.get_mutable()->route_pattern_ = const_cast< PROTOBUF_NAMESPACE_ID::StringValue*>(
+      PROTOBUF_NAMESPACE_ID::StringValue::internal_default_instance());
+  ::aspnet::core::_MvcRoute_default_instance_._instance.get_mutable()->custom_return_type_ = const_cast< PROTOBUF_NAMESPACE_ID::StringValue*>(
+      PROTOBUF_NAMESPACE_ID::StringValue::internal_default_instance());
 }
 class MvcRoute::HasBitSetters {
  public:
-  static const ::google::protobuf::StringValue& route_pattern(const MvcRoute* msg);
-  static const ::google::protobuf::StringValue& custom_return_type(const MvcRoute* msg);
+  static const PROTOBUF_NAMESPACE_ID::StringValue& route_pattern(const MvcRoute* msg);
+  static const PROTOBUF_NAMESPACE_ID::StringValue& custom_return_type(const MvcRoute* msg);
 };
 
-const ::google::protobuf::StringValue&
+const PROTOBUF_NAMESPACE_ID::StringValue&
 MvcRoute::HasBitSetters::route_pattern(const MvcRoute* msg) {
   return *msg->route_pattern_;
 }
-const ::google::protobuf::StringValue&
+const PROTOBUF_NAMESPACE_ID::StringValue&
 MvcRoute::HasBitSetters::custom_return_type(const MvcRoute* msg) {
   return *msg->custom_return_type_;
 }
@@ -199,24 +189,24 @@ const int MvcRoute::kCustomExceptionHandlingFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 MvcRoute::MvcRoute()
-  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspnet.core.MvcRoute)
 }
 MvcRoute::MvcRoute(const MvcRoute& from)
-  : ::google::protobuf::Message(),
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
       custom_method_attributes_(from.custom_method_attributes_),
       custom_method_body_(from.custom_method_body_),
       custom_exception_handling_(from.custom_exception_handling_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_route_pattern()) {
-    route_pattern_ = new ::google::protobuf::StringValue(*from.route_pattern_);
+    route_pattern_ = new PROTOBUF_NAMESPACE_ID::StringValue(*from.route_pattern_);
   } else {
     route_pattern_ = nullptr;
   }
   if (from.has_custom_return_type()) {
-    custom_return_type_ = new ::google::protobuf::StringValue(*from.custom_return_type_);
+    custom_return_type_ = new PROTOBUF_NAMESPACE_ID::StringValue(*from.custom_return_type_);
   } else {
     custom_return_type_ = nullptr;
   }
@@ -227,8 +217,7 @@ MvcRoute::MvcRoute(const MvcRoute& from)
 }
 
 void MvcRoute::SharedCtor() {
-  ::google::protobuf::internal::InitSCC(
-      &scc_info_MvcRoute_aspnetcore_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_MvcRoute_aspnetcore_2eproto.base);
   ::memset(&route_pattern_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&is_empty_request_) -
       reinterpret_cast<char*>(&route_pattern_)) + sizeof(is_empty_request_));
@@ -248,14 +237,14 @@ void MvcRoute::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const MvcRoute& MvcRoute::default_instance() {
-  ::google::protobuf::internal::InitSCC(&::scc_info_MvcRoute_aspnetcore_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_MvcRoute_aspnetcore_2eproto.base);
   return *internal_default_instance();
 }
 
 
 void MvcRoute::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspnet.core.MvcRoute)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -277,164 +266,122 @@ void MvcRoute::Clear() {
 }
 
 #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* MvcRoute::_InternalParse(const char* begin, const char* end, void* object,
-                  ::google::protobuf::internal::ParseContext* ctx) {
-  auto msg = static_cast<MvcRoute*>(object);
-  ::google::protobuf::int32 size; (void)size;
-  int depth; (void)depth;
-  ::google::protobuf::uint32 tag;
-  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
-  auto ptr = begin;
-  while (ptr < end) {
-    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
-    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
     switch (tag >> 3) {
       // .aspnet.core.HttpMethod method = 1;
-      case 1: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 8) goto handle_unusual;
-        ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
-        msg->set_method(static_cast<::aspnet::core::HttpMethod>(val));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+          set_method(static_cast<::aspnet::core::HttpMethod>(val));
+        } else goto handle_unusual;
+        continue;
       // .aspnet.core.HttpInputSource source = 2;
-      case 2: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 16) goto handle_unusual;
-        ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
-        msg->set_source(static_cast<::aspnet::core::HttpInputSource>(val));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+          set_source(static_cast<::aspnet::core::HttpInputSource>(val));
+        } else goto handle_unusual;
+        continue;
       // .google.protobuf.StringValue route_pattern = 3;
-      case 3: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 26) goto handle_unusual;
-        ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        parser_till_end = ::google::protobuf::StringValue::_InternalParse;
-        object = msg->mutable_route_pattern();
-        if (size > end - ptr) goto len_delim_till_end;
-        ptr += size;
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
-            {parser_till_end, object}, ptr - size, ptr));
-        break;
-      }
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ctx->ParseMessage(mutable_route_pattern(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       // repeated string custom_method_attributes = 4;
-      case 4: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 34) goto handle_unusual;
-        do {
-          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          ctx->extra_parse_data().SetFieldName("aspnet.core.MvcRoute.custom_method_attributes");
-          object = msg->add_custom_method_attributes();
-          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
-            goto string_till_end;
-          }
-          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
-          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
-          ptr += size;
-          if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 34 && (ptr += 1));
-        break;
-      }
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(add_custom_method_attributes(), ptr, ctx, "aspnet.core.MvcRoute.custom_method_attributes");
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<::PROTOBUF_NAMESPACE_ID::uint8>(ptr) == 34);
+        } else goto handle_unusual;
+        continue;
       // .google.protobuf.StringValue custom_return_type = 5;
-      case 5: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 42) goto handle_unusual;
-        ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        parser_till_end = ::google::protobuf::StringValue::_InternalParse;
-        object = msg->mutable_custom_return_type();
-        if (size > end - ptr) goto len_delim_till_end;
-        ptr += size;
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
-            {parser_till_end, object}, ptr - size, ptr));
-        break;
-      }
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr = ctx->ParseMessage(mutable_custom_return_type(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       // repeated string custom_method_body = 6;
-      case 6: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 50) goto handle_unusual;
-        do {
-          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          ctx->extra_parse_data().SetFieldName("aspnet.core.MvcRoute.custom_method_body");
-          object = msg->add_custom_method_body();
-          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
-            goto string_till_end;
-          }
-          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
-          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
-          ptr += size;
-          if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 50 && (ptr += 1));
-        break;
-      }
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(add_custom_method_body(), ptr, ctx, "aspnet.core.MvcRoute.custom_method_body");
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<::PROTOBUF_NAMESPACE_ID::uint8>(ptr) == 50);
+        } else goto handle_unusual;
+        continue;
       // bool is_empty_request = 7;
-      case 7: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 56) goto handle_unusual;
-        msg->set_is_empty_request(::google::protobuf::internal::ReadVarint(&ptr));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+          is_empty_request_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       // repeated string custom_exception_handling = 8;
-      case 8: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 66) goto handle_unusual;
-        do {
-          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          ctx->extra_parse_data().SetFieldName("aspnet.core.MvcRoute.custom_exception_handling");
-          object = msg->add_custom_exception_handling();
-          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
-            goto string_till_end;
-          }
-          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
-          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
-          ptr += size;
-          if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 66 && (ptr += 1));
-        break;
-      }
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(add_custom_exception_handling(), ptr, ctx, "aspnet.core.MvcRoute.custom_exception_handling");
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<::PROTOBUF_NAMESPACE_ID::uint8>(ptr) == 66);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
-          ctx->EndGroup(tag);
-          return ptr;
+          ctx->SetLastTag(tag);
+          goto success;
         }
-        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
-          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
-        ptr = res.first;
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
-        if (res.second) return ptr;
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
       }
     }  // switch
   }  // while
+success:
   return ptr;
-string_till_end:
-  static_cast<::std::string*>(object)->clear();
-  static_cast<::std::string*>(object)->reserve(size);
-  goto len_delim_till_end;
-len_delim_till_end:
-  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
-                               {parser_till_end, object}, size);
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 bool MvcRoute::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
   // @@protoc_insertion_point(parse_start:aspnet.core.MvcRoute)
   for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // .aspnet.core.HttpMethod method = 1;
       case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (8 & 0xFF)) {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
           int value = 0;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   int, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
           set_method(static_cast< ::aspnet::core::HttpMethod >(value));
         } else {
@@ -445,10 +392,10 @@ bool MvcRoute::MergePartialFromCodedStream(
 
       // .aspnet.core.HttpInputSource source = 2;
       case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (16 & 0xFF)) {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (16 & 0xFF)) {
           int value = 0;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   int, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
           set_source(static_cast< ::aspnet::core::HttpInputSource >(value));
         } else {
@@ -459,8 +406,8 @@ bool MvcRoute::MergePartialFromCodedStream(
 
       // .google.protobuf.StringValue route_pattern = 3;
       case 3: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (26 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
                input, mutable_route_pattern()));
         } else {
           goto handle_unusual;
@@ -470,13 +417,13 @@ bool MvcRoute::MergePartialFromCodedStream(
 
       // repeated string custom_method_attributes = 4;
       case 4: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
                 input, this->add_custom_method_attributes()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
             this->custom_method_attributes(this->custom_method_attributes_size() - 1).data(),
             static_cast<int>(this->custom_method_attributes(this->custom_method_attributes_size() - 1).length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
             "aspnet.core.MvcRoute.custom_method_attributes"));
         } else {
           goto handle_unusual;
@@ -486,8 +433,8 @@ bool MvcRoute::MergePartialFromCodedStream(
 
       // .google.protobuf.StringValue custom_return_type = 5;
       case 5: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (42 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (42 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
                input, mutable_custom_return_type()));
         } else {
           goto handle_unusual;
@@ -497,13 +444,13 @@ bool MvcRoute::MergePartialFromCodedStream(
 
       // repeated string custom_method_body = 6;
       case 6: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (50 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (50 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
                 input, this->add_custom_method_body()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
             this->custom_method_body(this->custom_method_body_size() - 1).data(),
             static_cast<int>(this->custom_method_body(this->custom_method_body_size() - 1).length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
             "aspnet.core.MvcRoute.custom_method_body"));
         } else {
           goto handle_unusual;
@@ -513,10 +460,10 @@ bool MvcRoute::MergePartialFromCodedStream(
 
       // bool is_empty_request = 7;
       case 7: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (56 & 0xFF)) {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (56 & 0xFF)) {
 
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_BOOL>(
                  input, &is_empty_request_)));
         } else {
           goto handle_unusual;
@@ -526,13 +473,13 @@ bool MvcRoute::MergePartialFromCodedStream(
 
       // repeated string custom_exception_handling = 8;
       case 8: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (66 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (66 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
                 input, this->add_custom_exception_handling()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
             this->custom_exception_handling(this->custom_exception_handling_size() - 1).data(),
             static_cast<int>(this->custom_exception_handling(this->custom_exception_handling_size() - 1).length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
             "aspnet.core.MvcRoute.custom_exception_handling"));
         } else {
           goto handle_unusual;
@@ -545,7 +492,7 @@ bool MvcRoute::MergePartialFromCodedStream(
         if (tag == 0) {
           goto success;
         }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
               input, tag, _internal_metadata_.mutable_unknown_fields()));
         break;
       }
@@ -562,146 +509,146 @@ failure:
 #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 
 void MvcRoute::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:aspnet.core.MvcRoute)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   // .aspnet.core.HttpMethod method = 1;
   if (this->method() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnum(
       1, this->method(), output);
   }
 
   // .aspnet.core.HttpInputSource source = 2;
   if (this->source() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnum(
       2, this->source(), output);
   }
 
   // .google.protobuf.StringValue route_pattern = 3;
   if (this->has_route_pattern()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
       3, HasBitSetters::route_pattern(this), output);
   }
 
   // repeated string custom_method_attributes = 4;
   for (int i = 0, n = this->custom_method_attributes_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->custom_method_attributes(i).data(), static_cast<int>(this->custom_method_attributes(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "aspnet.core.MvcRoute.custom_method_attributes");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteString(
       4, this->custom_method_attributes(i), output);
   }
 
   // .google.protobuf.StringValue custom_return_type = 5;
   if (this->has_custom_return_type()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
       5, HasBitSetters::custom_return_type(this), output);
   }
 
   // repeated string custom_method_body = 6;
   for (int i = 0, n = this->custom_method_body_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->custom_method_body(i).data(), static_cast<int>(this->custom_method_body(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "aspnet.core.MvcRoute.custom_method_body");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteString(
       6, this->custom_method_body(i), output);
   }
 
   // bool is_empty_request = 7;
   if (this->is_empty_request() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->is_empty_request(), output);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBool(7, this->is_empty_request(), output);
   }
 
   // repeated string custom_exception_handling = 8;
   for (int i = 0, n = this->custom_exception_handling_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->custom_exception_handling(i).data(), static_cast<int>(this->custom_exception_handling(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "aspnet.core.MvcRoute.custom_exception_handling");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteString(
       8, this->custom_exception_handling(i), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
   // @@protoc_insertion_point(serialize_end:aspnet.core.MvcRoute)
 }
 
-::google::protobuf::uint8* MvcRoute::InternalSerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
+::PROTOBUF_NAMESPACE_ID::uint8* MvcRoute::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:aspnet.core.MvcRoute)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   // .aspnet.core.HttpMethod method = 1;
   if (this->method() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       1, this->method(), target);
   }
 
   // .aspnet.core.HttpInputSource source = 2;
   if (this->source() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       2, this->source(), target);
   }
 
   // .google.protobuf.StringValue route_pattern = 3;
   if (this->has_route_pattern()) {
-    target = ::google::protobuf::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
         3, HasBitSetters::route_pattern(this), target);
   }
 
   // repeated string custom_method_attributes = 4;
   for (int i = 0, n = this->custom_method_attributes_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->custom_method_attributes(i).data(), static_cast<int>(this->custom_method_attributes(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "aspnet.core.MvcRoute.custom_method_attributes");
-    target = ::google::protobuf::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       WriteStringToArray(4, this->custom_method_attributes(i), target);
   }
 
   // .google.protobuf.StringValue custom_return_type = 5;
   if (this->has_custom_return_type()) {
-    target = ::google::protobuf::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
         5, HasBitSetters::custom_return_type(this), target);
   }
 
   // repeated string custom_method_body = 6;
   for (int i = 0, n = this->custom_method_body_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->custom_method_body(i).data(), static_cast<int>(this->custom_method_body(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "aspnet.core.MvcRoute.custom_method_body");
-    target = ::google::protobuf::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       WriteStringToArray(6, this->custom_method_body(i), target);
   }
 
   // bool is_empty_request = 7;
   if (this->is_empty_request() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(7, this->is_empty_request(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(7, this->is_empty_request(), target);
   }
 
   // repeated string custom_exception_handling = 8;
   for (int i = 0, n = this->custom_exception_handling_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->custom_exception_handling(i).data(), static_cast<int>(this->custom_exception_handling(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "aspnet.core.MvcRoute.custom_exception_handling");
-    target = ::google::protobuf::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       WriteStringToArray(8, this->custom_exception_handling(i), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
   // @@protoc_insertion_point(serialize_to_array_end:aspnet.core.MvcRoute)
@@ -714,61 +661,61 @@ size_t MvcRoute::ByteSizeLong() const {
 
   if (_internal_metadata_.have_unknown_fields()) {
     total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated string custom_method_attributes = 4;
   total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->custom_method_attributes_size());
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->custom_method_attributes_size());
   for (int i = 0, n = this->custom_method_attributes_size(); i < n; i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
       this->custom_method_attributes(i));
   }
 
   // repeated string custom_method_body = 6;
   total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->custom_method_body_size());
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->custom_method_body_size());
   for (int i = 0, n = this->custom_method_body_size(); i < n; i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
       this->custom_method_body(i));
   }
 
   // repeated string custom_exception_handling = 8;
   total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->custom_exception_handling_size());
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->custom_exception_handling_size());
   for (int i = 0, n = this->custom_exception_handling_size(); i < n; i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
       this->custom_exception_handling(i));
   }
 
   // .google.protobuf.StringValue route_pattern = 3;
   if (this->has_route_pattern()) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *route_pattern_);
   }
 
   // .google.protobuf.StringValue custom_return_type = 5;
   if (this->has_custom_return_type()) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *custom_return_type_);
   }
 
   // .aspnet.core.HttpMethod method = 1;
   if (this->method() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->method());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->method());
   }
 
   // .aspnet.core.HttpInputSource source = 2;
   if (this->source() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->source());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->source());
   }
 
   // bool is_empty_request = 7;
@@ -776,20 +723,20 @@ size_t MvcRoute::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
 
-void MvcRoute::MergeFrom(const ::google::protobuf::Message& from) {
+void MvcRoute::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:aspnet.core.MvcRoute)
   GOOGLE_DCHECK_NE(&from, this);
   const MvcRoute* source =
-      ::google::protobuf::DynamicCastToGenerated<MvcRoute>(
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<MvcRoute>(
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:aspnet.core.MvcRoute)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:aspnet.core.MvcRoute)
     MergeFrom(*source);
@@ -800,17 +747,17 @@ void MvcRoute::MergeFrom(const MvcRoute& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:aspnet.core.MvcRoute)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   custom_method_attributes_.MergeFrom(from.custom_method_attributes_);
   custom_method_body_.MergeFrom(from.custom_method_body_);
   custom_exception_handling_.MergeFrom(from.custom_exception_handling_);
   if (from.has_route_pattern()) {
-    mutable_route_pattern()->::google::protobuf::StringValue::MergeFrom(from.route_pattern());
+    mutable_route_pattern()->PROTOBUF_NAMESPACE_ID::StringValue::MergeFrom(from.route_pattern());
   }
   if (from.has_custom_return_type()) {
-    mutable_custom_return_type()->::google::protobuf::StringValue::MergeFrom(from.custom_return_type());
+    mutable_custom_return_type()->PROTOBUF_NAMESPACE_ID::StringValue::MergeFrom(from.custom_return_type());
   }
   if (from.method() != 0) {
     set_method(from.method());
@@ -823,7 +770,7 @@ void MvcRoute::MergeFrom(const MvcRoute& from) {
   }
 }
 
-void MvcRoute::CopyFrom(const ::google::protobuf::Message& from) {
+void MvcRoute::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
 // @@protoc_insertion_point(generalized_copy_from_start:aspnet.core.MvcRoute)
   if (&from == this) return;
   Clear();
@@ -858,25 +805,22 @@ void MvcRoute::InternalSwap(MvcRoute* other) {
   swap(is_empty_request_, other->is_empty_request_);
 }
 
-::google::protobuf::Metadata MvcRoute::GetMetadata() const {
-  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_aspnetcore_2eproto);
-  return ::file_level_metadata_aspnetcore_2eproto[kIndexInFileMessages];
+::PROTOBUF_NAMESPACE_ID::Metadata MvcRoute::GetMetadata() const {
+  return GetMetadataStatic();
 }
 
-::google::protobuf::internal::ExtensionIdentifier< ::google::protobuf::MethodOptions,
-    ::google::protobuf::internal::MessageTypeTraits< ::aspnet::core::MvcRoute >, 11, false >
+::PROTOBUF_NAMESPACE_ID::internal::ExtensionIdentifier< ::google::protobuf::MethodOptions,
+    ::PROTOBUF_NAMESPACE_ID::internal::MessageTypeTraits< ::aspnet::core::MvcRoute >, 11, false >
   api(kApiFieldNumber, *::aspnet::core::MvcRoute::internal_default_instance());
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace core
 }  // namespace aspnet
-namespace google {
-namespace protobuf {
+PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::aspnet::core::MvcRoute* Arena::CreateMaybeMessage< ::aspnet::core::MvcRoute >(Arena* arena) {
   return Arena::CreateInternal< ::aspnet::core::MvcRoute >(arena);
 }
-}  // namespace protobuf
-}  // namespace google
+PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
 #include <google/protobuf/port_undef.inc>

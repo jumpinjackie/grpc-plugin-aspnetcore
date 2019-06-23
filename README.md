@@ -10,7 +10,7 @@ This is intended to be the asp.net core analogue of [grpc-gateway](https://githu
 
 ## Requirements
 
-* Protocol buffers 3.6.1 (built as dynamic)
+* Protocol buffers 3.8.0 (built as dynamic)
 
 This repo assumes protobuf was acquired with [vcpkg](https://github.com/Microsoft/vcpkg) and was built with dynamic linkage. It assumes you exported protobuf from vcpkg into `thirdparty/vcpkg-export`
 
