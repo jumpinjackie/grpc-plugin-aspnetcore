@@ -9,6 +9,7 @@
 #include "aspnetcore.pb.h"
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <vector>
 
 // Can't change indentation size. Ugh!
@@ -333,32 +334,29 @@ public:
                 }
             }
             m_methodBlock = new CodeBlock(m_printer); //Begin method
-
-            if (routeOption.custom_method_body_size() > 0)
+            if (!routeOption.custom_method_body_template().empty())
             {
-                for (auto const& line : routeOption.custom_method_body())
+                std::ifstream fin(routeOption.custom_method_body_template());
+                if (!fin.is_open())
                 {
-                    std::map<std::string, std::string> vars;
-                    if (line.find("$method_call$") != std::string::npos)
+                    std::cerr << "Could not read template file: "
+                        << routeOption.custom_method_body_template()
+                        << std::endl;
+                }
+                else
+                {
+                    std::string line;
+                    while (std::getline(fin, line))
                     {
-                        std::string methodCall = "await _client.";
-                        methodCall += msg->name();
-                        if (!isOutputTypeStreamed)
-                        {
-                            methodCall += "Async";
-                        }
-                        methodCall += "(input)";
-                        vars["method_call"] = methodCall;
+                        PrintCustomMethodLine(line, msg, isOutputTypeStreamed, outputType, true);
                     }
-                    if (line.find("$output_var$") != std::string::npos)
-                    {
-                        vars["output_var"] = "result";
-                    }
-                    if (line.find("$output_type$") != std::string::npos)
-                    {
-                        vars["output_type"] = outputType->name();
-                    }
-                    m_printer->Print(vars, line.c_str());
+                }
+            }
+            else if (routeOption.custom_method_body_inline_size() > 0)
+            {
+                for (auto const& line : routeOption.custom_method_body_inline())
+                {
+                    PrintCustomMethodLine(line, msg, isOutputTypeStreamed, outputType);
                 }
             }
             else
@@ -408,6 +406,39 @@ public:
     }
 
 private:
+    void PrintCustomMethodLine(const std::string& line,
+                               const MethodDescriptor* msg,
+                               const bool isOutputTypeStreamed,
+                               const Descriptor* outputType,
+                               const bool newLine = false)
+    {
+        std::map<std::string, std::string> vars;
+        if (line.find("$method_call$") != std::string::npos)
+        {
+            std::string methodCall = "await _client.";
+            methodCall += msg->name();
+            if (!isOutputTypeStreamed)
+            {
+                methodCall += "Async";
+            }
+            methodCall += "(input)";
+            vars["method_call"] = methodCall;
+        }
+        if (line.find("$output_var$") != std::string::npos)
+        {
+            vars["output_var"] = "result";
+        }
+        if (line.find("$output_type$") != std::string::npos)
+        {
+            vars["output_type"] = outputType->name();
+        }
+        m_printer->Print(vars, line.c_str());
+        if (newLine)
+        {
+            m_printer->Print("\n");
+        }
+    }
+
     Printer* m_printer;
     CodeBlock* m_methodBlock;
 };

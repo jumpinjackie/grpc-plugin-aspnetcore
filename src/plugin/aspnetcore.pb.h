@@ -254,28 +254,28 @@ class MvcRoute :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& custom_method_attributes() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_custom_method_attributes();
 
-  // repeated string custom_method_body = 6;
-  int custom_method_body_size() const;
-  void clear_custom_method_body();
-  static const int kCustomMethodBodyFieldNumber = 6;
-  const std::string& custom_method_body(int index) const;
-  std::string* mutable_custom_method_body(int index);
-  void set_custom_method_body(int index, const std::string& value);
-  void set_custom_method_body(int index, std::string&& value);
-  void set_custom_method_body(int index, const char* value);
-  void set_custom_method_body(int index, const char* value, size_t size);
-  std::string* add_custom_method_body();
-  void add_custom_method_body(const std::string& value);
-  void add_custom_method_body(std::string&& value);
-  void add_custom_method_body(const char* value);
-  void add_custom_method_body(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& custom_method_body() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_custom_method_body();
+  // repeated string custom_method_body_inline = 7;
+  int custom_method_body_inline_size() const;
+  void clear_custom_method_body_inline();
+  static const int kCustomMethodBodyInlineFieldNumber = 7;
+  const std::string& custom_method_body_inline(int index) const;
+  std::string* mutable_custom_method_body_inline(int index);
+  void set_custom_method_body_inline(int index, const std::string& value);
+  void set_custom_method_body_inline(int index, std::string&& value);
+  void set_custom_method_body_inline(int index, const char* value);
+  void set_custom_method_body_inline(int index, const char* value, size_t size);
+  std::string* add_custom_method_body_inline();
+  void add_custom_method_body_inline(const std::string& value);
+  void add_custom_method_body_inline(std::string&& value);
+  void add_custom_method_body_inline(const char* value);
+  void add_custom_method_body_inline(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& custom_method_body_inline() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_custom_method_body_inline();
 
-  // repeated string custom_exception_handling = 8;
+  // repeated string custom_exception_handling = 9;
   int custom_exception_handling_size() const;
   void clear_custom_exception_handling();
-  static const int kCustomExceptionHandlingFieldNumber = 8;
+  static const int kCustomExceptionHandlingFieldNumber = 9;
   const std::string& custom_exception_handling(int index) const;
   std::string* mutable_custom_exception_handling(int index);
   void set_custom_exception_handling(int index, const std::string& value);
@@ -289,6 +289,18 @@ class MvcRoute :
   void add_custom_exception_handling(const char* value, size_t size);
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& custom_exception_handling() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_custom_exception_handling();
+
+  // string custom_method_body_template = 6;
+  void clear_custom_method_body_template();
+  static const int kCustomMethodBodyTemplateFieldNumber = 6;
+  const std::string& custom_method_body_template() const;
+  void set_custom_method_body_template(const std::string& value);
+  void set_custom_method_body_template(std::string&& value);
+  void set_custom_method_body_template(const char* value);
+  void set_custom_method_body_template(const char* value, size_t size);
+  std::string* mutable_custom_method_body_template();
+  std::string* release_custom_method_body_template();
+  void set_allocated_custom_method_body_template(std::string* custom_method_body_template);
 
   // .google.protobuf.StringValue route_pattern = 3;
   bool has_route_pattern() const;
@@ -320,9 +332,9 @@ class MvcRoute :
   ::aspnet::core::HttpInputSource source() const;
   void set_source(::aspnet::core::HttpInputSource value);
 
-  // bool is_empty_request = 7;
+  // bool is_empty_request = 8;
   void clear_is_empty_request();
-  static const int kIsEmptyRequestFieldNumber = 7;
+  static const int kIsEmptyRequestFieldNumber = 8;
   bool is_empty_request() const;
   void set_is_empty_request(bool value);
 
@@ -332,8 +344,9 @@ class MvcRoute :
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> custom_method_attributes_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> custom_method_body_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> custom_method_body_inline_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> custom_exception_handling_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr custom_method_body_template_;
   PROTOBUF_NAMESPACE_ID::StringValue* route_pattern_;
   PROTOBUF_NAMESPACE_ID::StringValue* custom_return_type_;
   int method_;
@@ -542,72 +555,123 @@ inline void MvcRoute::set_allocated_custom_return_type(PROTOBUF_NAMESPACE_ID::St
   // @@protoc_insertion_point(field_set_allocated:aspnet.core.MvcRoute.custom_return_type)
 }
 
-// repeated string custom_method_body = 6;
-inline int MvcRoute::custom_method_body_size() const {
-  return custom_method_body_.size();
+// string custom_method_body_template = 6;
+inline void MvcRoute::clear_custom_method_body_template() {
+  custom_method_body_template_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void MvcRoute::clear_custom_method_body() {
-  custom_method_body_.Clear();
+inline const std::string& MvcRoute::custom_method_body_template() const {
+  // @@protoc_insertion_point(field_get:aspnet.core.MvcRoute.custom_method_body_template)
+  return custom_method_body_template_.GetNoArena();
 }
-inline const std::string& MvcRoute::custom_method_body(int index) const {
-  // @@protoc_insertion_point(field_get:aspnet.core.MvcRoute.custom_method_body)
-  return custom_method_body_.Get(index);
+inline void MvcRoute::set_custom_method_body_template(const std::string& value) {
+  
+  custom_method_body_template_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_body_template)
 }
-inline std::string* MvcRoute::mutable_custom_method_body(int index) {
-  // @@protoc_insertion_point(field_mutable:aspnet.core.MvcRoute.custom_method_body)
-  return custom_method_body_.Mutable(index);
+inline void MvcRoute::set_custom_method_body_template(std::string&& value) {
+  
+  custom_method_body_template_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspnet.core.MvcRoute.custom_method_body_template)
 }
-inline void MvcRoute::set_custom_method_body(int index, const std::string& value) {
-  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_body)
-  custom_method_body_.Mutable(index)->assign(value);
-}
-inline void MvcRoute::set_custom_method_body(int index, std::string&& value) {
-  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_body)
-  custom_method_body_.Mutable(index)->assign(std::move(value));
-}
-inline void MvcRoute::set_custom_method_body(int index, const char* value) {
+inline void MvcRoute::set_custom_method_body_template(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  custom_method_body_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:aspnet.core.MvcRoute.custom_method_body)
+  
+  custom_method_body_template_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspnet.core.MvcRoute.custom_method_body_template)
 }
-inline void MvcRoute::set_custom_method_body(int index, const char* value, size_t size) {
-  custom_method_body_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:aspnet.core.MvcRoute.custom_method_body)
+inline void MvcRoute::set_custom_method_body_template(const char* value, size_t size) {
+  
+  custom_method_body_template_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspnet.core.MvcRoute.custom_method_body_template)
 }
-inline std::string* MvcRoute::add_custom_method_body() {
-  // @@protoc_insertion_point(field_add_mutable:aspnet.core.MvcRoute.custom_method_body)
-  return custom_method_body_.Add();
+inline std::string* MvcRoute::mutable_custom_method_body_template() {
+  
+  // @@protoc_insertion_point(field_mutable:aspnet.core.MvcRoute.custom_method_body_template)
+  return custom_method_body_template_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void MvcRoute::add_custom_method_body(const std::string& value) {
-  custom_method_body_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_method_body)
+inline std::string* MvcRoute::release_custom_method_body_template() {
+  // @@protoc_insertion_point(field_release:aspnet.core.MvcRoute.custom_method_body_template)
+  
+  return custom_method_body_template_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void MvcRoute::add_custom_method_body(std::string&& value) {
-  custom_method_body_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_method_body)
-}
-inline void MvcRoute::add_custom_method_body(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  custom_method_body_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:aspnet.core.MvcRoute.custom_method_body)
-}
-inline void MvcRoute::add_custom_method_body(const char* value, size_t size) {
-  custom_method_body_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:aspnet.core.MvcRoute.custom_method_body)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-MvcRoute::custom_method_body() const {
-  // @@protoc_insertion_point(field_list:aspnet.core.MvcRoute.custom_method_body)
-  return custom_method_body_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-MvcRoute::mutable_custom_method_body() {
-  // @@protoc_insertion_point(field_mutable_list:aspnet.core.MvcRoute.custom_method_body)
-  return &custom_method_body_;
+inline void MvcRoute::set_allocated_custom_method_body_template(std::string* custom_method_body_template) {
+  if (custom_method_body_template != nullptr) {
+    
+  } else {
+    
+  }
+  custom_method_body_template_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), custom_method_body_template);
+  // @@protoc_insertion_point(field_set_allocated:aspnet.core.MvcRoute.custom_method_body_template)
 }
 
-// bool is_empty_request = 7;
+// repeated string custom_method_body_inline = 7;
+inline int MvcRoute::custom_method_body_inline_size() const {
+  return custom_method_body_inline_.size();
+}
+inline void MvcRoute::clear_custom_method_body_inline() {
+  custom_method_body_inline_.Clear();
+}
+inline const std::string& MvcRoute::custom_method_body_inline(int index) const {
+  // @@protoc_insertion_point(field_get:aspnet.core.MvcRoute.custom_method_body_inline)
+  return custom_method_body_inline_.Get(index);
+}
+inline std::string* MvcRoute::mutable_custom_method_body_inline(int index) {
+  // @@protoc_insertion_point(field_mutable:aspnet.core.MvcRoute.custom_method_body_inline)
+  return custom_method_body_inline_.Mutable(index);
+}
+inline void MvcRoute::set_custom_method_body_inline(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_body_inline)
+  custom_method_body_inline_.Mutable(index)->assign(value);
+}
+inline void MvcRoute::set_custom_method_body_inline(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.custom_method_body_inline)
+  custom_method_body_inline_.Mutable(index)->assign(std::move(value));
+}
+inline void MvcRoute::set_custom_method_body_inline(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  custom_method_body_inline_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:aspnet.core.MvcRoute.custom_method_body_inline)
+}
+inline void MvcRoute::set_custom_method_body_inline(int index, const char* value, size_t size) {
+  custom_method_body_inline_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:aspnet.core.MvcRoute.custom_method_body_inline)
+}
+inline std::string* MvcRoute::add_custom_method_body_inline() {
+  // @@protoc_insertion_point(field_add_mutable:aspnet.core.MvcRoute.custom_method_body_inline)
+  return custom_method_body_inline_.Add();
+}
+inline void MvcRoute::add_custom_method_body_inline(const std::string& value) {
+  custom_method_body_inline_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_method_body_inline)
+}
+inline void MvcRoute::add_custom_method_body_inline(std::string&& value) {
+  custom_method_body_inline_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:aspnet.core.MvcRoute.custom_method_body_inline)
+}
+inline void MvcRoute::add_custom_method_body_inline(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  custom_method_body_inline_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:aspnet.core.MvcRoute.custom_method_body_inline)
+}
+inline void MvcRoute::add_custom_method_body_inline(const char* value, size_t size) {
+  custom_method_body_inline_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:aspnet.core.MvcRoute.custom_method_body_inline)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+MvcRoute::custom_method_body_inline() const {
+  // @@protoc_insertion_point(field_list:aspnet.core.MvcRoute.custom_method_body_inline)
+  return custom_method_body_inline_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+MvcRoute::mutable_custom_method_body_inline() {
+  // @@protoc_insertion_point(field_mutable_list:aspnet.core.MvcRoute.custom_method_body_inline)
+  return &custom_method_body_inline_;
+}
+
+// bool is_empty_request = 8;
 inline void MvcRoute::clear_is_empty_request() {
   is_empty_request_ = false;
 }
@@ -621,7 +685,7 @@ inline void MvcRoute::set_is_empty_request(bool value) {
   // @@protoc_insertion_point(field_set:aspnet.core.MvcRoute.is_empty_request)
 }
 
-// repeated string custom_exception_handling = 8;
+// repeated string custom_exception_handling = 9;
 inline int MvcRoute::custom_exception_handling_size() const {
   return custom_exception_handling_.size();
 }
