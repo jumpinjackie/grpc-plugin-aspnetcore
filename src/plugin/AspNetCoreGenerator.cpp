@@ -62,7 +62,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                 projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.App\" />\n");
                 projPrinter.Print("<PackageReference Include=\"Google.Protobuf\" Version=\"3.8.0\" />\n");
                 projPrinter.Print("<PackageReference Include=\"Grpc.Core\" Version=\"1.21.0\" />\n");
-                projPrinter.Print("<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"4.0.1\" />\n");
+                projPrinter.Print("<PackageReference Include=\"NSwag.AspNetCore\" Version=\"13.0.4\" />\n");
             }
             projPrinter.Print("</ItemGroup>\n");
 
@@ -126,7 +126,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
         startupCsPrinter.Print("using Microsoft.AspNetCore.Mvc;\n");
         startupCsPrinter.Print("using Microsoft.Extensions.Configuration;\n");
         startupCsPrinter.Print("using Microsoft.Extensions.DependencyInjection;\n");
-        startupCsPrinter.Print("using Swashbuckle.AspNetCore.Swagger;\n\n");
+        startupCsPrinter.Print("using Newtonsoft.Json.Converters;\n");
         startupCsPrinter.Print("#pragma warning disable 1591\n\n");
         startupCsPrinter.Print("namespace $ns$\n", "ns", file->package());
         {
@@ -165,23 +165,15 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                             svc->name());
                     }
                     
-                    startupCsPrinter.Print("services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);\n");
-                    startupCsPrinter.Print("services.AddSwaggerGen(c =>\n");
+                    startupCsPrinter.Print("services.AddMvc()\n");
+                    startupCsPrinter.Print("    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)\n");
+                    startupCsPrinter.Print("    .AddJsonOptions(options =>\n");
+                    startupCsPrinter.Print("        options.SerializerSettings.Converters.Add(new StringEnumConverter()));\n");
+                    startupCsPrinter.Print("services.AddSwaggerDocument(c =>\n");
                     {
                         CodeBlock swaggerGenStart(&startupCsPrinter, ");");
-                        startupCsPrinter.Print("c.SwaggerDoc(\"v1\", new Info\n");
-                        {
-                            CodeBlock infoSet(&startupCsPrinter, ");");
-                            startupCsPrinter.Print("Title = \"$name$\",\n", "name", name);
-                            startupCsPrinter.Print("Version = \"v1\"\n");
-                        }
-                        startupCsPrinter.Print("\n//To support API description from comments, enable XML documentation support\n");
-                        startupCsPrinter.Print("//and uncomment the lines below\n");
-                        startupCsPrinter.Print("//var filePath = Path.Combine(System.AppContext.BaseDirectory, \"$package$.xml\");\n",
-                            "package", file->package());
-                        startupCsPrinter.Print("//c.IncludeXmlComments(filePath);\n\n");
-                        startupCsPrinter.Print("c.DescribeAllEnumsAsStrings();\n");
-                        startupCsPrinter.Print("c.DescribeStringEnumsInCamelCase();\n");
+                        startupCsPrinter.Print("c.Title = \"$name$\";\n", "name", name);
+                        startupCsPrinter.Print("c.Version = \"v1\";\n");
                     }
                 }
                 startupCsPrinter.Print("// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.\n");
@@ -202,14 +194,8 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
 
                     startupCsPrinter.Print("app.UseHttpsRedirection();\n");
                     startupCsPrinter.Print("app.UseMvc();\n");
-                    startupCsPrinter.Print("app.UseSwagger();\n");
-                    startupCsPrinter.Print("app.UseSwaggerUI(c =>\n");
-                    {
-                        CodeBlock useSwagger(&startupCsPrinter, ");");
-                        startupCsPrinter.Print("c.SwaggerEndpoint(\"/swagger/v1/swagger.json\", \"$name$\");\n", "name", name);
-                        startupCsPrinter.Print("c.DisplayRequestDuration();\n");
-                        startupCsPrinter.Print("c.ShowExtensions();\n");
-                    }
+                    startupCsPrinter.Print("app.UseOpenApi();\n");
+                    startupCsPrinter.Print("app.UseSwaggerUi3();\n");
                 }
             }
         }
