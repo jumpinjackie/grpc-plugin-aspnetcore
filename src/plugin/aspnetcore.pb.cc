@@ -68,7 +68,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::aspnet::core::_MvcRoute_default_instance_),
 };
 
-const char descriptor_table_protodef_aspnetcore_2eproto[] =
+const char descriptor_table_protodef_aspnetcore_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\020aspnetcore.proto\022\013aspnet.core\032\036google/"
   "protobuf/wrappers.proto\032 google/protobuf"
   "/descriptor.proto\"\367\002\n\010MvcRoute\022\'\n\006method"
@@ -153,18 +153,18 @@ void MvcRoute::InitAsDefaultInstance() {
   ::aspnet::core::_MvcRoute_default_instance_._instance.get_mutable()->custom_return_type_ = const_cast< PROTOBUF_NAMESPACE_ID::StringValue*>(
       PROTOBUF_NAMESPACE_ID::StringValue::internal_default_instance());
 }
-class MvcRoute::HasBitSetters {
+class MvcRoute::_Internal {
  public:
   static const PROTOBUF_NAMESPACE_ID::StringValue& route_pattern(const MvcRoute* msg);
   static const PROTOBUF_NAMESPACE_ID::StringValue& custom_return_type(const MvcRoute* msg);
 };
 
 const PROTOBUF_NAMESPACE_ID::StringValue&
-MvcRoute::HasBitSetters::route_pattern(const MvcRoute* msg) {
+MvcRoute::_Internal::route_pattern(const MvcRoute* msg) {
   return *msg->route_pattern_;
 }
 const PROTOBUF_NAMESPACE_ID::StringValue&
-MvcRoute::HasBitSetters::custom_return_type(const MvcRoute* msg) {
+MvcRoute::_Internal::custom_return_type(const MvcRoute* msg) {
   return *msg->custom_return_type_;
 }
 void MvcRoute::clear_route_pattern() {
@@ -179,18 +179,6 @@ void MvcRoute::clear_custom_return_type() {
   }
   custom_return_type_ = nullptr;
 }
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int MvcRoute::kMethodFieldNumber;
-const int MvcRoute::kSourceFieldNumber;
-const int MvcRoute::kRoutePatternFieldNumber;
-const int MvcRoute::kCustomMethodAttributesFieldNumber;
-const int MvcRoute::kCustomReturnTypeFieldNumber;
-const int MvcRoute::kCustomMethodBodyTemplateFieldNumber;
-const int MvcRoute::kCustomMethodBodyInlineFieldNumber;
-const int MvcRoute::kIsEmptyRequestFieldNumber;
-const int MvcRoute::kCustomExceptionHandlingFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
 MvcRoute::MvcRoute()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
@@ -204,7 +192,7 @@ MvcRoute::MvcRoute(const MvcRoute& from)
       custom_exception_handling_(from.custom_exception_handling_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   custom_method_body_template_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from.custom_method_body_template().size() > 0) {
+  if (!from.custom_method_body_template().empty()) {
     custom_method_body_template_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.custom_method_body_template_);
   }
   if (from.has_route_pattern()) {
@@ -561,7 +549,7 @@ void MvcRoute::SerializeWithCachedSizes(
   // .google.protobuf.StringValue route_pattern = 3;
   if (this->has_route_pattern()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, HasBitSetters::route_pattern(this), output);
+      3, _Internal::route_pattern(this), output);
   }
 
   // repeated string custom_method_attributes = 4;
@@ -577,7 +565,7 @@ void MvcRoute::SerializeWithCachedSizes(
   // .google.protobuf.StringValue custom_return_type = 5;
   if (this->has_custom_return_type()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, HasBitSetters::custom_return_type(this), output);
+      5, _Internal::custom_return_type(this), output);
   }
 
   // string custom_method_body_template = 6;
@@ -644,7 +632,7 @@ void MvcRoute::SerializeWithCachedSizes(
   if (this->has_route_pattern()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
-        3, HasBitSetters::route_pattern(this), target);
+        3, _Internal::route_pattern(this), target);
   }
 
   // repeated string custom_method_attributes = 4;
@@ -661,7 +649,7 @@ void MvcRoute::SerializeWithCachedSizes(
   if (this->has_custom_return_type()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
-        5, HasBitSetters::custom_return_type(this), target);
+        5, _Internal::custom_return_type(this), target);
   }
 
   // string custom_method_body_template = 6;
@@ -852,10 +840,6 @@ bool MvcRoute::IsInitialized() const {
   return true;
 }
 
-void MvcRoute::Swap(MvcRoute* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
 void MvcRoute::InternalSwap(MvcRoute* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
