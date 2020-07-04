@@ -98,16 +98,15 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_asp
   &scc_info_MvcRoute_aspnetcore_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_aspnetcore_2eproto_once;
-static bool descriptor_table_aspnetcore_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_aspnetcore_2eproto = {
-  &descriptor_table_aspnetcore_2eproto_initialized, descriptor_table_protodef_aspnetcore_2eproto, "aspnetcore.proto", 812,
+  false, false, descriptor_table_protodef_aspnetcore_2eproto, "aspnetcore.proto", 812,
   &descriptor_table_aspnetcore_2eproto_once, descriptor_table_aspnetcore_2eproto_sccs, descriptor_table_aspnetcore_2eproto_deps, 1, 2,
   schemas, file_default_instances, TableStruct_aspnetcore_2eproto::offsets,
   file_level_metadata_aspnetcore_2eproto, 1, file_level_enum_descriptors_aspnetcore_2eproto, file_level_service_descriptors_aspnetcore_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_aspnetcore_2eproto = (  ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_aspnetcore_2eproto), true);
+static bool dynamic_init_dummy_aspnetcore_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_aspnetcore_2eproto)), true);
 namespace aspnet {
 namespace core {
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* HttpMethod_descriptor() {
@@ -167,32 +166,36 @@ MvcRoute::_Internal::custom_return_type(const MvcRoute* msg) {
   return *msg->custom_return_type_;
 }
 void MvcRoute::clear_route_pattern() {
-  if (GetArenaNoVirtual() == nullptr && route_pattern_ != nullptr) {
+  if (GetArena() == nullptr && route_pattern_ != nullptr) {
     delete route_pattern_;
   }
   route_pattern_ = nullptr;
 }
 void MvcRoute::clear_custom_return_type() {
-  if (GetArenaNoVirtual() == nullptr && custom_return_type_ != nullptr) {
+  if (GetArena() == nullptr && custom_return_type_ != nullptr) {
     delete custom_return_type_;
   }
   custom_return_type_ = nullptr;
 }
-MvcRoute::MvcRoute()
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+MvcRoute::MvcRoute(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena),
+  custom_method_attributes_(arena),
+  custom_method_body_inline_(arena),
+  custom_exception_handling_(arena) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspnet.core.MvcRoute)
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aspnet.core.MvcRoute)
 }
 MvcRoute::MvcRoute(const MvcRoute& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
-      _internal_metadata_(nullptr),
       custom_method_attributes_(from.custom_method_attributes_),
       custom_method_body_inline_(from.custom_method_body_inline_),
       custom_exception_handling_(from.custom_exception_handling_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   custom_method_body_template_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_custom_method_body_template().empty()) {
-    custom_method_body_template_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.custom_method_body_template_);
+    custom_method_body_template_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from._internal_custom_method_body_template(),
+      GetArena());
   }
   if (from._internal_has_route_pattern()) {
     route_pattern_ = new PROTOBUF_NAMESPACE_ID::StringValue(*from.route_pattern_);
@@ -221,14 +224,22 @@ void MvcRoute::SharedCtor() {
 MvcRoute::~MvcRoute() {
   // @@protoc_insertion_point(destructor:aspnet.core.MvcRoute)
   SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 void MvcRoute::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
   custom_method_body_template_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete route_pattern_;
   if (this != internal_default_instance()) delete custom_return_type_;
 }
 
+void MvcRoute::ArenaDtor(void* object) {
+  MvcRoute* _this = reinterpret_cast< MvcRoute* >(object);
+  (void)_this;
+}
+void MvcRoute::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
 void MvcRoute::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
@@ -247,23 +258,24 @@ void MvcRoute::Clear() {
   custom_method_attributes_.Clear();
   custom_method_body_inline_.Clear();
   custom_exception_handling_.Clear();
-  custom_method_body_template_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (GetArenaNoVirtual() == nullptr && route_pattern_ != nullptr) {
+  custom_method_body_template_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  if (GetArena() == nullptr && route_pattern_ != nullptr) {
     delete route_pattern_;
   }
   route_pattern_ = nullptr;
-  if (GetArenaNoVirtual() == nullptr && custom_return_type_ != nullptr) {
+  if (GetArena() == nullptr && custom_return_type_ != nullptr) {
     delete custom_return_type_;
   }
   custom_return_type_ = nullptr;
   ::memset(&method_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&is_empty_request_) -
       reinterpret_cast<char*>(&method_)) + sizeof(is_empty_request_));
-  _internal_metadata_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -272,7 +284,7 @@ const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       // .aspnet.core.HttpMethod method = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_method(static_cast<::aspnet::core::HttpMethod>(val));
         } else goto handle_unusual;
@@ -280,7 +292,7 @@ const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       // .aspnet.core.HttpInputSource source = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_source(static_cast<::aspnet::core::HttpInputSource>(val));
         } else goto handle_unusual;
@@ -298,7 +310,9 @@ const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(_internal_add_custom_method_attributes(), ptr, ctx, "aspnet.core.MvcRoute.custom_method_attributes");
+            auto str = _internal_add_custom_method_attributes();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "aspnet.core.MvcRoute.custom_method_attributes"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
@@ -314,7 +328,9 @@ const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       // string custom_method_body_template = 6;
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(_internal_mutable_custom_method_body_template(), ptr, ctx, "aspnet.core.MvcRoute.custom_method_body_template");
+          auto str = _internal_mutable_custom_method_body_template();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "aspnet.core.MvcRoute.custom_method_body_template"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -324,7 +340,9 @@ const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(_internal_add_custom_method_body_inline(), ptr, ctx, "aspnet.core.MvcRoute.custom_method_body_inline");
+            auto str = _internal_add_custom_method_body_inline();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "aspnet.core.MvcRoute.custom_method_body_inline"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<58>(ptr));
@@ -333,7 +351,7 @@ const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       // bool is_empty_request = 8;
       case 8:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 64)) {
-          is_empty_request_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          is_empty_request_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -343,7 +361,9 @@ const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(_internal_add_custom_exception_handling(), ptr, ctx, "aspnet.core.MvcRoute.custom_exception_handling");
+            auto str = _internal_add_custom_exception_handling();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "aspnet.core.MvcRoute.custom_exception_handling"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<74>(ptr));
@@ -355,7 +375,9 @@ const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           ctx->SetLastTag(tag);
           goto success;
         }
-        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
         CHK_(ptr != nullptr);
         continue;
       }
@@ -369,7 +391,7 @@ failure:
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* MvcRoute::InternalSerializeWithCachedSizesToArray(
+::PROTOBUF_NAMESPACE_ID::uint8* MvcRoute::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:aspnet.core.MvcRoute)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -377,23 +399,23 @@ failure:
 
   // .aspnet.core.HttpMethod method = 1;
   if (this->method() != 0) {
-    stream->EnsureSpace(&target);
+    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       1, this->_internal_method(), target);
   }
 
   // .aspnet.core.HttpInputSource source = 2;
   if (this->source() != 0) {
-    stream->EnsureSpace(&target);
+    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       2, this->_internal_source(), target);
   }
 
   // .google.protobuf.StringValue route_pattern = 3;
   if (this->has_route_pattern()) {
-    stream->EnsureSpace(&target);
+    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessageToArray(
+      InternalWriteMessage(
         3, _Internal::route_pattern(this), target, stream);
   }
 
@@ -409,9 +431,9 @@ failure:
 
   // .google.protobuf.StringValue custom_return_type = 5;
   if (this->has_custom_return_type()) {
-    stream->EnsureSpace(&target);
+    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessageToArray(
+      InternalWriteMessage(
         5, _Internal::custom_return_type(this), target, stream);
   }
 
@@ -437,7 +459,7 @@ failure:
 
   // bool is_empty_request = 8;
   if (this->is_empty_request() != 0) {
-    stream->EnsureSpace(&target);
+    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(8, this->_internal_is_empty_request(), target);
   }
 
@@ -453,7 +475,7 @@ failure:
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields(), target, stream);
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:aspnet.core.MvcRoute)
   return target;
@@ -556,7 +578,7 @@ void MvcRoute::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
 void MvcRoute::MergeFrom(const MvcRoute& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:aspnet.core.MvcRoute)
   GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -564,8 +586,7 @@ void MvcRoute::MergeFrom(const MvcRoute& from) {
   custom_method_body_inline_.MergeFrom(from.custom_method_body_inline_);
   custom_exception_handling_.MergeFrom(from.custom_exception_handling_);
   if (from.custom_method_body_template().size() > 0) {
-
-    custom_method_body_template_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.custom_method_body_template_);
+    _internal_set_custom_method_body_template(from._internal_custom_method_body_template());
   }
   if (from.has_route_pattern()) {
     _internal_mutable_route_pattern()->PROTOBUF_NAMESPACE_ID::StringValue::MergeFrom(from._internal_route_pattern());
@@ -604,17 +625,17 @@ bool MvcRoute::IsInitialized() const {
 
 void MvcRoute::InternalSwap(MvcRoute* other) {
   using std::swap;
-  _internal_metadata_.Swap(&other->_internal_metadata_);
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   custom_method_attributes_.InternalSwap(&other->custom_method_attributes_);
   custom_method_body_inline_.InternalSwap(&other->custom_method_body_inline_);
   custom_exception_handling_.InternalSwap(&other->custom_exception_handling_);
-  custom_method_body_template_.Swap(&other->custom_method_body_template_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-  swap(route_pattern_, other->route_pattern_);
-  swap(custom_return_type_, other->custom_return_type_);
-  swap(method_, other->method_);
-  swap(source_, other->source_);
-  swap(is_empty_request_, other->is_empty_request_);
+  custom_method_body_template_.Swap(&other->custom_method_body_template_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MvcRoute, is_empty_request_)
+      + sizeof(MvcRoute::is_empty_request_)
+      - PROTOBUF_FIELD_OFFSET(MvcRoute, route_pattern_)>(
+          reinterpret_cast<char*>(&route_pattern_),
+          reinterpret_cast<char*>(&other->route_pattern_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata MvcRoute::GetMetadata() const {
@@ -623,14 +644,14 @@ void MvcRoute::InternalSwap(MvcRoute* other) {
 
 ::PROTOBUF_NAMESPACE_ID::internal::ExtensionIdentifier< ::google::protobuf::MethodOptions,
     ::PROTOBUF_NAMESPACE_ID::internal::MessageTypeTraits< ::aspnet::core::MvcRoute >, 11, false >
-  api(kApiFieldNumber, *::aspnet::core::MvcRoute::internal_default_instance());
+  api(kApiFieldNumber, ::aspnet::core::MvcRoute::default_instance());
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace core
 }  // namespace aspnet
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::aspnet::core::MvcRoute* Arena::CreateMaybeMessage< ::aspnet::core::MvcRoute >(Arena* arena) {
-  return Arena::CreateInternal< ::aspnet::core::MvcRoute >(arena);
+  return Arena::CreateMessageInternal< ::aspnet::core::MvcRoute >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 
