@@ -14,31 +14,34 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_aspnetcore_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_MvcRoute_aspnetcore_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_google_2fprotobuf_2fwrappers_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StringValue_google_2fprotobuf_2fwrappers_2eproto;
+
+PROTOBUF_PRAGMA_INIT_SEG
 namespace aspnet {
 namespace core {
-class MvcRouteDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<MvcRoute> _instance;
-} _MvcRoute_default_instance_;
+constexpr MvcRoute::MvcRoute(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : custom_method_attributes_()
+  , custom_method_body_inline_()
+  , custom_exception_handling_()
+  , custom_method_body_template_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , route_pattern_(nullptr)
+  , custom_return_type_(nullptr)
+  , method_(0)
+
+  , source_(0)
+
+  , is_empty_request_(false){}
+struct MvcRouteDefaultTypeInternal {
+  constexpr MvcRouteDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~MvcRouteDefaultTypeInternal() {}
+  union {
+    MvcRoute _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT MvcRouteDefaultTypeInternal _MvcRoute_default_instance_;
 }  // namespace core
 }  // namespace aspnet
-static void InitDefaultsscc_info_MvcRoute_aspnetcore_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::aspnet::core::_MvcRoute_default_instance_;
-    new (ptr) ::aspnet::core::MvcRoute();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::aspnet::core::MvcRoute::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_MvcRoute_aspnetcore_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_MvcRoute_aspnetcore_2eproto}, {
-      &scc_info_StringValue_google_2fprotobuf_2fwrappers_2eproto.base,}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_aspnetcore_2eproto[1];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_aspnetcore_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_aspnetcore_2eproto = nullptr;
@@ -94,19 +97,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_google_2fprotobuf_2fdescriptor_2eproto,
   &::descriptor_table_google_2fprotobuf_2fwrappers_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_aspnetcore_2eproto_sccs[1] = {
-  &scc_info_MvcRoute_aspnetcore_2eproto.base,
-};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_aspnetcore_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_aspnetcore_2eproto = {
-  false, false, descriptor_table_protodef_aspnetcore_2eproto, "aspnetcore.proto", 812,
-  &descriptor_table_aspnetcore_2eproto_once, descriptor_table_aspnetcore_2eproto_sccs, descriptor_table_aspnetcore_2eproto_deps, 1, 2,
+  false, false, 812, descriptor_table_protodef_aspnetcore_2eproto, "aspnetcore.proto", 
+  &descriptor_table_aspnetcore_2eproto_once, descriptor_table_aspnetcore_2eproto_deps, 2, 1,
   schemas, file_default_instances, TableStruct_aspnetcore_2eproto::offsets,
-  file_level_metadata_aspnetcore_2eproto, 1, file_level_enum_descriptors_aspnetcore_2eproto, file_level_service_descriptors_aspnetcore_2eproto,
+  file_level_metadata_aspnetcore_2eproto, file_level_enum_descriptors_aspnetcore_2eproto, file_level_service_descriptors_aspnetcore_2eproto,
 };
+PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
+descriptor_table_aspnetcore_2eproto_metadata_getter(int index) {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_aspnetcore_2eproto);
+  return descriptor_table_aspnetcore_2eproto.file_level_metadata[index];
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_aspnetcore_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_aspnetcore_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_aspnetcore_2eproto(&descriptor_table_aspnetcore_2eproto);
 namespace aspnet {
 namespace core {
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* HttpMethod_descriptor() {
@@ -145,12 +150,6 @@ bool HttpInputSource_IsValid(int value) {
 
 // ===================================================================
 
-void MvcRoute::InitAsDefaultInstance() {
-  ::aspnet::core::_MvcRoute_default_instance_._instance.get_mutable()->route_pattern_ = const_cast< PROTOBUF_NAMESPACE_ID::StringValue*>(
-      PROTOBUF_NAMESPACE_ID::StringValue::internal_default_instance());
-  ::aspnet::core::_MvcRoute_default_instance_._instance.get_mutable()->custom_return_type_ = const_cast< PROTOBUF_NAMESPACE_ID::StringValue*>(
-      PROTOBUF_NAMESPACE_ID::StringValue::internal_default_instance());
-}
 class MvcRoute::_Internal {
  public:
   static const PROTOBUF_NAMESPACE_ID::StringValue& route_pattern(const MvcRoute* msg);
@@ -194,7 +193,7 @@ MvcRoute::MvcRoute(const MvcRoute& from)
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   custom_method_body_template_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_custom_method_body_template().empty()) {
-    custom_method_body_template_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from._internal_custom_method_body_template(),
+    custom_method_body_template_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_custom_method_body_template(), 
       GetArena());
   }
   if (from._internal_has_route_pattern()) {
@@ -214,11 +213,11 @@ MvcRoute::MvcRoute(const MvcRoute& from)
 }
 
 void MvcRoute::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_MvcRoute_aspnetcore_2eproto.base);
-  custom_method_body_template_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  ::memset(&route_pattern_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&is_empty_request_) -
-      reinterpret_cast<char*>(&route_pattern_)) + sizeof(is_empty_request_));
+custom_method_body_template_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&route_pattern_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&is_empty_request_) -
+    reinterpret_cast<char*>(&route_pattern_)) + sizeof(is_empty_request_));
 }
 
 MvcRoute::~MvcRoute() {
@@ -243,11 +242,6 @@ void MvcRoute::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void MvcRoute::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const MvcRoute& MvcRoute::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_MvcRoute_aspnetcore_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void MvcRoute::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspnet.core.MvcRoute)
@@ -258,7 +252,7 @@ void MvcRoute::Clear() {
   custom_method_attributes_.Clear();
   custom_method_body_inline_.Clear();
   custom_exception_handling_.Clear();
-  custom_method_body_template_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  custom_method_body_template_.ClearToEmpty();
   if (GetArena() == nullptr && route_pattern_ != nullptr) {
     delete route_pattern_;
   }
@@ -275,7 +269,6 @@ void MvcRoute::Clear() {
 
 const char* MvcRoute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -642,7 +635,7 @@ void MvcRoute::InternalSwap(MvcRoute* other) {
   return GetMetadataStatic();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::ExtensionIdentifier< ::google::protobuf::MethodOptions,
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY ::PROTOBUF_NAMESPACE_ID::internal::ExtensionIdentifier< ::google::protobuf::MethodOptions,
     ::PROTOBUF_NAMESPACE_ID::internal::MessageTypeTraits< ::aspnet::core::MvcRoute >, 11, false >
   api(kApiFieldNumber, ::aspnet::core::MvcRoute::default_instance());
 
