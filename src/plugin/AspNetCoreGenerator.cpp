@@ -59,10 +59,9 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
             projPrinter.Print("<ItemGroup>\n");
             {
                 Indent i2(&projPrinter);
-                projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.App\" />\n");
-                projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.Mvc.NewtonsoftJson\" Version=\"5.0.9\" />\n");
                 projPrinter.Print("<PackageReference Include=\"Google.Protobuf\" Version=\"3.17.3\" />\n");
                 projPrinter.Print("<PackageReference Include=\"Grpc.Core\" Version=\"2.38.1\" />\n");
+                projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.Mvc.NewtonsoftJson\" Version=\"5.0.9\" />\n");
                 projPrinter.Print("<PackageReference Include=\"NSwag.AspNetCore\" Version=\"13.13.2\" />\n");
             }
             projPrinter.Print("</ItemGroup>\n");
@@ -126,6 +125,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
         startupCsPrinter.Print("using Microsoft.AspNetCore.Hosting;\n");
         startupCsPrinter.Print("using Microsoft.Extensions.Configuration;\n");
         startupCsPrinter.Print("using Microsoft.Extensions.DependencyInjection;\n");
+        startupCsPrinter.Print("using Microsoft.Extensions.Hosting;\n");
         startupCsPrinter.Print("using Newtonsoft.Json.Converters;\n");
         startupCsPrinter.Print("#pragma warning disable 1591\n\n");
         startupCsPrinter.Print("namespace $ns$\n", "ns", file->package());
@@ -176,7 +176,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                     }
                 }
                 startupCsPrinter.Print("// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.\n");
-                startupCsPrinter.Print("public void Configure(IApplicationBuilder app, IHostingEnvironment env)\n");
+                startupCsPrinter.Print("public void Configure(IApplicationBuilder app, IWebHostEnvironment env)\n");
                 {
                     CodeBlock configureStart(&startupCsPrinter);
                     startupCsPrinter.Print("if (env.IsDevelopment())\n");
