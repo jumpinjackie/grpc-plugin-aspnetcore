@@ -51,7 +51,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
             projPrinter.Print("<PropertyGroup>\n");
             {
                 Indent i2(&projPrinter);
-                projPrinter.Print("<TargetFramework>netcoreapp2.2</TargetFramework>\n");
+                projPrinter.Print("<TargetFramework>net5.0</TargetFramework>\n");
                 projPrinter.Print("<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>\n");
                 projPrinter.Print("<LangVersion>latest</LangVersion>\n");
             }
@@ -60,9 +60,10 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
             {
                 Indent i2(&projPrinter);
                 projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.App\" />\n");
-                projPrinter.Print("<PackageReference Include=\"Google.Protobuf\" Version=\"3.12.3\" />\n");
-                projPrinter.Print("<PackageReference Include=\"Grpc.Core\" Version=\"2.29.0\" />\n");
-                projPrinter.Print("<PackageReference Include=\"NSwag.AspNetCore\" Version=\"13.6.2\" />\n");
+                projPrinter.Print("<PackageReference Include=\"Microsoft.AspNetCore.Mvc.NewtonsoftJson\" Version=\"5.0.9\" />\n");
+                projPrinter.Print("<PackageReference Include=\"Google.Protobuf\" Version=\"3.17.3\" />\n");
+                projPrinter.Print("<PackageReference Include=\"Grpc.Core\" Version=\"2.38.1\" />\n");
+                projPrinter.Print("<PackageReference Include=\"NSwag.AspNetCore\" Version=\"13.13.2\" />\n");
             }
             projPrinter.Print("</ItemGroup>\n");
 
@@ -123,7 +124,6 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
         startupCsPrinter.Print("using Grpc.Core;\n");
         startupCsPrinter.Print("using Microsoft.AspNetCore.Builder;\n");
         startupCsPrinter.Print("using Microsoft.AspNetCore.Hosting;\n");
-        startupCsPrinter.Print("using Microsoft.AspNetCore.Mvc;\n");
         startupCsPrinter.Print("using Microsoft.Extensions.Configuration;\n");
         startupCsPrinter.Print("using Microsoft.Extensions.DependencyInjection;\n");
         startupCsPrinter.Print("using Newtonsoft.Json.Converters;\n");
@@ -166,8 +166,7 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                     }
                     
                     startupCsPrinter.Print("services.AddMvc()\n");
-                    startupCsPrinter.Print("    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)\n");
-                    startupCsPrinter.Print("    .AddJsonOptions(options =>\n");
+                    startupCsPrinter.Print("    .AddNewtonsoftJson(options =>\n");
                     startupCsPrinter.Print("        options.SerializerSettings.Converters.Add(new StringEnumConverter()));\n");
                     startupCsPrinter.Print("services.AddSwaggerDocument(c =>\n");
                     {
@@ -193,7 +192,11 @@ bool AspNetCoreGenerator::Generate(const FileDescriptor * file,
                     }
 
                     startupCsPrinter.Print("app.UseHttpsRedirection();\n");
-                    startupCsPrinter.Print("app.UseMvc();\n");
+                    startupCsPrinter.Print("app.UseRouting();\n");
+                    startupCsPrinter.Print("app.UseEndpoints(endpoints =>\n");
+                    startupCsPrinter.Print("{\n");
+                    startupCsPrinter.Print("    endpoints.MapDefaultControllerRoute();\n");
+                    startupCsPrinter.Print("});\n");
                     startupCsPrinter.Print("app.UseOpenApi();\n");
                     startupCsPrinter.Print("app.UseSwaggerUi3();\n");
                 }
